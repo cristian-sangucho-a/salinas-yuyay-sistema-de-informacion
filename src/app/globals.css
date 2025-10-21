@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-primary: hsl(17 95% 18%); /* Marrón tierra (#5A1E02) */
+  --color-primary-foreground: hsl(
+    40 30% 95%
+  ); /* Texto claro sobre fondo marrón */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-secondary: hsl(24 80% 30%); /* Marrón arcilla (#8B3C10) */
+  --color-secondary-foreground: hsl(
+    42 30% 95%
+  ); /* Texto claro sobre secundario */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-tertiary: hsl(30 55% 65%); /* Ocre salino (#D6A77A) */
+  --color-tertiary-foreground: hsl(24 9.8% 10%); /* Texto oscuro sobre ocre */
+
+  --color-background: hsl(36 44% 96%); /* Beige sal (#F8F3ED) */
+  --color-foreground: hsl(20 14% 6%); /* Gris oscuro, texto principal */
+
+  --color-card: hsl(36 44% 98%); /* Fondo de tarjetas */
+  --color-card-foreground: hsl(20 14% 6%); /* Texto en tarjetas */
+
+  --color-popover: hsl(36 44% 98%);
+  --color-popover-foreground: hsl(20 14% 6%);
+
+  --color-muted: hsl(34 28% 82%); /* Arena (#D9C3A3) */
+  --color-muted-foreground: hsl(20 14% 6%);
+
+  --color-accent: hsl(137 39% 52%); /* Verde andino (#7CB856) */
+  --color-accent-foreground: hsl(24 9.8% 10%); /* Texto oscuro sobre verde */
+
+  --color-destructive: hsl(10 70% 40%); /* Rojo achiote (#B63A1B) */
+  --color-destructive-foreground: hsl(60 9% 97%); /* Texto claro sobre rojo */
+
+  --color-border: hsl(34 28% 82%);
+  --color-input: hsl(34 28% 82%);
+  --color-ring: hsl(17 95% 18%);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
