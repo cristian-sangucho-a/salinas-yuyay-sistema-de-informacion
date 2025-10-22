@@ -1,44 +1,66 @@
 @import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "salinas-yuyay";
+  default: true; /* set as default */
+  prefersdark: false; /* set as default dark mode (prefers-color-scheme:dark) */
+  color-scheme: light; /* color of browser-provided UI */
 
-@theme {
-  --color-primary: hsl(17 95% 18%); /* Marrón tierra (#5A1E02) */
-  --color-primary-foreground: hsl(
-    40 30% 95%
-  ); /* Texto claro sobre fondo marrón */
+  /* Colores base - Beige sal y tonos tierra */
+  --color-base-100: #f8f3ed; /* Beige sal - fondo principal */
+  --color-base-200: #f0e8dc; /* Beige más oscuro */
+  --color-base-300: #d9c3a3; /* Arena */
+  --color-base-content: #0f0907; /* Gris oscuro - texto principal */
 
-  --color-secondary: hsl(24 80% 30%); /* Marrón arcilla (#8B3C10) */
-  --color-secondary-foreground: hsl(
-    42 30% 95%
-  ); /* Texto claro sobre secundario */
+  /* Primary - Marrón tierra */
+  --color-primary: #5a1e02; /* Marrón tierra */
+  --color-primary-content: #f2ebe5; /* Texto claro sobre primary */
 
-  --color-tertiary: hsl(30 55% 65%); /* Ocre salino (#D6A77A) */
-  --color-tertiary-foreground: hsl(24 9.8% 10%); /* Texto oscuro sobre ocre */
+  /* Secondary - Marrón arcilla */
+  --color-secondary: #8b3c10; /* Marrón arcilla */
+  --color-secondary-content: #f3ebe5; /* Texto claro sobre secondary */
 
-  --color-background: hsl(36 44% 96%); /* Beige sal (#F8F3ED) */
-  --color-foreground: hsl(20 14% 6%); /* Gris oscuro, texto principal */
+  /* Accent - Verde andino */
+  --color-accent: #7cb856; /* Verde andino */
+  --color-accent-content: #19180f; /* Texto oscuro sobre accent */
 
-  --color-card: hsl(36 44% 98%); /* Fondo de tarjetas */
-  --color-card-foreground: hsl(20 14% 6%); /* Texto en tarjetas */
+  /* Neutral - Tonos tierra */
+  --color-neutral: #d6a77a; /* Ocre salino (tertiary) */
+  --color-neutral-content: #19180f; /* Texto oscuro sobre neutral */
 
-  --color-popover: hsl(36 44% 98%);
-  --color-popover-foreground: hsl(20 14% 6%);
+  /* Info - Azul suave (mantiene funcionalidad) */
+  --color-info: #5b9bd5;
+  --color-info-content: #f8f3ed;
 
-  --color-muted: hsl(34 28% 82%); /* Arena (#D9C3A3) */
-  --color-muted-foreground: hsl(20 14% 6%);
+  /* Success - Verde andino */
+  --color-success: #7cb856;
+  --color-success-content: #19180f;
 
-  --color-accent: hsl(137 39% 52%); /* Verde andino (#7CB856) */
-  --color-accent-foreground: hsl(24 9.8% 10%); /* Texto oscuro sobre verde */
+  /* Warning - Ocre salino */
+  --color-warning: #d6a77a;
+  --color-warning-content: #19180f;
 
-  --color-destructive: hsl(10 70% 40%); /* Rojo achiote (#B63A1B) */
-  --color-destructive-foreground: hsl(60 9% 97%); /* Texto claro sobre rojo */
+  /* Error - Rojo achiote */
+  --color-error: #b63a1b; /* Rojo achiote */
+  --color-error-content: #f7f6f3; /* Texto claro sobre error */
 
-  --color-border: hsl(34 28% 82%);
-  --color-input: hsl(34 28% 82%);
-  --color-ring: hsl(17 95% 18%);
+  /* border radius */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
