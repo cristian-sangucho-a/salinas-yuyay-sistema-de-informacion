@@ -1,4 +1,15 @@
+"use client";
+
+import Button from "@atoms/Button";
+import Card from "@molecules/Card";
+import Alert from "@molecules/Alert";
+import SearchBar from "@molecules/SearchBar";
+
 export default function Home() {
+  const handleSearch = (query: string) => {
+    console.log("Buscando:", query);
+  };
+
   return (
     <div className="bg-base-100 min-h-screen p-8 pb-20 sm:p-20">
       <main className="max-w-6xl mx-auto space-y-12">
@@ -15,11 +26,72 @@ export default function Home() {
           </p>
         </div>
 
+        {/* SearchBar Demo */}
+        <Card title="Búsqueda" description="Componente SearchBar (Molecule)">
+          <SearchBar
+            placeholder="Buscar productos, usuarios..."
+            onSearch={handleSearch}
+          />
+        </Card>
+
+        {/* Botones DaisyUI usando componente Button */}
+        <Card
+          title="Componentes Button (Atoms)"
+          description="Botones reutilizables con variantes"
+        >
+          <div className="flex flex-wrap gap-3">
+            <Button variant="primary">Botón Primary</Button>
+            <Button variant="secondary">Botón Secondary</Button>
+            <Button variant="accent">Botón Accent</Button>
+            <Button variant="neutral">Botón Neutral</Button>
+            <Button variant="success">Botón Success</Button>
+            <Button variant="warning">Botón Warning</Button>
+            <Button variant="error">Botón Error</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="ghost">Ghost</Button>
+          </div>
+          <div className="flex flex-wrap gap-3 mt-4">
+            <Button variant="primary" size="sm">
+              Small
+            </Button>
+            <Button variant="secondary" size="md">
+              Medium
+            </Button>
+            <Button variant="accent" size="lg">
+              Large
+            </Button>
+          </div>
+        </Card>
+
+        {/* Alertas usando componente Alert */}
+        <Card
+          title="Componentes Alert (Molecules)"
+          description="Alertas con iconos y variantes"
+        >
+          <div className="space-y-3">
+            <Alert type="info" title="Información">
+              Información importante del sistema
+            </Alert>
+            <Alert type="success" title="Éxito">
+              ¡Operación completada con éxito!
+            </Alert>
+            <Alert type="warning" title="Advertencia">
+              Revisa esta información antes de continuar
+            </Alert>
+            <Alert type="error" title="Error">
+              Algo salió mal, por favor intenta nuevamente
+            </Alert>
+            <Alert type="info" showIcon={false}>
+              Alerta sin icono
+            </Alert>
+          </div>
+        </Card>
+
         {/* Paleta de Colores Base */}
-        <div className="card bg-base-200 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-base-content mb-4">
-            Colores Base
-          </h2>
+        <Card
+          title="Colores Base"
+          description="Tonos beige y arena del tema Salinas Yuyay"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-base-100 p-6 rounded-lg border border-base-300">
               <div className="font-mono text-sm text-base-content">
@@ -46,13 +118,13 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Colores Temáticos */}
-        <div className="card bg-base-200 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-base-content mb-4">
-            Colores Temáticos
-          </h2>
+        <Card
+          title="Colores Temáticos"
+          description="Paleta completa de colores del tema"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="bg-primary text-primary-content p-6 rounded-lg shadow-md">
               <div className="font-bold text-lg">Primary</div>
@@ -107,84 +179,13 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Alertas */}
-        <div className="card bg-base-200 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-base-content mb-4">Alertas</h2>
-          <div className="space-y-3">
-            <div className="alert alert-info">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="stroke-current shrink-0 w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-              <span>Información importante del sistema</span>
-            </div>
-            <div className="alert alert-success">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>¡Operación completada con éxito!</span>
-            </div>
-            <div className="alert alert-warning">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <span>Advertencia: Revisa esta información</span>
-            </div>
-            <div className="alert alert-error">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>Error: Algo salió mal</span>
-            </div>
-          </div>
-        </div>
+        </Card>
 
         {/* Badges */}
-        <div className="card bg-base-200 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-base-content mb-4">
-            Badges y Etiquetas
-          </h2>
+        <Card
+          title="Badges y Etiquetas"
+          description="Etiquetas pequeñas para categorías y estados"
+        >
           <div className="flex flex-wrap gap-2">
             <div className="badge badge-primary">Primary</div>
             <div className="badge badge-secondary">Secondary</div>
@@ -195,7 +196,7 @@ export default function Home() {
             <div className="badge badge-error">Error</div>
             <div className="badge badge-outline badge-primary">Outline</div>
           </div>
-        </div>
+        </Card>
       </main>
 
       <footer className="mt-12 text-center text-base-content/60 text-sm">

@@ -61,6 +61,42 @@
   --noise: 0;
 }
 
+/* Forzar aplicación de colores en botones */
+.btn-primary {
+  background-color: var(--color-primary) !important;
+  color: var(--color-primary-content) !important;
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-secondary-content) !important;
+}
+
+.btn-accent {
+  background-color: var(--color-accent) !important;
+  color: var(--color-accent-content) !important;
+}
+
+.btn-neutral {
+  background-color: var(--color-neutral) !important;
+  color: var(--color-neutral-content) !important;
+}
+
+.btn-success {
+  background-color: var(--color-success) !important;
+  color: var(--color-success-content) !important;
+}
+
+.btn-warning {
+  background-color: var(--color-warning) !important;
+  color: var(--color-warning-content) !important;
+}
+
+.btn-error {
+  background-color: var(--color-error) !important;
+  color: var(--color-error-content) !important;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
