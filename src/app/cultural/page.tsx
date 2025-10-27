@@ -1,6 +1,7 @@
 import React from 'react';
 import HeroSection from './components/HeroSection';
 import SearchHeader from './components/SearchHeader';
+import ArchiveDisplaySection from './components/ArchiveDisplaySection';
 export default function CulturalPage() {
   return (
     // La página principal ahora solo renderiza la sección SAISAL.
@@ -8,6 +9,7 @@ export default function CulturalPage() {
     <main className="min-h-screen"> 
         <HeroSection />
         <SearchHeader />
+        <ArchiveDisplaySection />
     </main>
   );
 }

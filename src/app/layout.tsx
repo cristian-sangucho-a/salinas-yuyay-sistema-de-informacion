@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Roboto} from "next/font/google";
 import "./globals.css";
-
+import Footer from "./Footer";
+import Navbar from "./NavBar";
 const geistSans = Geist({
   subsets: ["latin"],
 });
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body
         className={roboto.className}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
