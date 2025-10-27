@@ -11,6 +11,7 @@
     "build:css": "npx @tailwindcss/cli -i app.css -o public/output.css"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.17.6",
     "@tailwindcss/cli": "^4.1.15",
     "daisyui": "^5.3.7",
     "next": "15.5.6",
