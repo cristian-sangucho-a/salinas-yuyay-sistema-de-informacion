@@ -1,9 +1,15 @@
 import PocketBase from 'pocketbase';
 
-const POCKETBASE_URL = process.env.NEXT_PUBLIC_POCKETBASE_URL;
 
-if (!POCKETBASE_URL) {
-    throw new Error('Please define NEXT_PUBLIC_POCKETBASE_URL in your .env file');
-}
+const POCKETBASE_URL = process.env.NEXT_PUBLIC_POCKETBASE_URL || 'http://127.0.0.1:8090';
 
-export const pocketbase = new PocketBase(POCKETBASE_URL);
+
+export const pb = new PocketBase(POCKETBASE_URL);
+
+// Opcional
+pb.autoCancellation(false);
+
+
+
+
+
