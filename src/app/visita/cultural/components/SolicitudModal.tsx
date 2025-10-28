@@ -65,7 +65,7 @@ export default function SolicitudModal({
       correo: formData.correo,
       institucion: formData.institucion || undefined,
       motivo: formData.motivo,
-      activo_solicitado: activoId,
+      activo: activoId,
     });
 
     setIsSubmitting(false);

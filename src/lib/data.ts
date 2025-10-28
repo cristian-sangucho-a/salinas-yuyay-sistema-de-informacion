@@ -130,11 +130,16 @@ export async function createSolicitud(data: {
     correo: string;
     institucion?: string;
     motivo: string;
-    activo_solicitado: string;
+    activo: string;
 }): Promise<boolean> {
     try {
         await pb.collection('solicitud').create({
-            ...data,
+            nombre: data.nombre,
+            apellido: data.apellido,
+            correo: data.correo,
+            institucion: data.institucion,
+            motivo: data.motivo,
+            activo: data.activo,
             estado: 'pendiente',
         });
         return true;

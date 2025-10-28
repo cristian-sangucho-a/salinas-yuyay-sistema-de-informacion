@@ -45,5 +45,5 @@ export interface Solicitud {
     institucion?: string;
     motivo: string;
     estado: 'pendiente' | 'aprobado' | 'rechazado';
-    activo_solicitado: string; // ID del activo relacionado
+    activo: string; // ID del activo relacionado
 }
