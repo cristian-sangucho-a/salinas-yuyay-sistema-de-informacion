@@ -1,76 +1,77 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaCalendarAlt, FaUser, FaFileArchive } from 'react-icons/fa';
-
-// Reutiliza la misma interfaz Asset
-interface Asset {
-  id: string;
-  image: string;
-  category: { name: string };
-  title: string;
-  description: string;
-  year?: string;
-  author?: string;
-  fileCount: number;
-}
+import { FaImage, FaCalendar, FaUser, FaFile } from 'react-icons/fa';
+import type { Activo } from '@/lib/types';
+import { getFileUrl } from '@/lib/data';
 
 interface AssetListItemProps {
-  asset: Asset;
+  asset: Activo;
 }
 
 export default function AssetListItem({ asset }: AssetListItemProps) {
+  const imageUrl = getFileUrl(asset, 'archivos');
+  const categoryName = asset.expand?.categoria?.nombre ?? 'Sin categoría';
+  const fileCount = asset.archivos?.length ?? 0;
+
   return (
-    // Contenedor: Fondo Beige sal, Borde Arena
-    <div className="flex flex-col sm:flex-row gap-4 bg-base-100 border border-base-300 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden p-4">
-      {/* Imagen */}
-      <div className="relative w-full sm:w-32 h-32 sm:h-auto shrink-0 rounded overflow-hidden"> {/* Tamaño fijo y redondeado */}
-        <Image
-          src={asset.image}
-          alt={`Imagen de ${asset.title}`}
-          layout="fill"
-          objectFit="cover"
-           unoptimized={asset.image.startsWith('https://placehold.co')}
-        />
-      </div>
-
-      {/* Contenido */}
-      <div className="flex flex-col grow">
-         {/* Badge Categoría: Marrón arcilla */}
-         <span className="badge badge-secondary text-secondary-content mb-1 self-start">{asset.category.name}</span>
-
-        {/* Título: Gris pizarra */}
-        <h2 className="text-base-content text-lg font-semibold leading-snug mb-1 hover:text-primary transition-colors">
-           <Link href={`/cultural/activos/${asset.id}`}>
-            {asset.title}
-          </Link>
-        </h2>
-
-        {/* Descripción: Gris pizarra (más claro) */}
-        <p className="text-sm text-base-content/70 mb-2 line-clamp-2">
-          {asset.description}
-        </p>
-
-        {/* Metadatos en línea */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/70 mt-auto pt-1"> {/* mt-auto empuja hacia abajo */}
-          {asset.year && (
-            <div className="flex items-center gap-1">
-              <FaCalendarAlt className="w-3 h-3" />
-              <span>{asset.year}</span>
-            </div>
-          )}
-          {asset.author && (
-            <div className="flex items-center gap-1">
-              <FaUser className="w-3 h-3" />
-              <span>{asset.author}</span>
-            </div>
-          )}
-          <div className="flex items-center gap-1">
-            <FaFileArchive className="w-3 h-3" />
-            <span>{asset.fileCount} {asset.fileCount === 1 ? 'archivo' : 'archivos'}</span>
+    <Link 
+      href={`/visita/cultural/activo/${asset.id}`} 
+      className="card card-side bg-base-100 border-2 border-[#D9C3A3] shadow-sm hover:shadow-lg hover:border-secondary transition-all overflow-hidden"
+    >
+      <figure className="relative w-64 h-auto bg-base-300 shrink-0">
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={asset.titulo}
+            width={256}
+            height={200}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-[#D6A77A] to-[#D9C3A3]">
+            <FaImage className="w-16 h-16 text-[#5A1E02]/30" />
+          </div>
+        )}
+      </figure>
+      <div className="card-body py-4 px-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <span className="badge badge-sm bg-secondary text-white border-none mb-2">
+              {categoryName}
+            </span>
+            <h3 className="card-title text-xl text-primary font-bold mb-2">
+              {asset.titulo}
+            </h3>
+            <p className="text-base-content/70 line-clamp-2 text-sm mb-3">
+              {asset.descripcion}
+            </p>
           </div>
         </div>
+        
+        <div className="flex flex-wrap items-center gap-4 text-sm text-base-content/60 mt-auto pt-3 border-t border-[#D9C3A3]">
+          {asset.anio && (
+            <div className="flex items-center gap-1.5">
+              <FaCalendar className="w-3.5 h-3.5" />
+              <span>{asset.anio}</span>
+            </div>
+          )}
+          {asset.autor && (
+            <div className="flex items-center gap-1.5">
+              <FaUser className="w-3.5 h-3.5" />
+              <span>{asset.autor}</span>
+            </div>
+          )}
+          {fileCount > 0 && (
+            <div className="flex items-center gap-1.5">
+              <FaFile className="w-3.5 h-3.5" />
+              <span>{fileCount} {fileCount === 1 ? 'archivo' : 'archivos'}</span>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }

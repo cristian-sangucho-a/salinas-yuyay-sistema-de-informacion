@@ -2,66 +2,76 @@
 
 import React from 'react';
 import { FaThLarge, FaList, FaChevronDown } from 'react-icons/fa';
+import type { Categoria } from '@/lib/types';
 
 interface ArchiveControlsProps {
   assetCount: number;
-  categories: string[];
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
+  categorias: Categoria[];
+  selectedCategoryId: string;
+  selectedCategoryName: string;
+  onCategoryChange: (categoryId: string) => void;
   viewMode: 'grid' | 'list';
   onViewChange: (mode: 'grid' | 'list') => void;
 }
 
 export default function ArchiveControls({
   assetCount,
-  categories,
-  selectedCategory,
+  categorias,
+  selectedCategoryId,
+  selectedCategoryName,
   onCategoryChange,
   viewMode,
   onViewChange,
 }: ArchiveControlsProps) {
   return (
-    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-base-300"> {/* Borde inferior Arena */}
-      {/* Título y Subtítulo */}
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-base-300">
       <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-primary"> {/* Título: Marrón tierra */}
+        <h2 className="text-2xl md:text-3xl font-bold text-primary">
           Activos Históricos
         </h2>
-        <p className="text-sm text-base-content/70 mt-1"> {/* Subtítulo: Gris pizarra */}
-          Explora {assetCount} activos del archivo histórico
+        <p className="text-sm text-base-content/70 mt-1">
+          {assetCount} {assetCount === 1 ? 'activo encontrado' : 'activos encontrados'}
         </p>
       </div>
 
-      {/* Controles: Filtro y Vistas */}
       <div className="flex items-center gap-2">
-        {/* Dropdown de Categorías */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-outline border-base-300 bg-base-100 text-base-content hover:bg-base-200 hover:border-base-300 min-w-[150px] justify-between">
-            {selectedCategory}
+            {selectedCategoryName}
             <FaChevronDown className="w-3 h-3 ml-2 opacity-50" />
           </div>
-          <ul tabIndex={0} className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52 mt-1">
-            {categories.map((category) => (
-              <li key={category}>
-                {/* Usamos un botón para manejar el click y cerrar el dropdown */}
+          <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52 mt-1 max-h-60 overflow-y-auto">
+             <li>
+               <button
+                 onClick={() => {
+                   onCategoryChange('Todas');
+                   if (document.activeElement instanceof HTMLElement) {
+                     document.activeElement.blur();
+                   }
+                 }}
+                 className={`text-left w-full ${selectedCategoryId === 'Todas' ? 'bg-base-300 font-semibold' : ''}`}
+               >
+                 Todas
+               </button>
+             </li>
+            {categorias.map((category) => (
+              <li key={category.id}>
                 <button
                     onClick={() => {
-                        onCategoryChange(category);
-                        // Cierra el dropdown manualmente si es necesario (DaisyUI a veces lo maneja solo)
+                        onCategoryChange(category.id);
                         if (document.activeElement instanceof HTMLElement) {
                             document.activeElement.blur();
                         }
                     }}
-                    className={`text-left w-full ${selectedCategory === category ? 'bg-base-300 font-semibold' : ''}`} // Estilo para seleccionado
+                    className={`text-left w-full ${selectedCategoryId === category.id ? 'bg-base-300 font-semibold' : ''}`}
                 >
-                    {category}
+                    {category.nombre}
                 </button>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Botones de Vista (Grid/List) */}
         <div className="btn-group">
           <button
             onClick={() => onViewChange('grid')}
@@ -82,3 +92,4 @@ export default function ArchiveControls({
     </div>
   );
 }
+

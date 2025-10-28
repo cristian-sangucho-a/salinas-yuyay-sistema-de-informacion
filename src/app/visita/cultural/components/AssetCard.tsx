@@ -1,76 +1,90 @@
-import React from 'react';
-import Image from 'next/image'; // Usar Image de Next.js
-import Link from 'next/link';
-import { FaCalendarAlt, FaUser, FaFileArchive } from 'react-icons/fa';
+'use client';
 
-// Define una interfaz para las props del asset
-interface Asset {
-  id: string;
-  image: string; // URL de la imagen (del campo 'archivo' de Pocketbase, necesitará lógica)
-  category: { name: string }; // Asume que la categoría tiene un nombre
-  title: string;
-  description: string;
-  year?: string; // Opcional
-  author?: string; // Opcional
-  fileCount: number; // Del campo múltiple 'archivo'
-}
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { FaCalendar, FaUser, FaFile, FaPaperPlane } from 'react-icons/fa';
+import type { Activo } from '@/lib/types';
+import SolicitudModal from './SolicitudModal';
 
 interface AssetCardProps {
-  asset: Asset;
+  asset: Activo;
 }
 
 export default function AssetCard({ asset }: AssetCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const categoryName = asset.expand?.categoria?.nombre ?? 'Sin categoría';
+  const fileCount = asset.archivos?.length ?? 0;
+
+  const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('button')) {
+      e.preventDefault();
+    }
+  };
+
   return (
-    // Card: Fondo Beige sal, Borde Arena
-    <div className="card bg-base-100 border border-base-300 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-      <figure className="relative h-48 w-full"> {/* Altura fija para la imagen */}
-        <Image
-          src={asset.image}
-          alt={`Imagen de ${asset.title}`}
-          layout="fill" // Ocupa todo el espacio de figure
-          objectFit="cover" // Cubre el espacio sin distorsionar
-          unoptimized={asset.image.startsWith('https://placehold.co')} // Desactiva optimización para placeholders
-        />
-      </figure>
-      <div className="card-body p-4 md:p-5"> {/* Padding ajustado */}
-        {/* Badge Categoría: Marrón arcilla */}
-        <div className="card-actions justify-start mb-2">
-          <span className="badge badge-secondary text-secondary-content">{asset.category.name}</span>
+    <>
+      <Link 
+        href={`/visita/cultural/activo/${asset.id}`}
+        onClick={handleCardClick}
+        className="block bg-white border border-[#D9C3A3] rounded-lg p-5 hover:shadow-md transition-shadow relative"
+      >
+        <div className="mb-3">
+          <span className="inline-block px-3 py-1 bg-[#8B3C10] text-white text-xs font-medium rounded">
+            {categoryName}
+          </span>
         </div>
 
-        {/* Título: Gris pizarra */}
-        <h2 className="card-title text-base-content text-lg font-semibold leading-snug mb-1 hover:text-primary transition-colors">
-          {/* Enlace al detalle del activo (cambiar ruta si es necesario) */}
-          <Link href={`/cultural/activos/${asset.id}`}>
-            {asset.title}
-          </Link>
-        </h2>
+        <h3 className="text-lg font-bold text-[#5A1E02] mb-2">
+          {asset.titulo}
+        </h3>
 
-        {/* Descripción: Gris pizarra (más claro) */}
-        <p className="text-sm text-base-content/70 mb-3 line-clamp-2"> {/* Limita a 2 líneas */}
-          {asset.description}
+        <p className="text-sm text-[#4A3B31]/70 mb-4 line-clamp-2">
+          {asset.descripcion}
         </p>
 
-        {/* Metadatos: Año, Autor, Cantidad */}
-        <div className="flex flex-col space-y-1 text-xs text-base-content/70">
-          {asset.year && (
-            <div className="flex items-center gap-1.5">
-              <FaCalendarAlt className="w-3 h-3" />
-              <span>{asset.year}</span>
-            </div>
-          )}
-          {asset.author && (
-            <div className="flex items-center gap-1.5">
-              <FaUser className="w-3 h-3" />
-              <span>{asset.author}</span>
-            </div>
-          )}
-          <div className="flex items-center gap-1.5">
-            <FaFileArchive className="w-3 h-3" />
-            <span>{asset.fileCount} {asset.fileCount === 1 ? 'archivo' : 'archivos'}</span>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#4A3B31]/60">
+            {asset.anio && (
+              <div className="flex items-center gap-1.5">
+                <FaCalendar className="w-3.5 h-3.5" />
+                <span>{asset.anio}</span>
+              </div>
+            )}
+            {asset.autor && (
+              <div className="flex items-center gap-1.5">
+                <FaUser className="w-3.5 h-3.5" />
+                <span>{asset.autor}</span>
+              </div>
+            )}
+            {fileCount > 0 && (
+              <div className="flex items-center gap-1.5">
+                <FaFile className="w-3.5 h-3.5" />
+                <span>{fileCount}</span>
+              </div>
+            )}
           </div>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsModalOpen(true);
+            }}
+            className="btn btn-sm bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
+          >
+            <FaPaperPlane className="w-3 h-3" />
+            Solicitar
+          </button>
         </div>
-      </div>
-    </div>
+      </Link>
+
+      <SolicitudModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        activoId={asset.id}
+        activoTitulo={asset.titulo}
+      />
+    </>
   );
 }

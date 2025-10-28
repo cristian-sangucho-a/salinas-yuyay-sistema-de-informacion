@@ -82,3 +82,65 @@ export async function getActivos(
     }
 }
 
+/**
+ * Obtiene el conteo de activos por categoría.
+ */
+export async function getAssetCountsByCategory(): Promise<Record<string, number>> {
+    try {
+        const activos = await pb.collection('activo').getFullList<Activo>({
+            filter: 'publico = true',
+            fields: 'id,categoria',
+        });
+
+        const counts: Record<string, number> = {};
+        activos.forEach(activo => {
+            if (activo.categoria) {
+                counts[activo.categoria] = (counts[activo.categoria] || 0) + 1;
+            }
+        });
+
+        return counts;
+    } catch (error) {
+        console.error("Error fetching asset counts:", error);
+        return {};
+    }
+}
+
+/**
+ * Obtiene un activo específico por su ID.
+ */
+export async function getActivoById(id: string): Promise<Activo | null> {
+    try {
+        const activo = await pb.collection('activo').getOne<Activo>(id, {
+            expand: 'categoria',
+        });
+        return activo;
+    } catch (error) {
+        console.error("Error fetching activo:", error);
+        return null;
+    }
+}
+
+/**
+ * Crea una solicitud para un activo.
+ */
+export async function createSolicitud(data: {
+    nombre: string;
+    apellido: string;
+    correo: string;
+    institucion?: string;
+    motivo: string;
+    activo_solicitado: string;
+}): Promise<boolean> {
+    try {
+        await pb.collection('solicitud').create({
+            ...data,
+            estado: 'pendiente',
+        });
+        return true;
+    } catch (error) {
+        console.error("Error creating solicitud:", error);
+        return false;
+    }
+}
+

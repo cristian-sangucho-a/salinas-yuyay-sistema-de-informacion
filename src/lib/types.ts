@@ -26,6 +26,7 @@ export interface Activo {
     archivos: string[];
     publico: boolean;
     categoria: string; // ID de la relación (Single)
+    fileCount?: number;
     expand?: { // Para cuando expandimos la relación con 'categoria'
         categoria?: Categoria;
     };

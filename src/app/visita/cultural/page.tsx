@@ -1,15 +1,19 @@
 import React from 'react';
 import HeroSection from './components/HeroSection';
 import SearchHeader from './components/SearchHeader';
-import ArchiveDisplaySection from './components/ArchiveDisplaySection';
-export default function CulturalPage() {
+import CategoryDisplaySection from './components/CategoryDisplaySection';
+import { getCategorias, getAssetCountsByCategory } from '@/lib/data';
+
+export default async function CulturalPage() {
+  const categorias = await getCategorias();
+  const assetCounts = await getAssetCountsByCategory();
+
   return (
-    // La página principal ahora solo renderiza la sección SAISAL.
-    // Puedes añadir más componentes de sección aquí en el futuro si es necesario.
-    <main className="min-h-screen"> 
-        <HeroSection />
-        <SearchHeader />
-        <ArchiveDisplaySection />
+    <main className="min-h-screen">
+      <HeroSection />
+      <SearchHeader />
+      <CategoryDisplaySection categorias={categorias} assetCounts={assetCounts} />
     </main>
   );
 }
+
