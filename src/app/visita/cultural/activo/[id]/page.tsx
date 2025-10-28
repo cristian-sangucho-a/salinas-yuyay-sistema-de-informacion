@@ -1,8 +1,9 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { FaArrowLeft, FaCalendar, FaUser, FaFolder, FaFile, FaEye } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaUser, FaFolder, FaFile } from 'react-icons/fa';
 import { getActivoById } from '@/lib/data';
+import AssetFileItem from '../../components/AssetFileItem';
 
 interface AssetPageProps {
   params: Promise<{
@@ -65,71 +66,31 @@ export default async function AssetPage({ params }: AssetPageProps) {
           </div>
         </div>
 
-        {fileCount > 0 && (
+        {fileCount > 0 ? (
           <div>
             <h2 className="text-2xl font-bold text-[#5A1E02] mb-6">
               Archivos Disponibles
             </h2>
 
             <div className="space-y-4">
-              {activo.archivos.map((archivo, index) => {
-                const extension = archivo.split('.').pop()?.toUpperCase() || 'FILE';
-                const sizeInMB = (Math.random() * 5 + 0.5).toFixed(1);
-                const pageCount = Math.floor(Math.random() * 20) + 1;
-                
-                return (
-                  <div 
-                    key={index}
-                    className="bg-white border border-[#D9C3A3] rounded-lg p-5 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4 flex-1 min-w-0">
-                        <FaFile className="w-5 h-5 text-[#8B3C10] shrink-0 mt-1" />
-                        
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-[#5A1E02] mb-2 break-words">
-                            {archivo}
-                          </h3>
-                          
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-[#4A3B31]/70 mb-3">
-                            <span className="px-2 py-0.5 bg-[#F8F3ED] border border-[#D9C3A3] rounded">
-                              {extension}
-                            </span>
-                            <span>{sizeInMB} MB</span>
-                            <span>{pageCount} páginas</span>
-                          </div>
-
-                          <p className="text-sm text-[#4A3B31]/60 italic">
-                            Documento original escaneado del acta de fundación
-                          </p>
-                          <p className="text-xs text-[#7C8B56] mt-1">
-                            Calidad: Alta resolución
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <button 
-                          className="btn btn-sm btn-outline border-[#D9C3A3] hover:bg-[#F8F3ED] hover:border-[#8B3C10] text-[#4A3B31] gap-2"
-                          onClick={() => {
-                            alert('Vista previa no disponible. Para acceder al archivo completo, solicite el archivo.');
-                          }}
-                        >
-                          <FaEye className="w-3.5 h-3.5" />
-                          Vista previa
-                        </button>
-                        <Link
-                          href={`/visita/cultural/activo/${activo.id}/solicitar`}
-                          className="btn btn-sm bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
-                        >
-                          Solicitar archivo
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {activo.archivos.map((archivo, index) => (
+                <AssetFileItem 
+                  key={index}
+                  filename={archivo}
+                  index={index}
+                  totalFiles={fileCount}
+                  activoId={activo.id}
+                  activoTitulo={activo.titulo}
+                />
+              ))}
             </div>
+          </div>
+        ) : (
+          <div className="bg-[#D6A77A]/20 border border-[#D6A77A] rounded-lg p-6 text-center">
+            <FaFile className="w-12 h-12 text-[#8B3C10]/50 mx-auto mb-3" />
+            <p className="text-[#4A3B31]">
+              Este activo no tiene archivos disponibles.
+            </p>
           </div>
         )}
       </div>

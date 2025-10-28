@@ -31,7 +31,7 @@ export default function AssetListItem({ asset }: AssetListItemProps) {
             className="object-cover w-full h-full"
           />
         ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-[#D6A77A] to-[#D9C3A3]">
+          <div className="flex items-center justify-center w-full h-full bg-linear-to-br from-[#D6A77A] to-[#D9C3A3]">
             <FaImage className="w-16 h-16 text-[#5A1E02]/30" />
           </div>
         )}
