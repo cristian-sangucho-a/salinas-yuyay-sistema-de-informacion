@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaCalendar, FaUser, FaFolder, FaFile } from 'react-icons/fa';
 import { getActivoById } from '@/lib/data';
-import AssetFileItem from '../../components/AssetFileItem';
+import AssetFileItem from '@cultural/AssetFileItem';
 
 interface AssetPageProps {
   params: Promise<{
