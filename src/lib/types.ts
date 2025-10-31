@@ -37,8 +37,6 @@ export interface Solicitud {
     id: string;
     collectionId: string;
     collectionName: 'solicitud';
-    created: string;
-    updated: string;
     nombre: string;
     apellido: string;
     correo: string;
@@ -46,4 +44,7 @@ export interface Solicitud {
     motivo: string;
     estado: 'pendiente' | 'aprobado' | 'rechazado';
     activo: string; // ID del activo relacionado
+    expand?: { // Para cuando expandimos la relación con 'activo'
+        activo?: Activo;
+    };
 }

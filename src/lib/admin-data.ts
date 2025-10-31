@@ -1,5 +1,6 @@
 import { pb } from './pocketbase';
-import type { Categoria, Activo } from './types';
+import type { Categoria, Activo, Solicitud } from './types';
+import { ListResult } from 'pocketbase';
 
 // Funciones de Categorías
 export async function createCategoria(data: {
@@ -205,5 +206,40 @@ export async function getActivoById(id: string): Promise<Activo | null> {
   } catch (error) {
     console.error("Error fetching activo:", error);
     return null;
+  }
+}
+
+export async function getSolicitudesAdmin(
+  page: number = 1,
+  perPage: number = 30
+): Promise<ListResult<Solicitud>> {
+  try {
+    const result = await pb.collection('solicitud').getList<Solicitud>(
+      page,
+      perPage,
+      {
+        expand: 'activo', // Para poder ver el nombre del activo solicitado
+        sort: '-created', // Mostrar las más nuevas primero
+      }
+    );
+    return result;
+  } catch (error) {
+    console.error("Error fetching solicitudes:", error);
+    return { page: 1, perPage, totalItems: 0, totalPages: 1, items: [] };
+  }
+}
+export async function updateSolicitudEstado(
+  id: string,
+  estado: 'aprobado' | 'rechazado'
+): Promise<Solicitud> {
+  try {
+    // FIX: Añadir <Solicitud>
+    const updatedSolicitud = await pb.collection('solicitud').update<Solicitud>(id, {
+      estado,
+    });
+    return updatedSolicitud;
+  } catch (error) {
+    console.error(`Error updating solicitud ${id} to ${estado}:`, error);
+    throw error;
   }
 }
