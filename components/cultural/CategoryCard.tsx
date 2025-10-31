@@ -17,7 +17,7 @@ export default function CategoryCard({ categoria, assetCount }: CategoryCardProp
 
   return (
     <Link 
-      href={`/visita/cultural/categoria/${categoria.id}`} 
+      href={`/cultural/categoria/${categoria.id}`} 
       className="card bg-base-100 border-2 border-[#D9C3A3] shadow-md hover:shadow-xl hover:border-secondary transition-all hover:-translate-y-1 overflow-hidden"
     >
       <figure className="relative h-56 bg-base-300">

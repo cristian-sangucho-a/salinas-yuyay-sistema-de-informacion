@@ -18,7 +18,7 @@ export default function AssetListItem({ asset }: AssetListItemProps) {
 
   return (
     <Link 
-      href={`/visita/cultural/activo/${asset.id}`} 
+      href={`/cultural/activo/${asset.id}`} 
       className="card card-side bg-base-100 border-2 border-[#D9C3A3] shadow-sm hover:shadow-lg hover:border-secondary transition-all overflow-hidden"
     >
       <figure className="relative w-64 h-auto bg-base-300 shrink-0">

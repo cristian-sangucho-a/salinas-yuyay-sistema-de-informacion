@@ -17,7 +17,7 @@ export default function CategoryListItem({ categoria, assetCount }: CategoryList
 
   return (
     <Link 
-      href={`/visita/cultural/categoria/${categoria.id}`} 
+      href={`/cultural/categoria/${categoria.id}`} 
       className="card card-side bg-base-100 border-2 border-[#D9C3A3] shadow-sm hover:shadow-lg hover:border-secondary transition-all overflow-hidden"
     >
       <figure className="relative w-64 h-auto bg-base-300 shrink-0">

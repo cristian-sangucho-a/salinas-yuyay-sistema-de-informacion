@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getCategorias, getActivos } from '@/lib/data';
-import AssetGrid from '../../components/AssetGrid';
+import AssetGrid from '@cultural/AssetGrid';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -28,8 +28,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="bg-base-200 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
           <Link 
-            href="/visita/cultural"
-            className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors mb-6"
+            href="/cultural"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6"
           >
             <FaArrowLeft className="w-4 h-4" />
             <span className="text-sm">Volver a categorías</span>

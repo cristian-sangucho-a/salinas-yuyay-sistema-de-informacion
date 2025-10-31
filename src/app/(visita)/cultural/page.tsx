@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import HeroSection from './components/HeroSection';
-import SearchHeader from './components/SearchHeader';
-import CategoryDisplaySection from './components/CategoryDisplaySection';
+import HeroSection from '@cultural/HeroSection';
+import SearchHeader from '@cultural/SearchHeader';
+import CategoryDisplaySection from '@cultural/CategoryDisplaySection';
 import { getCategorias, getAssetCountsByCategory } from '@/lib/data';
 import type { Categoria } from '@/lib/types';
 
