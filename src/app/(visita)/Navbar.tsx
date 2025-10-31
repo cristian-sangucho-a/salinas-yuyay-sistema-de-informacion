@@ -22,9 +22,9 @@ export default function Navbar() {
 
   // Lista de enlaces de navegación
   const navLinks: NavLink[] = [
-    { href: '/visita/productos', label: 'Productos' }, // Asume estas rutas
-    { href: '/visita/actividades', label: 'Actividades' }, // Asume estas rutas
-    { href: '/visita/cultural', label: 'Cultural' },
+    { href: '/productos', label: 'Productos' }, // Asume estas rutas
+    { href: '/actividades', label: 'Actividades' }, // Asume estas rutas
+    { href: '/cultural', label: 'Cultural' },
   ];
 
   return (
@@ -34,7 +34,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo/Título Principal */}
           <div className="shrink-0">
-            <Link href="/visita" className="text-2xl font-bold text-primary hover:text-secondary transition-colors">
+            <Link href="/" className="text-2xl font-bold text-primary hover:text-secondary transition-colors">
               SAISAL
             </Link>
           </div>
