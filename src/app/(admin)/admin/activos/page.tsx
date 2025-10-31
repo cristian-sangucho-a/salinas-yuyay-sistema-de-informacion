@@ -1,76 +1,68 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  FaPlus,
-  FaArrowLeft,
-  FaFolder,
-  FaFile,
-  FaEnvelope,
-} from "react-icons/fa";
-import { logout, getAuthUser, isAuthenticated } from "@/lib/auth";
-import { getCategorias } from "@/lib/data";
-import type { Categoria } from "@/lib/types";
-import CategoriasGrid from "@cultural/admin/CategoriasGrid";
-import CategoriaModal from "@cultural/admin/CategoriaModal";
-import CulturalNavTabs from "@cultural/admin/CulturalNavTabs";
-export default function CategoriasAdminPage() {
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { FaPlus, FaArrowLeft, FaFolder, FaFile, FaEnvelope } from 'react-icons/fa';
+import { logout, getAuthUser, isAuthenticated } from '@/lib/auth';
+import type { Activo, Categoria } from '@/lib/types';
+import ActivosTable from '@cultural/admin/ActivosTable';
+import ActivoModal from '@cultural/admin/ActivoModal';
+import CulturalNavTabs from '@cultural/admin/CulturalNavTabs';
+import { getActivos, getCategorias } from '@/lib/data';
+export default function ActivosAdminPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [activos, setActivos] = useState<Activo[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCategoria, setEditingCategoria] = useState<Categoria | null>(
-    null
-  );
+  const [editingActivo, setEditingActivo] = useState<Activo | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-
+    
     if (!isAuthenticated()) {
-      router.push("/login");
+      router.push('/login');
       return;
     }
-
+    
     setUser(getAuthUser());
-    loadCategorias();
+    loadData();
   }, [router]);
 
-  const loadCategorias = async () => {
+  const loadData = async () => {
     try {
       setIsLoading(true);
-      const data = await getCategorias();
-      setCategorias(data);
+      const [activosData, categoriasData] = await Promise.all([
+        getActivos(),
+        getCategorias(),
+      ]);
+      setActivos(activosData.items);
+      setCategorias(categoriasData);
     } catch (error) {
-      console.error("Error al cargar categorías:", error);
+      console.error('Error al cargar datos:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
   const handleCreate = () => {
-    setEditingCategoria(null);
+    setEditingActivo(null);
     setIsModalOpen(true);
   };
 
-  const handleEdit = (categoria: Categoria) => {
-    setEditingCategoria(categoria);
+  const handleEdit = (activo: Activo) => {
+    setEditingActivo(activo);
     setIsModalOpen(true);
   };
 
   const handleModalClose = (shouldRefresh: boolean) => {
     setIsModalOpen(false);
-    setEditingCategoria(null);
+    setEditingActivo(null);
     if (shouldRefresh) {
-      loadCategorias();
+      loadData();
     }
   };
 
@@ -84,7 +76,7 @@ export default function CategoriasAdminPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F3ED]">
-      {/* Header simple con botón Dashboard */}
+      {/* Header */}
       <div className="bg-white border-b border-[#D9C3A3]">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-4">
           <div className="flex items-center justify-between">
@@ -98,37 +90,34 @@ export default function CategoriasAdminPage() {
               </Link>
               <div className="border-l border-[#D9C3A3] h-6"></div>
               <div>
-                <h1 className="text-lg font-bold text-[#5A1E02]">
-                  Panel Administrativo
-                </h1>
-                <p className="text-xs text-[#4A3B31]/60">
-                  Archivo Histórico de Salinas
-                </p>
+                <h1 className="text-lg font-bold text-[#5A1E02]">Panel Administrativo</h1>
+                <p className="text-xs text-[#4A3B31]/60">Archivo Histórico de Salinas</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <CulturalNavTabs />
 
-      {/* Contenido principal */}
+      <CulturalNavTabs/>
+
+      {/* Contenido */}
       <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-[#5A1E02]">
-              Gestión de Categorías
+              Gestión de Activos
             </h2>
             <p className="text-sm text-[#4A3B31]/70 mt-1">
-              Administra las categorías del archivo histórico
+              Administra los activos del archivo histórico
             </p>
           </div>
-
+          
           <button
             onClick={handleCreate}
             className="btn bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
           >
             <FaPlus className="w-4 h-4" />
-            Nueva Categoría
+            Nuevo Activo
           </button>
         </div>
 
@@ -137,18 +126,19 @@ export default function CategoriasAdminPage() {
             <span className="loading loading-spinner loading-lg text-[#5A1E02]"></span>
           </div>
         ) : (
-          <CategoriasGrid
-            categorias={categorias}
+          <ActivosTable
+            activos={activos}
             onEdit={handleEdit}
-            onDelete={loadCategorias}
+            onDelete={loadData}
           />
         )}
       </main>
 
-      <CategoriaModal
+      <ActivoModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
-        categoria={editingCategoria}
+        activo={editingActivo}
+        categorias={categorias}
       />
 
       <footer className="fixed bottom-4 right-4">

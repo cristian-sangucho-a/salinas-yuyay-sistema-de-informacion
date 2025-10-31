@@ -29,7 +29,7 @@ export default function CategoryCard({ categoria, assetCount }: CategoryCardProp
             className="object-cover"
           />
         ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-br from-[#D6A77A] to-[#D9C3A3]">
+          <div className="flex items-center justify-center h-full bg-linear-to-br from-[#D6A77A] to-[#D9C3A3]">
             <FaImage className="w-20 h-20 text-[#5A1E02]/30" />
           </div>
         )}

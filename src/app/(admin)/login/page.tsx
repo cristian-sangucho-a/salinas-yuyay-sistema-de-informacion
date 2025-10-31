@@ -46,11 +46,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8F3ED] via-[#D9C3A3] to-[#D6A77A] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-[#F8F3ED] via-[#D9C3A3] to-[#D6A77A] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white border-2 border-[#D9C3A3] rounded-lg shadow-xl p-8 animate-in fade-in zoom-in duration-500">
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#5A1E02] to-[#8B3C10] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <div className="w-20 h-20 bg-linear-to-br from-[#5A1E02] to-[#8B3C10] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <FaUser className="w-10 h-10 text-[#F8F3ED]" />
             </div>
             <h1 className="text-3xl font-bold text-[#5A1E02] mb-2">
