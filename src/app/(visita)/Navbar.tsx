@@ -23,7 +23,7 @@ export default function Navbar() {
   // Lista de enlaces de navegación
   const navLinks: NavLink[] = [
     { href: '/productos', label: 'Productos' }, // Asume estas rutas
-    { href: '/actividades', label: 'Actividades' }, // Asume estas rutas
+    { href: '/turismo', label: 'Turismo' }, // Asume estas rutas
     { href: '/cultural', label: 'Cultural' },
   ];
 
