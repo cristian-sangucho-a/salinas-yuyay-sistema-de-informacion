@@ -1,0 +1,206 @@
+"use client";
+import { useState } from "react";
+import type { ReactNode } from "react";
+import { FaMars, FaVenus } from "react-icons/fa6";
+import Button from "@atoms/Button";
+
+const PRICES = {
+  nino: 1.0,
+  adulto: 2.5,
+  mayor: 1.5,
+  discapacidad: 0.0,
+};
+
+export default function TicketCalculator() {
+  // Cantidades separadas por género para cada categoría
+  const [ninoH, setNinoH] = useState(0);
+  const [ninoM, setNinoM] = useState(0);
+  const [adultoH, setAdultoH] = useState(0);
+  const [adultoM, setAdultoM] = useState(0);
+  const [mayorH, setMayorH] = useState(0);
+  const [mayorM, setMayorM] = useState(0);
+  const [discapacidadH, setDiscapacidadH] = useState(0);
+  const [discapacidadM, setDiscapacidadM] = useState(0);
+
+  const total = (
+    (ninoH + ninoM) * PRICES.nino +
+    (adultoH + adultoM) * PRICES.adulto +
+    (mayorH + mayorM) * PRICES.mayor +
+    (discapacidadH + discapacidadM) * PRICES.discapacidad
+  ).toFixed(2);
+
+  // Totales por categoría (sumando géneros)
+  const totalNinos = ninoH + ninoM;
+  const totalAdultos = adultoH + adultoM;
+  const totalMayores = mayorH + mayorM;
+  const totalDiscapacitados = discapacidadH + discapacidadM;
+  // numeric total para cálculos si se necesita
+  const totalNumber = (
+    (totalNinos) * PRICES.nino +
+    (totalAdultos) * PRICES.adulto +
+    (totalMayores) * PRICES.mayor +
+    (totalDiscapacitados) * PRICES.discapacidad
+  );
+
+  const Counter = ({
+    label,
+    value,
+    onInc,
+    onDec,
+    price,
+    icon,
+    colorClass,
+  }: {
+    label: string;
+    value: number;
+    onInc: () => void;
+    onDec: () => void;
+    price: number;
+    icon?: ReactNode;
+    colorClass?: string; // e.g., "text-sky-600 bg-sky-100"
+  }) => (
+    <div className="flex items-center justify-between gap-4 p-3 border border-base-300 rounded bg-base-100">
+      <div className="flex items-center gap-3">
+        <div className={`avatar placeholder ${colorClass?.split(" ").some((c) => c.includes("bg-")) ? "" : "bg-base-200"}`}>
+          <div className={`w-10 rounded-full flex items-center justify-center ${colorClass ?? ""}`}>
+            <span className="text-xl">{icon}</span>
+          </div>
+        </div>
+        <div>
+          <div className="font-semibold">{label}</div>
+          <div className="text-xs text-base-content/70">Precio: ${price}</div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <button className="btn btn-circle btn-outline" onClick={onDec} aria-label={`disminuir ${label}`}>
+          −
+        </button>
+        <div className="w-8 text-center text-lg tabular-nums">{value}</div>
+        <button className="btn btn-circle btn-primary" onClick={onInc} aria-label={`aumentar ${label}`}>
+          +
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <section id="boletos" className="py-8">
+      <div className="max-w-2xl mx-auto px-4">
+        <h3 className="text-2xl font-bold mb-4">Calculadora de Boletos</h3>
+        <div className="flex flex-col gap-3">
+          <div className="space-y-2">
+            <div className="text-base font-semibold">Niño</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <Counter
+                label="Hombre"
+                value={ninoH}
+                price={PRICES.nino}
+                onInc={() => setNinoH((v) => v + 1)}
+                onDec={() => setNinoH((v) => Math.max(0, v - 1))}
+                icon={<FaMars />}
+                colorClass="text-sky-600 bg-sky-100"
+              />
+              <Counter
+                label="Mujer"
+                value={ninoM}
+                price={PRICES.nino}
+                onInc={() => setNinoM((v) => v + 1)}
+                onDec={() => setNinoM((v) => Math.max(0, v - 1))}
+                icon={<FaVenus />}
+                colorClass="text-pink-600 bg-pink-100"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-base font-semibold">Adulto</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <Counter
+                label="Hombre"
+                value={adultoH}
+                price={PRICES.adulto}
+                onInc={() => setAdultoH((v) => v + 1)}
+                onDec={() => setAdultoH((v) => Math.max(0, v - 1))}
+                icon={<FaMars />}
+                colorClass="text-sky-600 bg-sky-100"
+              />
+              <Counter
+                label="Mujer"
+                value={adultoM}
+                price={PRICES.adulto}
+                onInc={() => setAdultoM((v) => v + 1)}
+                onDec={() => setAdultoM((v) => Math.max(0, v - 1))}
+                icon={<FaVenus />}
+                colorClass="text-pink-600 bg-pink-100"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-base font-semibold">Adulto Mayor</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <Counter
+                label="Hombre"
+                value={mayorH}
+                price={PRICES.mayor}
+                onInc={() => setMayorH((v) => v + 1)}
+                onDec={() => setMayorH((v) => Math.max(0, v - 1))}
+                icon={<FaMars />}
+                colorClass="text-sky-600 bg-sky-100"
+              />
+              <Counter
+                label="Mujer"
+                value={mayorM}
+                price={PRICES.mayor}
+                onInc={() => setMayorM((v) => v + 1)}
+                onDec={() => setMayorM((v) => Math.max(0, v - 1))}
+                icon={<FaVenus />}
+                colorClass="text-pink-600 bg-pink-100"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-base font-semibold">Discapacidad</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <Counter
+                label="Hombre"
+                value={discapacidadH}
+                price={PRICES.discapacidad}
+                onInc={() => setDiscapacidadH((v) => v + 1)}
+                onDec={() => setDiscapacidadH((v) => Math.max(0, v - 1))}
+                icon={<FaMars />}
+                colorClass="text-sky-600 bg-sky-100"
+              />
+              <Counter
+                label="Mujer"
+                value={discapacidadM}
+                price={PRICES.discapacidad}
+                onInc={() => setDiscapacidadM((v) => v + 1)}
+                onDec={() => setDiscapacidadM((v) => Math.max(0, v - 1))}
+                icon={<FaVenus />}
+                colorClass="text-pink-600 bg-pink-100"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mt-4">
+            <div className="text-lg font-semibold">Total: ${total}</div>
+            <Button
+              variant="primary"
+              onClick={() => {
+                const message = `Quiero comprar boletos:\nNiños: ${totalNinos}\nAdultos: ${totalAdultos}\nAdultos mayores: ${totalMayores}\nDiscapacitados: ${totalDiscapacitados}\nTotal: $${totalNumber.toFixed(2)}`;
+                const url = `https://api.whatsapp.com/send/?phone=593999999999&text=${encodeURIComponent(
+                  message
+                )}&type=phone_number&app_absent=0`;
+                window.open(url, "_blank");
+              }}
+            >
+              Comprar
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
