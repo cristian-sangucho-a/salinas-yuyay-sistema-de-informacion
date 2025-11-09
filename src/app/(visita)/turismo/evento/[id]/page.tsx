@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { getEventById, buildImageUrl } from "@/lib/pocketbase";
+import { getEventoById, getFileUrl } from "@/lib/data";
+import type { Evento } from "@/lib/types";
 
 interface Props {
   params: {
@@ -9,15 +10,16 @@ interface Props {
 
 export default async function EventPage({ params }: Props) {
   const { id } = params;
-  let record: Record<string, unknown>;
+  let evento: Evento | null = null;
   try {
-    record = await getEventById(id);
+    evento = await getEventoById(id);
   } catch {
-    // si no existe, mostrar 404
     return notFound();
   }
 
-  const r = record as Record<string, unknown>;
+  if (!evento) return notFound();
+
+  const r = evento as unknown as Record<string, unknown>;
   const titulo = String(r.titulo ?? r["titulo"] ?? "Evento");
   const contenido = String(r.contenido ?? r["contenido"] ?? r.resumen ?? r["resumen"] ?? "");
   const portada = String(r.portada ?? r["portada"] ?? "");
@@ -47,7 +49,16 @@ export default async function EventPage({ params }: Props) {
   const fechaInicio = fmt(parseDate(rawInicio));
   const fechaFin = fmt(parseDate(rawFin));
 
-  const portadaUrl = portada ? buildImageUrl(record, portada) : null;
+  const portadaUrl = getFileUrl(evento as any, "portada");
+  
+  // Procesar galería usando getFileUrl para cada imagen
+  const galeriaUrls: string[] = galeria
+    .map((filename) => {
+      // Crear un objeto temporal para usar con getFileUrl
+      const tempRecord = { ...evento, galeria: filename };
+      return getFileUrl(tempRecord as any, "galeria");
+    })
+    .filter((url): url is string => url !== null);
 
   return (
     <main className="flex-1">
@@ -85,13 +96,13 @@ export default async function EventPage({ params }: Props) {
             ))}
           </div>
 
-          {galeria.length > 0 && (
+          {galeriaUrls.length > 0 && (
             <section className="mt-12">
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {galeria.map((f) => (
-                  <div key={f} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={buildImageUrl(record, f)} alt={f} className="w-full h-full object-cover" />
+                {galeriaUrls.map((url, index) => (
+                  <div key={`gallery-${index}`} className="h-44 overflow-hidden rounded shadow-sm">
+                    <img src={url} alt={`Imagen de galería ${index + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>

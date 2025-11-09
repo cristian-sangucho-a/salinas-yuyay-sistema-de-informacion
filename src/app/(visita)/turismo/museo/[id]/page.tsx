@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { buildImageUrl, getSalaById } from "@/lib/pocketbase";
+import { getSalaMuseoPublicaById, getFileUrl } from "@/lib/data";
+import type { SalaMuseo } from "@/lib/types";
 
 interface Props {
   params: {
@@ -9,24 +10,29 @@ interface Props {
 
 export default async function SalaPage({ params }: Props) {
   const { id } = params;
-  let record: Record<string, unknown>;
+  let sala: SalaMuseo | null = null;
   try {
-    record = await getSalaById(id);
+    sala = await getSalaMuseoPublicaById(id);
   } catch {
     return notFound();
   }
 
-  const r = record as Record<string, unknown>;
-  const titulo = String(r.Titulo ?? r["Titulo"] ?? "Sala del museo");
-  const resumen = String(r.Resumen ?? r["Resumen"] ?? "");
-  const contenido = String(r.Contenido ?? r["Contenido"] ?? resumen);
-  const portada = String(r.Portada ?? r["Portada"] ?? "");
-  const rawGaleria = r.Galeria ?? r["Galeria"];
+  if (!sala) return notFound();
+
+  const r = sala as unknown as Record<string, unknown>;
+  const titulo = String(r.titulo ?? r["titulo"] ?? "Sala del museo");
+  const resumen = String(r.resumen ?? r["resumen"] ?? "");
+  const contenido = String(r.contenido ?? r["contenido"] ?? resumen);
+  const portada = String(r.portada ?? r["portada"] ?? "");
+  const rawGaleria = r.galeria ?? r["galeria"];
   const galeria: string[] = Array.isArray(rawGaleria)
-    ? (rawGaleria as unknown[]).map((x) => String(x))
+    ? (rawGaleria as unknown[]).map((filename) => {
+        const tempRecord = { ...sala, galeria: filename };
+        return getFileUrl(tempRecord as any, "galeria");
+      }).filter((url): url is string => url !== null)
     : [];
 
-  const portadaUrl = portada ? buildImageUrl(record, portada) : null;
+  const portadaUrl = getFileUrl(sala as any, "portada");
 
   return (
     <main className="flex-1">
@@ -50,9 +56,9 @@ export default async function SalaPage({ params }: Props) {
             <section className="mt-12">
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {galeria.map((f) => (
-                  <div key={f} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={buildImageUrl(record, f)} alt={f} className="w-full h-full object-cover" />
+                {galeria.map((url, index) => (
+                  <div key={`gallery-${index}`} className="h-44 overflow-hidden rounded shadow-sm">
+                    <img src={url} alt={`Imagen de galería ${index + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
