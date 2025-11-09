@@ -81,24 +81,26 @@ export default function DashboardPage() {
             </p>
           </Link>
 
-          {/* Cards deshabilitadas */}
-          <div className="bg-white border border-[#D9C3A3] rounded-lg p-6 opacity-50 cursor-not-allowed">
+          {/* Turístico - activado */}
+          <Link
+            href="/admin/eventos"
+            className="bg-white border border-[#D9C3A3] rounded-lg p-6 hover:shadow-lg transition-all flex flex-col"
+          >
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 bg-[#D9C3A3] rounded-lg flex items-center justify-center">
-                <FaFolder className="w-7 h-7 text-[#4A3B31]/50" />
+              <div className="w-14 h-14 bg-[#5A1E02] rounded-lg flex items-center justify-center group-hover:bg-[#8B3C10] transition-colors">
+                <FaFolder className="w-7 h-7 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-[#4A3B31]/50">Turístico</h3>
+                <h3 className="text-xl font-bold text-[#5A1E02]">Turístico</h3>
               </div>
             </div>
-            <p className="text-sm text-[#4A3B31]/50">
-              Administra los activos históricos y archivos
+            <p className="text-sm text-[#4A3B31]/70">
+              Administra eventos, salas del museo y contenidos turísticos.
             </p>
-            <span className="inline-block mt-3 px-3 py-1 bg-[#D9C3A3] text-[#4A3B31]/70 text-xs rounded">
-              Próximamente
-            </span>
-          </div>
+          
+          </Link>
 
+          {/* Productivo - sigue deshabilitado */}
           <div className="bg-white border border-[#D9C3A3] rounded-lg p-6 opacity-50 cursor-not-allowed">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-14 h-14 bg-[#D9C3A3] rounded-lg flex items-center justify-center">
