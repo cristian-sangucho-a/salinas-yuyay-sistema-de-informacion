@@ -16,6 +16,7 @@ import type { Categoria } from "@/lib/types";
 import CategoriasGrid from "@cultural/admin/CategoriasGrid";
 import CategoriaModal from "@cultural/admin/CategoriaModal";
 import CulturalNavTabs from "@cultural/admin/CulturalNavTabs";
+import AdminHeader from "@components/molecules/AdminHeader";
 export default function CategoriasAdminPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -85,30 +86,7 @@ export default function CategoriasAdminPage() {
   return (
     <div className="min-h-screen bg-[#F8F3ED]">
       {/* Header simple con botón Dashboard */}
-      <div className="bg-white border-b border-[#D9C3A3]">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin/dashboard"
-                className="flex items-center gap-2 text-[#5A1E02] hover:text-[#8B3C10] transition-colors"
-              >
-                <FaArrowLeft className="w-4 h-4" />
-                <span className="font-medium">Dashboard</span>
-              </Link>
-              <div className="border-l border-[#D9C3A3] h-6"></div>
-              <div>
-                <h1 className="text-lg font-bold text-[#5A1E02]">
-                  Panel Administrativo
-                </h1>
-                <p className="text-xs text-[#4A3B31]/60">
-                  Archivo Histórico de Salinas
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminHeader title="Panel Administrativo" subtitle="Archivo Histórico de Salinas" />
       <CulturalNavTabs />
 
       {/* Contenido principal */}
