@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import type { ReactNode } from "react";
 import { FaMars, FaVenus } from "react-icons/fa6";
 import Button from "@atoms/Button";
 
 const PRICES = {
-  nino: 1.0,
-  adulto: 2.5,
-  mayor: 1.5,
-  discapacidad: 0.0,
+  nino: 2.0,
+  adulto: 2.0,
+  mayor: 2.0,
+  discapacidad: 2.0,
 };
 
 export default function TicketCalculator() {
@@ -41,6 +43,10 @@ export default function TicketCalculator() {
     (totalMayores) * PRICES.mayor +
     (totalDiscapacitados) * PRICES.discapacidad
   );
+
+  // Fecha de visita y total de boletos (usar Date like admin event page, pero sin hora)
+  const [visitDate, setVisitDate] = useState<Date | null>(new Date());
+  const totalTickets = totalNinos + totalAdultos + totalMayores + totalDiscapacitados;
 
   const Counter = ({
     label,
@@ -86,8 +92,24 @@ export default function TicketCalculator() {
   return (
     <section id="boletos" className="py-8">
       <div className="max-w-2xl mx-auto px-4">
-        <h3 className="text-2xl font-bold mb-4">Calculadora de Boletos</h3>
+        <h3 className="text-2xl font-bold mb-4">Visitanos. Reserva tus entradas al museo</h3>
         <div className="flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+            <label className="flex-1">
+              <div className="text-sm font-medium">Fecha de visita</div>
+              <DatePicker
+                selected={visitDate}
+                onChange={(d: Date | null) => setVisitDate(d)}
+                dateFormat="yyyy-MM-dd"
+                className="input input-bordered w-full bg-base-200"
+                placeholderText="Selecciona una fecha"
+              />
+            </label>
+            <div className="mt-2 sm:mt-0">
+              <div className="text-sm font-medium">Número total de boletos</div>
+              <div className="text-lg font-semibold">{totalTickets}</div>
+            </div>
+          </div>
           <div className="space-y-2">
             <div className="text-base font-semibold">Niño</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -189,10 +211,9 @@ export default function TicketCalculator() {
             <Button
               variant="primary"
               onClick={() => {
-                const message = `Quiero comprar boletos:\nNiños: ${totalNinos}\nAdultos: ${totalAdultos}\nAdultos mayores: ${totalMayores}\nDiscapacitados: ${totalDiscapacitados}\nTotal: $${totalNumber.toFixed(2)}`;
-                const url = `https://api.whatsapp.com/send/?phone=593999999999&text=${encodeURIComponent(
-                  message
-                )}&type=phone_number&app_absent=0`;
+                const fechaStr = visitDate ? visitDate.toISOString().slice(0, 10) : "";
+                const message = `Quiero reservar boletos para el museo:\nFecha de visita: ${fechaStr}\nNiños: ${totalNinos}\nAdultos: ${totalAdultos}\nAdultos mayores: ${totalMayores}\nDiscapacitados: ${totalDiscapacitados}\nNúmero total de boletos: ${totalTickets}\nTotal a pagar: $${totalNumber.toFixed(2)}`;
+                const url = `https://api.whatsapp.com/send/?phone=593999999999&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
                 window.open(url, "_blank");
               }}
             >
