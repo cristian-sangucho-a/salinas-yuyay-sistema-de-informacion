@@ -1,6 +1,7 @@
 import { pb } from './pocketbase';
 import type { Categoria, Activo, Solicitud, Evento, SalaMuseo } from './types';
 import { ListResult } from 'pocketbase';
+import { sendApprovalEmail } from './email-service';
 
 // Funciones de Categorías
 export async function createCategoria(data: {
@@ -253,16 +254,43 @@ export async function getSolicitudesAdmin(
 export async function updateSolicitudEstado(
   id: string,
   estado: 'aprobado' | 'rechazado'
-): Promise<Solicitud> {
+): Promise<{ success: boolean; error?: string }> {
   try {
-    // FIX: Añadir <Solicitud>
+    // Actualizar el estado de la solicitud
     const updatedSolicitud = await pb.collection('solicitud').update<Solicitud>(id, {
       estado,
     });
-    return updatedSolicitud;
-  } catch (error) {
+
+    // Si fue aprobada, enviar email con archivos
+    if (estado === 'aprobado') {
+      // Obtener la solicitud con el activo expandido
+      const solicitudCompleta = await pb.collection('solicitud').getOne<Solicitud>(id, {
+        expand: 'activo',
+      });
+
+      if (solicitudCompleta.expand?.activo) {
+        const emailResult = await sendApprovalEmail(
+          solicitudCompleta,
+          solicitudCompleta.expand.activo
+        );
+
+        if (!emailResult.success) {
+          console.error('Error al enviar correo:', emailResult.error);
+          return {
+            success: false,
+            error: `Solicitud aprobada pero falló el envío del correo: ${emailResult.error}`,
+          };
+        }
+      }
+    }
+
+    return { success: true };
+  } catch (error: any) {
     console.error(`Error updating solicitud ${id} to ${estado}:`, error);
-    throw error;
+    return {
+      success: false,
+      error: error.message || 'Error al actualizar la solicitud',
+    };
   }
 }
 
