@@ -1,6 +1,7 @@
 import { pb } from './pocketbase';
 import type { Categoria, Activo, Solicitud, Evento, SalaMuseo } from './types';
 import { ListResult } from 'pocketbase';
+import { sendApprovalEmail } from './email-service';
 
 // Funciones de Categorías
 export async function createCategoria(data: {
@@ -134,27 +135,36 @@ export async function updateActivo(
     formData.append('categoria', data.categoria);
   }
   
-  // Agregar nuevos archivos
-  if (data.nuevosArchivos && data.nuevosArchivos.length > 0) {
-    data.nuevosArchivos.forEach((file) => {
-      formData.append('archivos', file);
-    });
-  }
-  
-  // Para eliminar archivos, enviar los nombres de archivos a mantener
-  if (data.archivosAEliminar && data.archivosAEliminar.length > 0) {
-    // Obtener el activo actual
+  // Manejo correcto de archivos
+  // Si hay cambios en archivos (eliminación o adición), necesitamos manejarlos
+  if ((data.archivosAEliminar && data.archivosAEliminar.length > 0) || 
+      (data.nuevosArchivos && data.nuevosArchivos.length > 0)) {
+    
+    // Obtener el activo actual para saber qué archivos tiene
     const activoActual = await pb.collection('activo').getOne(id);
     const archivosActuales: string[] = activoActual.archivos || [];
     
-    // Filtrar archivos a mantener
+    // Filtrar los archivos que NO están en la lista de eliminación
     const archivosAMantener = archivosActuales.filter(
-      archivo => !data.archivosAEliminar!.includes(archivo)
+      archivo => !(data.archivosAEliminar || []).includes(archivo)
     );
     
-    // Si no hay archivos a mantener, enviar array vacío
-    if (archivosAMantener.length === 0) {
-      formData.append('archivos', '');
+    // Primero, agregar los archivos existentes que se deben mantener
+    // usando el formato "filename.ext" que PocketBase reconoce
+    archivosAMantener.forEach(archivo => {
+      formData.append('archivos', archivo);
+    });
+    
+    // Luego, agregar los nuevos archivos (objetos File)
+    if (data.nuevosArchivos && data.nuevosArchivos.length > 0) {
+      data.nuevosArchivos.forEach((file) => {
+        formData.append('archivos', file);
+      });
+    }
+    
+    // Si no quedan archivos después de todo, enviar string vacío
+    if (archivosAMantener.length === 0 && (!data.nuevosArchivos || data.nuevosArchivos.length === 0)) {
+      formData.set('archivos', '');
     }
   }
 
@@ -244,16 +254,43 @@ export async function getSolicitudesAdmin(
 export async function updateSolicitudEstado(
   id: string,
   estado: 'aprobado' | 'rechazado'
-): Promise<Solicitud> {
+): Promise<{ success: boolean; error?: string }> {
   try {
-    // FIX: Añadir <Solicitud>
+    // Actualizar el estado de la solicitud
     const updatedSolicitud = await pb.collection('solicitud').update<Solicitud>(id, {
       estado,
     });
-    return updatedSolicitud;
-  } catch (error) {
+
+    // Si fue aprobada, enviar email con archivos
+    if (estado === 'aprobado') {
+      // Obtener la solicitud con el activo expandido
+      const solicitudCompleta = await pb.collection('solicitud').getOne<Solicitud>(id, {
+        expand: 'activo',
+      });
+
+      if (solicitudCompleta.expand?.activo) {
+        const emailResult = await sendApprovalEmail(
+          solicitudCompleta,
+          solicitudCompleta.expand.activo
+        );
+
+        if (!emailResult.success) {
+          console.error('Error al enviar correo:', emailResult.error);
+          return {
+            success: false,
+            error: `Solicitud aprobada pero falló el envío del correo: ${emailResult.error}`,
+          };
+        }
+      }
+    }
+
+    return { success: true };
+  } catch (error: any) {
     console.error(`Error updating solicitud ${id} to ${estado}:`, error);
-    throw error;
+    return {
+      success: false,
+      error: error.message || 'Error al actualizar la solicitud',
+    };
   }
 }
 
