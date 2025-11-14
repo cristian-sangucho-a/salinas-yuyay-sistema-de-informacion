@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FaEdit, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaDownload } from 'react-icons/fa';
 import type { Activo } from '@/lib/types';
-import { deleteActivo } from '@/lib/admin-data';
+import { deleteActivo, downloadActivoArchivosAsZip } from '@/lib/admin-data';
 import ConfirmDialog from './ConfirmDialog';
 
 interface ActivosTableProps {
@@ -14,6 +14,7 @@ interface ActivosTableProps {
 
 export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTableProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     activo: Activo | null;
@@ -35,6 +36,36 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
       alert('Error al eliminar el activo.');
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const handleDownload = async (activo: Activo) => {
+    if (!activo.archivos || activo.archivos.length === 0) {
+      alert('Este activo no tiene archivos para descargar');
+      return;
+    }
+
+    try {
+      setDownloadingId(activo.id);
+      const result = await downloadActivoArchivosAsZip(activo);
+
+      if (result.success && result.blob) {
+        const url = window.URL.createObjectURL(result.blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${activo.titulo.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_archivos.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        alert(result.error || 'Error al descargar los archivos');
+      }
+    } catch (error: any) {
+      console.error('Error al descargar archivos:', error);
+      alert(error.message || 'Error al descargar los archivos');
+    } finally {
+      setDownloadingId(null);
     }
   };
 
@@ -64,7 +95,7 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
               {activos.map((activo) => {
                 const categoryName = activo.expand?.categoria?.nombre || 'Sin categoría';
                 const fileCount = activo.archivos?.length || 0;
-                
+
                 return (
                   <tr key={activo.id} className="hover:bg-[#F8F3ED] transition-colors border-b border-[#D9C3A3]">
                     <td>
@@ -109,6 +140,18 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
                     </td>
                     <td>
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleDownload(activo)}
+                          disabled={downloadingId === activo.id || !activo.archivos || activo.archivos.length === 0}
+                          className="btn btn-sm bg-[#7C8B56] hover:bg-[#7C8B56]/80 text-white border-none gap-1 disabled:opacity-50"
+                          title="Descargar archivos"
+                        >
+                          {downloadingId === activo.id ? (
+                            <span className="loading loading-spinner loading-xs"></span>
+                          ) : (
+                            <FaDownload className="w-3 h-3" />
+                          )}
+                        </button>
                         <button
                           onClick={() => onEdit(activo)}
                           className="btn btn-sm bg-[#7C8B56] hover:bg-[#7C8B56]/80 text-white border-none gap-1"

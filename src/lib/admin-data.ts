@@ -2,6 +2,7 @@ import { pb } from './pocketbase';
 import type { Categoria, Activo, Solicitud, Evento, SalaMuseo } from './types';
 import { ListResult } from 'pocketbase';
 import { sendApprovalEmail } from './email-service';
+import JSZip from 'jszip';
 
 // Funciones de Categorías
 export async function createCategoria(data: {
@@ -229,6 +230,48 @@ export async function getActivoById(id: string): Promise<Activo | null> {
   } catch (error) {
     console.error("Error fetching activo:", error);
     return null;
+  }
+}
+
+/**
+ * Descarga todos los archivos de un activo como un archivo ZIP
+ */
+export async function downloadActivoArchivosAsZip(activo: Activo): Promise<{ success: boolean; blob?: Blob; error?: string }> {
+  try {
+    if (!activo.archivos || activo.archivos.length === 0) {
+      return { success: false, error: 'El activo no tiene archivos para descargar' };
+    }
+
+    const zip = new JSZip();
+    
+    // Descargar cada archivo y agregarlo al ZIP
+    for (const archivo of activo.archivos) {
+      try {
+        const fileUrl = pb.files.getURL(activo, archivo);
+        const response = await fetch(fileUrl);
+        
+        if (!response.ok) {
+          console.error(`Error descargando archivo ${archivo}: ${response.statusText}`);
+          continue;
+        }
+        
+        const blob = await response.blob();
+        zip.file(archivo, blob);
+      } catch (fileError) {
+        console.error(`Error procesando archivo ${archivo}:`, fileError);
+      }
+    }
+
+    // Generar el ZIP
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    
+    return { success: true, blob: zipBlob };
+  } catch (error: any) {
+    console.error('Error creando ZIP:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Error al crear el archivo ZIP' 
+    };
   }
 }
 
