@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { SALINAS_YUYAY } from "@utils/empresa";
 import { featureIconMap } from "@utils/maps/productivo";
-import { transformCategoria, transformProducto } from "@utils/transforms/productivo";
+import {
+  transformCategoria,
+  transformProducto,
+} from "@utils/transforms/productivo";
 
 // Data Layer
 import { getCategoriasProductos } from "@/lib/data/tienda/categorias";
@@ -11,7 +14,7 @@ import { getProductosDestacados } from "@/lib/data/tienda/productos";
 import {
   TiendaHero,
   FeaturesBar,
-  CollectionsGrid,
+  CategoriasGrid,
   FeaturedProduct,
   ProductsGrid,
 } from "@components/productivo/tienda";
@@ -63,7 +66,7 @@ export default async function TiendaPage() {
       <FeaturesBar features={features} />
 
       {/* Categorías de Productos Andinos */}
-      <CollectionsGrid
+      <CategoriasGrid
         collections={collections}
         title={tienda.textos.categorias.titulo}
       />
@@ -79,7 +82,7 @@ export default async function TiendaPage() {
           "Reconocido internacionalmente por su calidad",
         ]}
         buttonText="Explorar Más"
-        buttonHref="/tienda/productos"
+        buttonHref="/productos"
         imageIcon="🧀"
       />
 

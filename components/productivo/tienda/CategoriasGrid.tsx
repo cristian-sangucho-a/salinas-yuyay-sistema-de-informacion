@@ -18,7 +18,7 @@ export default function CategoriasGrid({
   subtitle,
   collections,
   showViewAllButton = true,
-  viewAllHref = "/tienda/todas",
+  viewAllHref = "/categorias",
   viewAllText = "VER TODAS LAS CATEGORÍAS",
 }: CategoriaGridProps) {
   return (
