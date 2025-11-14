@@ -31,7 +31,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       success: "btn-success",
       warning: "btn-warning",
       error: "btn-error",
-      outline: "btn-outline btn-primary",
+      outline:
+        "bg-transparent border border-base-content text-base-content hover:bg-base-content/5",
       ghost: "btn-ghost",
     };
 
