@@ -20,9 +20,9 @@ export default function TiendaHero({
   titleHighlight,
   description,
   primaryButtonText = "Ver categorías",
-  primaryButtonHref = "#categorias",
+  primaryButtonHref = "/categorias",
   secondaryButtonText = "Explorar productos",
-  secondaryButtonHref = "#productos",
+  secondaryButtonHref = "/productos",
   heroIcon = "🧀",
 }: TiendaHeroProps) {
   return (

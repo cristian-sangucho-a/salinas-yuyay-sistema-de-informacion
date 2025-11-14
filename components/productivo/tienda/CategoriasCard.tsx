@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { FaChevronRight } from "react-icons/fa";
 import Badge from "@atoms/Badge";
 
-interface CollectionCardProps {
+interface CategoriaCardProps {
   id: string;
   name: string;
   description: string;
@@ -13,7 +12,7 @@ interface CollectionCardProps {
   delay?: number;
 }
 
-export default function CollectionCard({
+export default function CategoriaCard({
   name,
   description,
   icon,
@@ -21,7 +20,7 @@ export default function CollectionCard({
   badge,
   badgeVariant = "primary",
   delay = 0,
-}: CollectionCardProps) {
+}: CategoriaCardProps) {
   return (
     <Link
       href={href}
