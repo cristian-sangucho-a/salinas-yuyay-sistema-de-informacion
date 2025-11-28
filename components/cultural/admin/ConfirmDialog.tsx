@@ -35,7 +35,7 @@ export default function ConfirmDialog({
   }, [isOpen]);
 
   if (!isOpen) return null;
-
+  // TODO: Refactor colors to use theme colors
   const colors = {
     danger: {
       icon: 'text-[#B63A1B]',

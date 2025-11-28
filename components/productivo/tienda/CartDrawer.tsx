@@ -166,9 +166,13 @@ export default function CartDrawer() {
                 Impuestos y envío calculados al finalizar la compra.
               </p>
               <div className="space-y-3">
-                <button className="btn btn-primary w-full">
+                <Link
+                  href="/checkout"
+                  className="btn btn-primary w-full"
+                  onClick={toggleCart}
+                >
                   Finalizar Compra
-                </button>
+                </Link>
                 <button
                   type="button"
                   className="btn btn-ghost w-full"

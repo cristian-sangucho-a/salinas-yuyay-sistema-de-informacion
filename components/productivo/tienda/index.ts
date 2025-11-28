@@ -11,6 +11,8 @@ export { default as StickyProductSummary } from "./StickyProductSummary";
 export { default as ProductInfo } from "./ProductInfo";
 export { default as MobileStickyBar } from "./MobileStickyBar";
 export { default as ProductSearch } from "./ProductSearch";
+export { default as CheckoutForm } from "./checkout/CheckoutForm";
+export { default as CheckoutSummary } from "./checkout/CheckoutSummary";
 
 // Molecules
 export { default as ProductCard } from "./ProductCard";
