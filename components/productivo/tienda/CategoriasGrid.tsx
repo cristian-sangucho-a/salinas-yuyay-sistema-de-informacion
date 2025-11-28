@@ -1,13 +1,13 @@
 import Link from "next/link";
-import CategoriaCard from "./CategoriasCard";
+import CategoriaCard from "./CategoriaCard";
 import Button from "@atoms/Button";
 import Text from "@atoms/Text";
-import type { Collection } from "@/lib/types/productivo";
+import type { Categoria } from "@/lib/types/productivo";
 
 interface CategoriaGridProps {
   title?: string;
   subtitle?: string;
-  collections: Collection[];
+  categorias: Categoria[];
   showViewAllButton?: boolean;
   viewAllHref?: string;
   viewAllText?: string;
@@ -16,13 +16,13 @@ interface CategoriaGridProps {
 export default function CategoriasGrid({
   title = "Categorías de Productos",
   subtitle,
-  collections,
+  categorias,
   showViewAllButton = true,
   viewAllHref = "/categorias",
   viewAllText = "VER TODAS LAS CATEGORÍAS",
 }: CategoriaGridProps) {
   return (
-    <section id="categorias" className="py-16 md:py-20 bg-base-100">
+    <section id="categorias" className="py-4 md:py-8">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif font-normal text-base-content mb-3">
@@ -36,10 +36,10 @@ export default function CategoriasGrid({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {collections.map((collection, index) => (
+          {categorias.map((categoria, index) => (
             <CategoriaCard
-              key={collection.id}
-              {...collection}
+              key={categoria.id}
+              {...categoria}
               delay={index * 100 + 100}
             />
           ))}

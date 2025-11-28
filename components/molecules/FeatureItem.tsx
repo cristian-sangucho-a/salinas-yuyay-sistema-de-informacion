@@ -6,6 +6,7 @@ interface FeatureItemProps {
   title: string;
   description: string;
   variant?: "primary" | "secondary" | "accent" | "neutral";
+  layout?: "default" | "slim";
 }
 
 export default function FeatureItem({
@@ -13,7 +14,23 @@ export default function FeatureItem({
   title,
   description,
   variant = "primary",
+  layout = "default",
 }: FeatureItemProps) {
+  if (layout === "slim") {
+    return (
+      <div className="flex-1">
+        <div className="flex items-center justify-center gap-2 py-2 px-3 cursor-pointer transition-colors hover:bg-primary-content/10 h-full">
+          <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-primary-content">
+            {icon}
+          </div>
+          <h3 className="font-medium text-primary-content text-xs whitespace-nowrap">
+            {title}
+          </h3>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-start gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-content/10 flex items-center justify-center text-primary-content">

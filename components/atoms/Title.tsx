@@ -31,7 +31,7 @@ export default function Title({
 
   return (
     <Component
-      className={`${baseStyles} ${variants[variant]} ${fontFamily} ${fontStyle} ${className}`}
+      className={`${baseStyles} ${variants[variant]} ${fontFamily} ${fontStyle} transition-all duration-300 ${className}`}
     >
       {children}
     </Component>

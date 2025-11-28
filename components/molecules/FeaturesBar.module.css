@@ -1,0 +1,38 @@
+/* Animación para variante default */
+@keyframes scrollFeatures {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scrollContainer {
+  display: flex;
+  animation: scrollFeatures var(--rotation-speed) linear infinite;
+}
+
+.scrollContainer:hover {
+  animation-play-state: paused;
+}
+
+/* Animación para variante slim */
+@keyframes scrollSlimFeatures {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scrollContainerSlim {
+  display: flex;
+  align-items: stretch;
+  animation: scrollSlimFeatures var(--rotation-speed) linear infinite;
+}
+
+.scrollContainerSlim:hover {
+  animation-play-state: paused;
+}
