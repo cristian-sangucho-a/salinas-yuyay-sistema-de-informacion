@@ -33,7 +33,7 @@ export default function PageHeader({
             </Title>
             {badge && <div className="mt-2">{badge}</div>}
           </div>
-          {actions && <div className="flex-shrink-0">{actions}</div>}
+          {actions && <div className="shrink-0">{actions}</div>}
         </div>
 
         {/* Description */}

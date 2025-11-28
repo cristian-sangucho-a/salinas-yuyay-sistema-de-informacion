@@ -27,7 +27,7 @@ export default function Title({
   const fontFamily = serif ? "font-serif" : "font-sans";
   const fontStyle = italic ? "italic" : "";
 
-  const Component = variant as keyof JSX.IntrinsicElements;
+  const Component = variant as React.ElementType;
 
   return (
     <Component

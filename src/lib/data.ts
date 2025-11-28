@@ -1,5 +1,11 @@
 import { pb } from "./pocketbase"; // Importa la instancia de Pocketbase
-import { type Categoria, type Activo, Solicitud, SalaMuseo, Evento } from "./types"; // Importa los tipos
+import {
+  type Categoria,
+  type Activo,
+  Solicitud,
+  SalaMuseo,
+  Evento,
+} from "./types"; // Importa los tipos
 import type { ListResult, RecordModel } from "pocketbase"; // Importa tipos necesarios
 
 /**
@@ -7,13 +13,18 @@ import type { ListResult, RecordModel } from "pocketbase"; // Importa tipos nece
  */
 export function getFileUrl(
   record: RecordModel | null | undefined,
-  filenameField: string
+  filenameField: string,
+  specificFilename?: string
 ): string | null {
-  if (!record || !record.id || !filenameField || !record[filenameField]) {
+  if (!record || !record.id || !filenameField) {
     return null;
   }
 
   try {
+    if (specificFilename) {
+      return pb.files.getURL(record, specificFilename);
+    }
+
     const fileValue = record[filenameField];
 
     // Manejar campo de archivo Múltiple (como 'archivos' en Activo)
@@ -143,7 +154,6 @@ export async function getSalasMuseoPublicas(): Promise<SalaMuseo[]> {
   }
 }
 
-
 /**
  * Devuelve todas las salas del museo que no están ocultas (ocultar = false).
  */
@@ -163,7 +173,9 @@ export async function getSalasMuseo(): Promise<SalaMuseo[]> {
 /**
  * Devuelve una sala del museo por id solo si no está oculta; de lo contrario retorna null.
  */
-export async function getSalaMuseoPublicaById(id: string): Promise<SalaMuseo | null> {
+export async function getSalaMuseoPublicaById(
+  id: string
+): Promise<SalaMuseo | null> {
   if (!id) return null;
   try {
     const sala = await pb.collection("sala_museo").getOne<SalaMuseo>(id);
@@ -233,9 +245,11 @@ export async function getUpcomingPublicEvents(): Promise<Evento[]> {
     });
     console.log("Fetched upcoming public events:", items);
     return items;
-    
   } catch (error) {
-    console.error("Error fetching upcoming public events (server filter):", error);
+    console.error(
+      "Error fetching upcoming public events (server filter):",
+      error
+    );
     return [];
   }
 }
@@ -286,4 +300,3 @@ export async function getAllEventos(): Promise<Evento[]> {
     return [];
   }
 }
-

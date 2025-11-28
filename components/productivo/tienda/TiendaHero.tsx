@@ -79,9 +79,9 @@ export default function TiendaHero({
 
           {/* Right Image */}
           <div className="relative">
-            <div className="relative aspect-[4/3] max-w-xl mx-auto bg-base-300/50 overflow-hidden">
+            <div className="relative aspect-4/3 max-w-xl mx-auto bg-base-300/50 overflow-hidden">
               {/* Placeholder for product image */}
-              <div className="w-full h-full bg-gradient-to-br from-base-200 to-base-300 flex items-center justify-center">
+              <div className="w-full h-full bg-linear-to-br from-base-200 to-base-300 flex items-center justify-center">
                 <div className="text-center space-y-4 p-8">
                   <div className="w-32 h-32 mx-auto bg-base-100/40 backdrop-blur-sm rounded-full flex items-center justify-center">
                     <span className="text-5xl">{heroIcon}</span>
