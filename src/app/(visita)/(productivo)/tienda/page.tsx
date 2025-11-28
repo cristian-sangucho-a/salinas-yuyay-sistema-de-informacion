@@ -20,7 +20,7 @@ import {
 } from "@components/productivo/tienda";
 
 // Types
-import type { Feature, Collection, Product } from "@/lib/types/productivo";
+import type { Feature, Categoria, Product } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
   title: "Tienda - Productos Artesanales | SAISAL",
@@ -39,7 +39,8 @@ export default async function TiendaPage() {
   ]);
 
   // Transformar datos al formato esperado por los componentes
-  const collections: Collection[] = categorias.map(transformCategoria);
+  const categoriasTransformadas: Categoria[] =
+    categorias.map(transformCategoria);
   const favoriteProducts: Product[] = productosDestacados
     .slice(0, 8) // Limitar a 8 productos destacados
     .map(transformProducto);
@@ -63,11 +64,11 @@ export default async function TiendaPage() {
       />
 
       {/* Features Bar */}
-      <FeaturesBar features={features} />
+      <FeaturesBar features={features} autoRotate={true} rotationSpeed={40} />
 
       {/* Categorías de Productos Andinos */}
       <CategoriasGrid
-        collections={collections}
+        categorias={categoriasTransformadas}
         title={tienda.textos.categorias.titulo}
       />
 
