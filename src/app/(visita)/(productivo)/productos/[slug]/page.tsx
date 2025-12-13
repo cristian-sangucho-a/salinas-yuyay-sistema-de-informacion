@@ -47,7 +47,7 @@ export default async function ProductoPage({ params }: ProductoPageProps) {
     notFound();
   }
 
-  const precio = producto.pvp1 || producto.precioBase || 0;
+  const precio = producto.pvp1 || 0;
   const imagenPrincipal = producto.imagenes?.[0]
     ? getFileUrl(producto, "imagenes")
     : null;
