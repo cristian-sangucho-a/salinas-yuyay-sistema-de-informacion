@@ -28,9 +28,19 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await pb.collection('_superusers').authWithPassword(email, password);
+      const authData = await pb.collection('users').authWithPassword(email, password);
       
       if (pb.authStore.isValid) {
+        // Guardar el token en cookies para que funcione en Server Components
+        await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: authData.token,
+            model: authData.record,
+          }),
+        });
+        
         router.push('/admin/dashboard');
       }
     } catch (err: any) {
