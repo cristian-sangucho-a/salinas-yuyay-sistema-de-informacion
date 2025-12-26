@@ -12,8 +12,17 @@ export function getAuthUser() {
   return pb.authStore.record;
 }
 
-export function logout(): void {
+export async function logout(): Promise<void> {
   pb.authStore.clear();
+  
+  // Eliminar también la cookie del servidor
+  try {
+    await fetch('/api/auth/set-cookie', {
+      method: 'DELETE',
+    });
+  } catch (error) {
+    console.error('Error clearing auth cookie:', error);
+  }
 }
 
 export async function checkAuth(): Promise<boolean> {
@@ -22,8 +31,8 @@ export async function checkAuth(): Promise<boolean> {
   }
 
   try {
-    // Verificar que el token siga siendo válido
-    await pb.collection('_superusers').authRefresh();
+    // Verificar que el token siga siendo válido contra la colección de usuarios
+    await pb.collection('users').authRefresh();
     return true;
   } catch (error) {
     pb.authStore.clear();
