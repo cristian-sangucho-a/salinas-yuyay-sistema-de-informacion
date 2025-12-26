@@ -6,27 +6,32 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { isAuthenticated } from "@/lib/auth";
 import { deleteRecord } from "@/lib/admin-data";
 import ConfirmDialog from "@cultural/admin/ConfirmDialog";
-import {
-  getSalasMuseo,
-  getAllEventos,
-  getFileUrl
-} from "@/lib/data";
-import type { SalaMuseo, Evento } from "@/lib/types";
+
+
+
+import {obtenerSalasMuseo } from "@/lib/data/turismo/salas-museo";
+import {generarUrlImagen } from "@/lib/data/turismo/eventos";
+
+
+import type { SalaMuseo} from "@/lib/types/turismo";
+
+
+
 import AdminHeader from "@components/molecules/AdminHeader";
 import TurismoNavTabs from "@cultural/admin/TurismoNavTabs";
 
 export default function AdminTurismoPage() {
   const router = useRouter();
-  const [eventsCount, setEventsCount] = useState<number | null>(null);
+  const [salasCount, setSalasCount] = useState<number | null>(null);
+  const [salas, setSalas] = useState<
+    Array<{ id: string; title: string; description?: string; image?: string }>
+  >([]);
+  const [loadingSalas, setLoadingSalas] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<null | { id: string; title?: string }>(null);
-  const [events, setEvents] = useState<
-    Array<{ id: string; title: string; date?: string; image?: string }>
-  >([]);
-  const [loadingEvents, setLoadingEvents] = useState(true);
 
   const handleCreate = () => {
-    redirect("/admin/eventos/crear");
+    redirect("/admin/salas_museo/crear");
   };
 
   useEffect(() => {
@@ -36,39 +41,38 @@ export default function AdminTurismoPage() {
       return;
     }
 
-    // Fetch counts in parallel using data helpers
+    // Fetch counts using data helper
     (async () => {
       try {
-        const [eventsList, salasList] = await Promise.all([
-          getAllEventos(),
-          getSalasMuseo(),
-        ]);
-        setEventsCount(Array.isArray(eventsList) ? eventsList.length : 0);
+        const salasList = await obtenerSalasMuseo();
+        setSalasCount(Array.isArray(salasList) ? salasList.length : 0);
       } catch (err) {
         console.error("Error fetching counts:", err);
       }
     })();
   }, [router]);
 
-  // Fetch events for admin preview (compact list)
+  // Fetch salas del museo to show preview similar to the public visita page
   useEffect(() => {
     (async () => {
       try {
-  const items = await getAllEventos();
-        const mapped = items.map((it: Evento) => ({
+        const items = await obtenerSalasMuseo();
+        const mapped = items.map((it: SalaMuseo) => ({
           id: it.id,
-          title: it.titulo ?? it.titulo ?? "Evento",
-          date: it.fecha_de_inicio ?? it["fecha_de_inicio"] ?? undefined,
-          image: getFileUrl(it as any, "portada") ?? undefined,
+          title: it.titulo,
+          description: it.resumen,
+          image: generarUrlImagen(it.collectionId, it.id, it.portada) ?? undefined,
         }));
-        setEvents(mapped);
+        setSalas(mapped);
       } catch (err) {
-        console.error("Error fetching events:", err);
+        console.error("Error fetching salas:", err);
       } finally {
-        setLoadingEvents(false);
+        setLoadingSalas(false);
       }
     })();
   }, []);
+
+  // no events list in this page — only salas
 
   return (
     <div className="min-h-screen bg-[#F8F3ED]">
@@ -81,8 +85,8 @@ export default function AdminTurismoPage() {
       <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-12">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[#5A1E02]">Gestión de Eventos</h2>
-            <p className="text-sm text-[#4A3B31]/70 mt-1">Administra los eventos turísticos</p>
+            <h2 className="text-2xl font-bold text-[#5A1E02]">Gestión de Salas del Museo</h2>
+            <p className="text-sm text-[#4A3B31]/70 mt-1">Administra las salas del museo</p>
           </div>
 
           <button
@@ -90,42 +94,43 @@ export default function AdminTurismoPage() {
             className="btn bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
           >
             <FaPlus className="w-4 h-4" />
-            Nuevo Evento
+            Nueva Sala
           </button>
         </div>
+
         <div className="mt-6">
-          {loadingEvents ? (
-            <p className="text-base-content/70">Cargando eventos...</p>
-          ) : events.length > 0 ? (
+          {loadingSalas ? (
+            <p className="text-base-content/70">Cargando salas...</p>
+          ) : salas.length > 0 ? (
             <ul className="space-y-3">
-              {events.map((ev) => (
+              {salas.map((s) => (
                 <li
-                  key={ev.id}
+                  key={s.id}
                   className="flex items-center gap-4 p-2 bg-white border border-[#E9E1D6] rounded-lg"
                 >
                   <Link
-                    href={`/turismo/evento/${ev.id}`}
+                    href={`/turismo/museo/${s.id}`}
                     className="flex items-center gap-4 w-full"
                   >
                     <img
-                      src={ev.image ?? "/placeholder.png"}
-                      alt={ev.title}
+                      src={s.image ?? "/placeholder.png"}
+                      alt={s.title}
                       className="w-20 h-20 object-cover rounded-md flex-shrink-0"
                     />
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-[#5A1E02]">
-                        {ev.title}
+                        {s.title}
                       </h3>
-                      {ev.date && (
+                      {s.description && (
                         <div className="text-sm text-[#4A3B31]/70">
-                          {String(ev.date)}
+                          {String(s.description)}
                         </div>
                       )}
                     </div>
                   </Link>
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/admin/eventos/editar/${ev.id}`}
+                      href={`/admin/salas_museo/editar/${s.id}`}
                       className="btn btn-sm btn-outline border-[#D9C3A3] text-[#5A1E02] hover:bg-[#F8F3ED] hover:border-[#7C8B56] gap-1"
                     >
                       <FaEdit className="w-3 h-3" />
@@ -135,11 +140,11 @@ export default function AdminTurismoPage() {
                       className="btn btn-sm btn-outline border-[#D9C3A3] text-[#B63A1B] hover:bg-red-50 hover:border-[#B63A1B] gap-1"
                       onClick={(e) => {
                         e.preventDefault();
-                        setConfirmDelete({ id: ev.id, title: ev.title });
+                        setConfirmDelete({ id: s.id, title: s.title });
                       }}
-                      disabled={deletingId === ev.id}
+                      disabled={deletingId === s.id}
                     >
-                      {deletingId === ev.id ? (
+                      {deletingId === s.id ? (
                         <span className="loading loading-spinner loading-xs"></span>
                       ) : (
                         <FaTrash className="w-3 h-3" />
@@ -152,15 +157,15 @@ export default function AdminTurismoPage() {
             </ul>
           ) : (
             <p className="text-base-content/60">
-              No hay eventos disponibles por el momento.
+              No hay salas disponibles por el momento.
             </p>
           )}
         </div>
-        {/* Confirm dialog for deleting events */}
+        {/* Confirm dialog for deleting salas */}
         <ConfirmDialog
           isOpen={!!confirmDelete}
-          title={confirmDelete ? `Eliminar evento "${confirmDelete.title ?? ''}"` : 'Eliminar evento'}
-          message="Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este evento?"
+          title={confirmDelete ? `Eliminar sala "${confirmDelete.title ?? ''}"` : 'Eliminar sala'}
+          message="Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta sala del museo?"
           confirmText="Eliminar"
           cancelText="Cancelar"
           type="danger"
@@ -170,14 +175,14 @@ export default function AdminTurismoPage() {
             const id = confirmDelete.id;
             try {
               setDeletingId(id);
-              const ok = await deleteRecord("evento", id);
-              if (!ok) throw new Error("No se pudo eliminar el evento");
-              setEvents((prev) => prev.filter((x) => x.id !== id));
-              setEventsCount((c) => (typeof c === "number" ? Math.max(0, c - 1) : c));
+              const ok = await deleteRecord("sala_museo", id);
+              if (!ok) throw new Error("No se pudo eliminar la sala");
+              setSalas((prev) => prev.filter((x) => x.id !== id));
+              setSalasCount((c) => (typeof c === "number" ? Math.max(0, c - 1) : c));
               setConfirmDelete(null);
             } catch (err) {
-              console.error("Error deleting evento:", err);
-              alert("No se pudo eliminar el evento. Revisa la consola para más detalles.");
+              console.error("Error deleting sala:", err);
+              alert("No se pudo eliminar la sala. Revisa la consola para más detalles.");
             } finally {
               setDeletingId(null);
             }

@@ -3,8 +3,13 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { FaImage, FaPlus, FaSave } from "react-icons/fa";
 import AdminHeader from "@components/molecules/AdminHeader";
-import { getSalaMuseoById, getFileUrl } from "@/lib/data";
-import { updateSalaMuseo } from "@/lib/admin-data";
+import Alert from "@components/molecules/Alert";
+
+import { getSalaMuseoById } from "@/lib/data/turismo/salas-museo";
+
+import { generarUrlImagen } from "@/lib/data/turismo/eventos";
+
+import { updateSalaMuseo } from "@/lib/data/turismo/salas-museo";
 
 export default function EditarSalaPage() {
 	const params = useParams();
@@ -15,7 +20,7 @@ export default function EditarSalaPage() {
 	const [contenido, setContenido] = useState("");
 	const [portada, setPortada] = useState<File | null>(null);
 	const [galeria, setGaleria] = useState<File[]>([]);
-	const [ocultar, setOcultar] = useState<boolean | undefined>(undefined);
+	const [publico, setPublico] = useState<boolean | undefined>(undefined);
 	const [status, setStatus] = useState<string | null>(null);
 	const [existingPortadaUrl, setExistingPortadaUrl] = useState<string | null>(null);
 	const [existingGaleriaUrls, setExistingGaleriaUrls] = useState<string[]>([]);
@@ -39,16 +44,16 @@ export default function EditarSalaPage() {
 				setTitulo(String(sala.titulo ?? ""));
 				setResumen(String(sala.resumen ?? ""));
 				setContenido(String(sala.contenido ?? ""));
-				setOcultar(sala.ocultar === undefined ? undefined : Boolean(sala.ocultar));
+				setPublico(sala.publico === undefined ? undefined : Boolean(sala.publico));
 
-				const portadaUrl = getFileUrl(sala as any, "portada");
+				const portadaUrl = generarUrlImagen(sala.collectionId, sala.id, sala.portada);
 				if (portadaUrl) setExistingPortadaUrl(portadaUrl);
 
 				const rawGaleria = sala.galeria ?? [];
 				if (Array.isArray(rawGaleria)) {
 					const urls = (rawGaleria as unknown[]).map((filename) => {
 						const tempRecord = { ...sala, galeria: filename };
-						return getFileUrl(tempRecord as any, "galeria");
+						return generarUrlImagen(sala.collectionId, sala.id, filename as string);
 					}).filter((url): url is string => url !== null);
 					setExistingGaleriaUrls(urls);
 				}
@@ -87,7 +92,7 @@ export default function EditarSalaPage() {
 				contenido,
 				portada: portada ?? undefined,
 				nuevosGaleria: galeria.length > 0 ? galeria : undefined,
-				ocultar: ocultar === undefined ? undefined : Boolean(ocultar),
+				publico: publico === undefined ? undefined : Boolean(publico),
 			});
 
 			setStatus(`Sala actualizada con éxito: ${updated?.id ?? id}`);
@@ -102,7 +107,14 @@ export default function EditarSalaPage() {
 			<form onSubmit={handleSubmit}>
 				<article className="max-w-4xl mx-auto my-8 relative">
 					<div className="fixed bottom-8 right-8 z-50 flex items-center gap-4">
-						{status && <div className="bg-base-300 text-base-content px-4 py-2 rounded-lg shadow-lg text-sm">{status}</div>}
+						{status && (
+              <Alert 
+                type={status.includes("Error") || status.includes("no encontrada") ? "error" : status.includes("actualizada") ? "success" : "info"}
+                className="shadow-lg max-w-md"
+              >
+                {status}
+              </Alert>
+            )}
 						<button type="submit" className="btn btn-primary btn-lg btn-circle shadow-lg" aria-label="Guardar Sala">
 							<FaSave size={24} />
 						</button>
@@ -130,13 +142,13 @@ export default function EditarSalaPage() {
 					<div className="p-8">
 							<div className="mb-4 flex items-center gap-3">
 								<input
-									id="ocultar"
-									type="checkbox"
-									checked={!!ocultar}
-									onChange={(e) => setOcultar(e.target.checked)}
-									className="checkbox checkbox-primary"
-								/>
-								<label htmlFor="ocultar" className="text-sm">Ocultar sala (no visible públicamente)</label>
+								id="publico"
+								type="checkbox"
+								checked={!!publico}
+								onChange={(e) => setPublico(e.target.checked)}
+								className="checkbox checkbox-primary"
+							/>
+							<label htmlFor="publico" className="text-sm">Marcar como público</label>
 							</div>
 						<input
 							type="text"
