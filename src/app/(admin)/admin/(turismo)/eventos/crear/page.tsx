@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -116,7 +117,7 @@ export default function CrearEventoInlinePage() {
             onClick={() => portadaInputRef.current?.click()}
           >
             {portadaUrl ? (
-              <img src={portadaUrl} alt="Portada" className="w-full h-full object-cover" />
+              <Image src={portadaUrl} alt="Portada" fill className="object-cover" />
             ) : (
               <div className="text-center text-base-content/50">
                 <FaImage size={48} className="mx-auto" />
@@ -207,8 +208,8 @@ export default function CrearEventoInlinePage() {
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {galeriaUrls.map((url, i) => (
-                  <div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={url} alt={`Imagen de galería ${i + 1}`} className="w-full h-full object-cover" />
+                  <div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+                    <Image src={url} alt={`Imagen de galería ${i + 1}`} fill className="object-cover" />
                   </div>
                 ))}
                 {/* Botón para añadir más imágenes */}

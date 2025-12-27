@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { FaImage, FaPlus, FaSave } from "react-icons/fa";
 import AdminHeader from "@components/molecules/AdminHeader";
 import Alert from "@components/molecules/Alert";
@@ -13,8 +14,8 @@ export default function CrearSalaInlinePage() {
   const [galeria, setGaleria] = useState<File[]>([]);
   const [publico, setPublico] = useState<boolean>(true);
   const [status, setStatus] = useState<string | null>(null);
-  const [existingPortadaUrl, setExistingPortadaUrl] = useState<string | null>(null);
-  const [existingGaleriaUrls, setExistingGaleriaUrls] = useState<string[]>([]);
+  const [existingPortadaUrl] = useState<string | null>(null);
+  const [existingGaleriaUrls] = useState<string[]>([]);
 
   const portadaInputRef = useRef<HTMLInputElement>(null);
   const galeriaInputRef = useRef<HTMLInputElement>(null);
@@ -92,7 +93,7 @@ export default function CrearSalaInlinePage() {
             onClick={() => portadaInputRef.current?.click()}
           >
             {portadaUrl || existingPortadaUrl ? (
-              <img src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"} alt="Portada" className="w-full h-full object-cover" />
+              <Image src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"} alt="Portada" fill className="object-cover" />
             ) : (
               <div className="text-center text-base-content/50">
                 <FaImage size={48} className="mx-auto" />
@@ -146,13 +147,13 @@ export default function CrearSalaInlinePage() {
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {existingGaleriaUrls.map((url, i) => (
-                  <div key={`existing-${i}`} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={url} alt={`Imagen de galería existente ${i + 1}`} className="w-full h-full object-cover" />
+                  <div key={`existing-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+                    <Image src={url} alt={`Imagen de galería existente ${i + 1}`} fill className="object-cover" />
                   </div>
                 ))}
                 {galeriaUrls.map((url, i) => (
-                  <div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={url} alt={`Imagen de galería ${i + 1}`} className="w-full h-full object-cover" />
+                  <div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+                    <Image src={url} alt={`Imagen de galería ${i + 1}`} fill className="object-cover" />
                   </div>
                 ))}
                 <input type="file" accept="image/*" multiple ref={galeriaInputRef} onChange={handleGaleriaChange} className="hidden" />

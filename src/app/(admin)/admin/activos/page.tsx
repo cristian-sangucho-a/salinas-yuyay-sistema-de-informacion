@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { FaPlus, FaArrowLeft } from 'react-icons/fa';
-import { getAuthUser, isAuthenticated } from '@/lib/auth';
-import type { Activo, Categoria } from '@/lib/types';
-import ActivosTable from '@cultural/admin/ActivosTable';
-import ActivoModal from '@cultural/admin/ActivoModal';
-import CulturalNavTabs from '@cultural/admin/CulturalNavTabs';
-import { getActivos, getCategorias } from '@/lib/data';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { FaPlus, FaArrowLeft } from "react-icons/fa";
+import { getAuthUser, isAuthenticated } from "@/lib/auth";
+import type { Activo, Categoria } from "@/lib/types";
+import ActivosTable from "@cultural/admin/ActivosTable";
+import ActivoModal from "@cultural/admin/ActivoModal";
+import CulturalNavTabs from "@cultural/admin/CulturalNavTabs";
+import { getActivos, getCategorias } from "@/lib/data";
 export default function ActivosAdminPage() {
   const router = useRouter();
   const [user, setUser] = useState<unknown>(null);
@@ -22,12 +22,12 @@ export default function ActivosAdminPage() {
 
   useEffect(() => {
     setMounted(true);
-    
+
     if (!isAuthenticated()) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
-    
+
     setUser(getAuthUser());
     loadData();
   }, [router]);
@@ -42,7 +42,7 @@ export default function ActivosAdminPage() {
       setActivos(activosData.items);
       setCategorias(categoriasData);
     } catch (error) {
-      console.error('Error al cargar datos:', error);
+      console.error("Error al cargar datos:", error);
     } finally {
       setIsLoading(false);
     }
@@ -90,15 +90,19 @@ export default function ActivosAdminPage() {
               </Link>
               <div className="border-l border-[#D9C3A3] h-6"></div>
               <div>
-                <h1 className="text-lg font-bold text-[#5A1E02]">Panel Administrativo</h1>
-                <p className="text-xs text-[#4A3B31]/60">Archivo Histórico de Salinas</p>
+                <h1 className="text-lg font-bold text-[#5A1E02]">
+                  Panel Administrativo
+                </h1>
+                <p className="text-xs text-[#4A3B31]/60">
+                  Archivo Histórico de Salinas
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <CulturalNavTabs/>
+      <CulturalNavTabs />
 
       {/* Contenido */}
       <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-8">
@@ -111,7 +115,7 @@ export default function ActivosAdminPage() {
               Administra los activos del archivo histórico
             </p>
           </div>
-          
+
           <button
             onClick={handleCreate}
             className="btn bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { isAuthenticated } from "@/lib/auth";
@@ -15,13 +16,12 @@ import {
   obtenerSalasMuseo
   
 } from "@/lib/data/turismo/salas-museo";
-import type { SalaMuseo, Evento } from "@/lib/types/turismo";
+import type { Evento } from "@/lib/types/turismo";
 import AdminHeader from "@components/molecules/AdminHeader";
 import TurismoNavTabs from "@cultural/admin/TurismoNavTabs";
 
 export default function AdminTurismoPage() {
   const router = useRouter();
-  const [eventsCount, setEventsCount] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<null | { id: string; title?: string }>(null);
   const [events, setEvents] = useState<
@@ -43,11 +43,10 @@ export default function AdminTurismoPage() {
     // Fetch counts in parallel using data helpers
     (async () => {
       try {
-        const [eventsList, salasList] = await Promise.all([
+        await Promise.all([
           obtenerEventos(),
           obtenerSalasMuseo(),
         ]);
-        setEventsCount(Array.isArray(eventsList) ? eventsList.length : 0);
       } catch (err) {
         console.error("Error fetching counts:", err);
       }
@@ -111,11 +110,14 @@ export default function AdminTurismoPage() {
                     href={`/turismo/evento/${ev.id}`}
                     className="flex items-center gap-4 w-full"
                   >
-                    <img
-                      src={ev.image ?? "/placeholder.png"}
-                      alt={ev.title}
-                      className="w-20 h-20 object-cover rounded-md flex-shrink-0"
-                    />
+                    <div className="w-20 h-20 relative shrink-0">
+                      <Image
+                        src={ev.image ?? "/placeholder.png"}
+                        alt={ev.title}
+                        fill
+                        className="object-cover rounded-md"
+                      />
+                    </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-[#5A1E02]">
                         {ev.title}
@@ -177,7 +179,6 @@ export default function AdminTurismoPage() {
               const ok = await deleteRecord("evento", id);
               if (!ok) throw new Error("No se pudo eliminar el evento");
               setEvents((prev) => prev.filter((x) => x.id !== id));
-              setEventsCount((c) => (typeof c === "number" ? Math.max(0, c - 1) : c));
               setConfirmDelete(null);
             } catch (err) {
               console.error("Error deleting evento:", err);

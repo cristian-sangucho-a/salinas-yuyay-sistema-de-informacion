@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { FaImage, FaPlus, FaSave } from "react-icons/fa";
 import AdminHeader from "@components/molecules/AdminHeader";
@@ -52,7 +53,6 @@ export default function EditarSalaPage() {
 				const rawGaleria = sala.galeria ?? [];
 				if (Array.isArray(rawGaleria)) {
 					const urls = (rawGaleria as unknown[]).map((filename) => {
-						const tempRecord = { ...sala, galeria: filename };
 						return generarUrlImagen(sala.collectionId, sala.id, filename as string);
 					}).filter((url): url is string => url !== null);
 					setExistingGaleriaUrls(urls);
@@ -126,7 +126,7 @@ export default function EditarSalaPage() {
 						onClick={() => portadaInputRef.current?.click()}
 					>
 						{portadaUrl || existingPortadaUrl ? (
-							<img src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"} alt="Portada" className="w-full h-full object-cover" />
+							<Image src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"} alt="Portada" fill className="object-cover" />
 						) : (
 							<div className="text-center text-base-content/50">
 								<FaImage size={48} className="mx-auto" />
@@ -180,13 +180,13 @@ export default function EditarSalaPage() {
 							<h2 className="text-2xl font-semibold mb-6">Galería</h2>
 							<div className="grid grid-cols-2 md:grid-cols-3 gap-6">
 								{existingGaleriaUrls.map((url, i) => (
-									<div key={`existing-${i}`} className="h-44 overflow-hidden rounded shadow-sm">
-										<img src={url} alt={`Imagen de galería existente ${i + 1}`} className="w-full h-full object-cover" />
+									<div key={`existing-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+										<Image src={url} alt={`Imagen de galería existente ${i + 1}`} fill className="object-cover" />
 									</div>
 								))}
 								{galeriaUrls.map((url, i) => (
-									<div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm">
-										<img src={url} alt={`Imagen de galería ${i + 1}`} className="w-full h-full object-cover" />
+									<div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+										<Image src={url} alt={`Imagen de galería ${i + 1}`} fill className="object-cover" />
 									</div>
 								))}
 								<input type="file" accept="image/*" multiple ref={galeriaInputRef} onChange={handleGaleriaChange} className="hidden" />

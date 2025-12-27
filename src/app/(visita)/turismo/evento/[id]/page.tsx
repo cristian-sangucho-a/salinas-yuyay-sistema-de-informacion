@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { obtenerEventoByIdServer, generarUrlImagen } from "@/lib/data/turismo/eventos-server";
 import type { Evento } from "@/lib/types/turismo";
 
@@ -17,8 +18,8 @@ export default async function EventPage({ params }: Props) {
     <main className="flex-1">
       <article className="max-w-4xl mx-auto my-8">
         {evento.portada && (
-          <div className="w-full h-72 md:h-96 overflow-hidden rounded-b-md">
-            <img src={generarUrlImagen("evento", evento.id, evento.portada)} alt={evento.titulo} className="w-full h-full object-cover" />
+          <div className="w-full h-72 md:h-96 overflow-hidden rounded-b-md relative">
+            <Image src={generarUrlImagen("evento", evento.id, evento.portada)} alt={evento.titulo} fill className="object-cover" />
           </div>
         )}
 
@@ -52,8 +53,8 @@ export default async function EventPage({ params }: Props) {
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {evento.galeria.map((url, index) => (
-                  <div key={`gallery-${index}`} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={generarUrlImagen("evento", evento.id, url)} alt={`Imagen de galería ${index + 1}`} className="w-full h-full object-cover" />
+                  <div key={`gallery-${index}`} className="h-44 overflow-hidden rounded shadow-sm relative">
+                    <Image src={generarUrlImagen("evento", evento.id, url)} alt={`Imagen de galería ${index + 1}`} fill className="object-cover" />
                   </div>
                 ))}
               </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getCategoriasProductos } from "@/lib/data/tienda/categorias";
 import { transformCategoria } from "@utils/transforms/productivo";
 import {
@@ -28,7 +29,11 @@ export default async function CategoriasPage() {
         title="Categorías de Productos"
         description="Descubre nuestra amplia selección de productos artesanales organizados por categoría."
         breadcrumbs={[{ label: "Categorías" }]}
-        actions={<ProductSearch />}
+        actions={
+          <Suspense>
+            <ProductSearch />
+          </Suspense>
+        }
       />
 
       {/* Categorías Grid */}
