@@ -116,7 +116,7 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
                       </div>
                     </td>
                     <td>
-                      <span className="badge badge-sm bg-[#8B3C10] text-white border-none">
+                      <span className="inline-flex items-center justify-center px-4 py-1 rounded-full bg-[#8B3C10] text-white text-xs font-medium min-w-[140px] whitespace-nowrap shadow-sm">
                         {categoryName}
                       </span>
                     </td>

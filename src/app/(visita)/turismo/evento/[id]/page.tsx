@@ -1,108 +1,59 @@
 import { notFound } from "next/navigation";
-import { getEventoById, getFileUrl } from "@/lib/data";
-import type { Evento } from "@/lib/types";
+import { obtenerEventoByIdServer, generarUrlImagen } from "@/lib/data/turismo/eventos-server";
+import type { Evento } from "@/lib/types/turismo";
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EventPage({ params }: Props) {
-  const { id } = params;
-  let evento: Evento | null = null;
-  try {
-    evento = await getEventoById(id);
-  } catch {
-    return notFound();
-  }
-
+  const { id } = await params;
+  const evento: Evento | null = await obtenerEventoByIdServer(id); 
   if (!evento) return notFound();
-
-  const r = evento as unknown as Record<string, unknown>;
-  const titulo = String(r.titulo ?? r["titulo"] ?? "Evento");
-  const contenido = String(r.contenido ?? r["contenido"] ?? r.resumen ?? r["resumen"] ?? "");
-  const portada = String(r.portada ?? r["portada"] ?? "");
-  const galeria: string[] = Array.isArray(r.galeria ?? r["galeria"]) ? ((r.galeria ?? r["galeria"]) as unknown[]).map((x) => String(x)) : [];
-
-  // Leer fechas y organizadores manejando variantes de nombre
-  const rawInicio = r.fecha_inicio ?? r["fecha_inicio"] ?? r.fecha_de_inicio ?? r["fecha_de_inicio"] ?? r.fechaInicio ?? r["fechaInicio"];
-  const rawFin = r.fecha_fin ?? r["fecha_fin"] ?? r.fecha_de_fin ?? r["fecha_de_fin"] ?? r.fechaFin ?? r["fechaFin"];
-  const organizadores = String(r.organizadores ?? r["organizadores"] ?? "");
-
-  const parseDate = (v: unknown): Date | null => {
-    if (!v) return null;
-    if (v instanceof Date) return v;
-    const s = String(v);
-    const d = new Date(s);
-    return isNaN(d.getTime()) ? null : d;
-  };
-
-  const fmt = (d: Date | null) =>
-    d
-      ? new Intl.DateTimeFormat("es", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        }).format(d)
-      : null;
-
-  const fechaInicio = fmt(parseDate(rawInicio));
-  const fechaFin = fmt(parseDate(rawFin));
-
-  const portadaUrl = getFileUrl(evento as any, "portada");
-  
-  // Procesar galería usando getFileUrl para cada imagen
-  const galeriaUrls: string[] = galeria
-    .map((filename) => {
-      // Crear un objeto temporal para usar con getFileUrl
-      const tempRecord = { ...evento, galeria: filename };
-      return getFileUrl(tempRecord as any, "galeria");
-    })
-    .filter((url): url is string => url !== null);
 
   return (
     <main className="flex-1">
       <article className="max-w-4xl mx-auto my-8">
-        {portadaUrl && (
+        {evento.portada && (
           <div className="w-full h-72 md:h-96 overflow-hidden rounded-b-md">
-            <img src={portadaUrl} alt={titulo} className="w-full h-full object-cover" />
+            <img src={generarUrlImagen("evento", evento.id, evento.portada)} alt={evento.titulo} className="w-full h-full object-cover" />
           </div>
         )}
 
         <div className="p-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-6">{titulo}</h1>
-          {(fechaInicio || fechaFin || organizadores) && (
+          <h1 className="text-3xl md:text-4xl font-bold mb-6">{evento.titulo}</h1>
+          
             <div className="text-sm text-base-content/70 flex flex-wrap gap-x-6 gap-y-2 mb-4">
-              {fechaInicio && (
+              {evento.fecha_de_inicio && (
                 <div>
-                  <span className="font-semibold">Inicio:</span> {fechaInicio}
+                  <span className="font-semibold">Inicio:</span> {formatDDMMYYYY(evento.fecha_de_inicio)}
                 </div>
               )}
-              {fechaFin && (
+              {evento.fecha_de_finalizacion && (
                 <div>
-                  <span className="font-semibold">Fin:</span> {fechaFin}
+                  <span className="font-semibold">Fin:</span> {formatDDMMYYYY(evento.fecha_de_finalizacion)}
                 </div>
               )}
-              {organizadores && (
+              {evento.organizadores && (
                 <div>
-                  <span className="font-semibold">Organizadores:</span> {organizadores}
+                  <span className="font-semibold">Organizadores:</span> {evento.organizadores}
                 </div>
               )}
             </div>
-          )}
-          <div className="prose max-w-none text-base-content/90 mt-4">
-            {contenido.split("\n").map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
+
+          <div className="prose max-w-none text-base-content/90 mt-4 whitespace-pre-wrap">
+            {evento.contenido}
           </div>
 
-          {galeriaUrls.length > 0 && (
+          {evento.galeria.length > 0 && (
             <section className="mt-12">
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {galeriaUrls.map((url, index) => (
+                {evento.galeria.map((url, index) => (
                   <div key={`gallery-${index}`} className="h-44 overflow-hidden rounded shadow-sm">
-                    <img src={url} alt={`Imagen de galería ${index + 1}`} className="w-full h-full object-cover" />
+                    <img src={generarUrlImagen("evento", evento.id, url)} alt={`Imagen de galería ${index + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
@@ -112,4 +63,13 @@ export default async function EventPage({ params }: Props) {
       </article>
     </main>
   );
+}
+
+function formatDDMMYYYY(value: string): string {
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value;
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
 }

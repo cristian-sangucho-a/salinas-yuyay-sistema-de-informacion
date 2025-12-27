@@ -2,7 +2,8 @@
 import { useMemo, useRef, useState } from "react";
 import { FaImage, FaPlus, FaSave } from "react-icons/fa";
 import AdminHeader from "@components/molecules/AdminHeader";
-import { createSalaMuseo } from "@/lib/admin-data";
+import Alert from "@components/molecules/Alert";
+import { createSalaMuseo } from "@/lib/data/turismo/salas-museo";
 
 export default function CrearSalaInlinePage() {
   const [titulo, setTitulo] = useState("");
@@ -10,7 +11,7 @@ export default function CrearSalaInlinePage() {
   const [contenido, setContenido] = useState("");
   const [portada, setPortada] = useState<File | null>(null);
   const [galeria, setGaleria] = useState<File[]>([]);
-  const [ocultar, setOcultar] = useState<boolean>(false);
+  const [publico, setPublico] = useState<boolean>(true);
   const [status, setStatus] = useState<string | null>(null);
   const [existingPortadaUrl, setExistingPortadaUrl] = useState<string | null>(null);
   const [existingGaleriaUrls, setExistingGaleriaUrls] = useState<string[]>([]);
@@ -48,7 +49,7 @@ export default function CrearSalaInlinePage() {
         contenido,
         portada: portada ?? undefined,
         galeria: galeria.length > 0 ? galeria : undefined,
-        ocultar,
+        publico,
       });
 
       setStatus(`Sala creada con éxito: ${created?.id}`);
@@ -71,7 +72,14 @@ export default function CrearSalaInlinePage() {
         <article className="max-w-4xl mx-auto my-8 relative">
           {/* Botón Guardar flotante */}
           <div className="fixed bottom-8 right-8 z-50 flex items-center gap-4">
-            {status && <div className="bg-base-300 text-base-content px-4 py-2 rounded-lg shadow-lg text-sm">{status}</div>}
+            {status && (
+              <Alert 
+                type={status.includes("Error") ? "error" : status.includes("éxito") || status.includes("creada") ? "success" : "info"}
+                className="shadow-lg max-w-md"
+              >
+                {status}
+              </Alert>
+            )}
             <button type="submit" className="btn btn-primary btn-lg btn-circle shadow-lg" aria-label="Guardar Sala">
               <FaSave size={24} />
             </button>
@@ -100,13 +108,13 @@ export default function CrearSalaInlinePage() {
           <div className="p-8">
             <div className="mb-4 flex items-center gap-3">
               <input
-                id="ocultar"
+                id="publico"
                 type="checkbox"
-                checked={ocultar}
-                onChange={(e) => setOcultar(e.target.checked)}
+                checked={publico}
+                onChange={(e) => setPublico(e.target.checked)}
                 className="checkbox checkbox-primary"
               />
-              <label htmlFor="ocultar" className="text-sm">Ocultar sala (no visible públicamente)</label>
+              <label htmlFor="publico" className="text-sm">Marcar como público</label>
             </div>
             <input
               type="text"

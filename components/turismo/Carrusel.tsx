@@ -1,15 +1,13 @@
 "use client";
 import React, { useRef } from "react";
-import EventCard from "./EventCard";
+import CoverCard from "./CoverCard";
+import { CarouselItem } from "@/lib/types";
 
-type EventRecord = Record<string, unknown>;
-
-
-interface EventsCarouselProps {
-  events: EventRecord[];
+interface CarruselProps {
+  item: CarouselItem[];
 }
 
-export default function EventsCarousel({ events }: EventsCarouselProps) {
+export default function Carrusel({ item: events }: CarruselProps) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const scroll = (direction: -1 | 1) => {
@@ -45,9 +43,9 @@ export default function EventsCarousel({ events }: EventsCarouselProps) {
           ref={ref}
           className="flex overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory w-full"
         >
-          {events.map((ev) => (
-            <div key={ev.id as string} className="flex-shrink-0 w-screen snap-start">
-              <EventCard event={ev} />
+          {events.map((item) => (
+            <div key={item.id as string} className="flex-shrink-0 w-screen snap-start">
+              <CoverCard item={item} />
             </div>
           ))}
         </div>

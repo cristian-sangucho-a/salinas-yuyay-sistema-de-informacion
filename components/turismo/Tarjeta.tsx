@@ -1,18 +1,20 @@
-interface MuseumCardProps {
-  title: string;
-  image?: string;
-  description?: string;
+import type { TarjetaItem } from "@/lib/types";
+
+// Definimos que las props del componente incluyen un objeto llamado 'datos'
+interface Props {
+  item: TarjetaItem;
   reverse?: boolean;
 }
 
-export default function MuseumCard({ title, image, description, reverse = false }: MuseumCardProps) {
+export default function Tarjeta({ item, reverse = false }: Props) {
+
   return (
     <div className={`card bg-base-100 shadow-md my-6 h-[315px] group transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-lg transform-gpu`}>
       <div className={`flex flex-col md:flex-row h-full ${reverse ? "md:flex-row-reverse" : ""}`}>
         <div className="md:w-1/2 h-1/2 md:h-full relative overflow-hidden">
-          {image ? (
+          {item?.portada ? (
             // fallback to regular img when image is an external url or missing loader
-            <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
+            <img src={item.portada} alt={item.titulo} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
           ) : (
             <div className="w-full h-full bg-base-200 flex items-center justify-center text-base-content/50">
               Imagen de sala
@@ -26,9 +28,9 @@ export default function MuseumCard({ title, image, description, reverse = false 
         </div>
         <div className="md:w-1/2 p-6 flex items-center h-1/2 md:h-full">
           <div>
-            <h3 className="text-xl font-semibold text-base-content">{title}</h3>
+            <h3 className="text-xl font-semibold text-base-content">{item.titulo}</h3>
             <p className="text-base-content/70 mt-2">
-              {description ?? "Descripción breve de la sala del museo."}
+              {item.resumen ?? "Descripción breve de la sala del museo."}
             </p>
           </div>
         </div>
