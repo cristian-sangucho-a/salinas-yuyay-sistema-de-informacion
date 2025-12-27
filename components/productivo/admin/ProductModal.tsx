@@ -70,8 +70,7 @@ export default function ProductModal({
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [showContificoModal, setShowContificoModal] = useState(false);
-  const [pendingContificoCreation, setPendingContificoCreation] =
-    useState<boolean>(false);
+  const [, setPendingContificoCreation] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadSubcategorias = async (catId: string) => {

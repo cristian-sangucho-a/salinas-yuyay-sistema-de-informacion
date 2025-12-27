@@ -21,7 +21,6 @@ export default async function ProductosPage({
 }) {
   const resolvedSearchParams = await searchParams;
   const subcategoriaSlug = resolvedSearchParams.subcategoria;
-  const sort = resolvedSearchParams.sort as string | undefined;
   const search = resolvedSearchParams.q as string | undefined;
 
   const [productosData, categoriasConSubcategorias] = await Promise.all([

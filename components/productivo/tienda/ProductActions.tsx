@@ -4,7 +4,6 @@ import React from "react";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Button from "@atoms/Button";
-import Text from "@atoms/Text";
 
 interface ProductActionsProps {
   product: {

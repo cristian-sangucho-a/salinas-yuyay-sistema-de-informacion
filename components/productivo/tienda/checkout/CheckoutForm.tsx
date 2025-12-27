@@ -117,9 +117,11 @@ export default function CheckoutForm() {
       setIsNewUser(false);
 
       alert("¡Usuario registrado correctamente!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || "Error al registrar el usuario.");
+      const message =
+        err instanceof Error ? err.message : "Error al registrar el usuario.";
+      setError(message);
     } finally {
       setIsLoading(false);
     }

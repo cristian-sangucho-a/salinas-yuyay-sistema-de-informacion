@@ -13,7 +13,7 @@ export default function FeatureItem({
   icon,
   title,
   description,
-  variant = "primary",
+  variant: _variant = "primary",
   layout = "default",
 }: FeatureItemProps) {
   if (layout === "slim") {
