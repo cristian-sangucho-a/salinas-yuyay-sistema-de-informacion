@@ -129,13 +129,8 @@ export default function ProductCatalog({
                 : "space-y-3"
             }
           >
-            {paginatedProducts.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                {...product}
-                delay={index * 100}
-                variant={viewMode}
-              />
+            {paginatedProducts.map((product) => (
+              <ProductCard key={product.id} {...product} variant={viewMode} />
             ))}
           </div>
 
