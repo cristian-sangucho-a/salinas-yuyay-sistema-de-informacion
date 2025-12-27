@@ -7,15 +7,9 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { isAuthenticated } from "@/lib/auth";
 import { deleteRecord } from "@/lib/admin-data";
 import ConfirmDialog from "@cultural/admin/ConfirmDialog";
-import {
-  obtenerEventos,
-  generarUrlImagen
-} from "@/lib/data/turismo/eventos";
+import { obtenerEventos, generarUrlImagen } from "@/lib/data/turismo/eventos";
 
-import {
-  obtenerSalasMuseo
-  
-} from "@/lib/data/turismo/salas-museo";
+import { obtenerSalasMuseo } from "@/lib/data/turismo/salas-museo";
 import type { Evento } from "@/lib/types/turismo";
 import AdminHeader from "@components/molecules/AdminHeader";
 import TurismoNavTabs from "@cultural/admin/TurismoNavTabs";
@@ -23,7 +17,10 @@ import TurismoNavTabs from "@cultural/admin/TurismoNavTabs";
 export default function AdminTurismoPage() {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<null | { id: string; title?: string }>(null);
+  const [confirmDelete, setConfirmDelete] = useState<null | {
+    id: string;
+    title?: string;
+  }>(null);
   const [events, setEvents] = useState<
     Array<{ id: string; title: string; date?: string; image?: string }>
   >([]);
@@ -43,10 +40,7 @@ export default function AdminTurismoPage() {
     // Fetch counts in parallel using data helpers
     (async () => {
       try {
-        await Promise.all([
-          obtenerEventos(),
-          obtenerSalasMuseo(),
-        ]);
+        await Promise.all([obtenerEventos(), obtenerSalasMuseo()]);
       } catch (err) {
         console.error("Error fetching counts:", err);
       }
@@ -57,12 +51,13 @@ export default function AdminTurismoPage() {
   useEffect(() => {
     (async () => {
       try {
-  const items = await obtenerEventos();
+        const items = await obtenerEventos();
         const mapped = items.map((it: Evento) => ({
           id: it.id,
           title: it.titulo ?? it.titulo ?? "Evento",
           date: it.fecha_de_inicio ?? it["fecha_de_inicio"] ?? undefined,
-          image: generarUrlImagen(it.collectionId,it.id, it.portada) ?? undefined,
+          image:
+            generarUrlImagen(it.collectionId, it.id, it.portada) ?? undefined,
         }));
         setEvents(mapped);
       } catch (err) {
@@ -84,8 +79,12 @@ export default function AdminTurismoPage() {
       <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-12">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[#5A1E02]">Gestión de Eventos</h2>
-            <p className="text-sm text-[#4A3B31]/70 mt-1">Administra los eventos turísticos</p>
+            <h2 className="text-2xl font-bold text-[#5A1E02]">
+              Gestión de Eventos
+            </h2>
+            <p className="text-sm text-[#4A3B31]/70 mt-1">
+              Administra los eventos turísticos
+            </p>
           </div>
 
           <button
@@ -165,7 +164,11 @@ export default function AdminTurismoPage() {
         {/* Confirm dialog for deleting events */}
         <ConfirmDialog
           isOpen={!!confirmDelete}
-          title={confirmDelete ? `Eliminar evento "${confirmDelete.title ?? ''}"` : 'Eliminar evento'}
+          title={
+            confirmDelete
+              ? `Eliminar evento "${confirmDelete.title ?? ""}"`
+              : "Eliminar evento"
+          }
           message="Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este evento?"
           confirmText="Eliminar"
           cancelText="Cancelar"
@@ -182,7 +185,9 @@ export default function AdminTurismoPage() {
               setConfirmDelete(null);
             } catch (err) {
               console.error("Error deleting evento:", err);
-              alert("No se pudo eliminar el evento. Revisa la consola para más detalles.");
+              alert(
+                "No se pudo eliminar el evento. Revisa la consola para más detalles."
+              );
             } finally {
               setDeletingId(null);
             }

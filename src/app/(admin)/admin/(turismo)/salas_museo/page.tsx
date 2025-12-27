@@ -8,15 +8,10 @@ import { isAuthenticated } from "@/lib/auth";
 import { deleteRecord } from "@/lib/admin-data";
 import ConfirmDialog from "@cultural/admin/ConfirmDialog";
 
+import { obtenerSalasMuseo } from "@/lib/data/turismo/salas-museo";
+import { generarUrlImagen } from "@/lib/data/turismo/eventos";
 
-
-import {obtenerSalasMuseo } from "@/lib/data/turismo/salas-museo";
-import {generarUrlImagen } from "@/lib/data/turismo/eventos";
-
-
-import type { SalaMuseo} from "@/lib/types/turismo";
-
-
+import type { SalaMuseo } from "@/lib/types/turismo";
 
 import AdminHeader from "@components/molecules/AdminHeader";
 import TurismoNavTabs from "@cultural/admin/TurismoNavTabs";
@@ -28,7 +23,10 @@ export default function AdminTurismoPage() {
   >([]);
   const [loadingSalas, setLoadingSalas] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<null | { id: string; title?: string }>(null);
+  const [confirmDelete, setConfirmDelete] = useState<null | {
+    id: string;
+    title?: string;
+  }>(null);
 
   const handleCreate = () => {
     redirect("/admin/salas_museo/crear");
@@ -60,7 +58,8 @@ export default function AdminTurismoPage() {
           id: it.id,
           title: it.titulo,
           description: it.resumen,
-          image: generarUrlImagen(it.collectionId, it.id, it.portada) ?? undefined,
+          image:
+            generarUrlImagen(it.collectionId, it.id, it.portada) ?? undefined,
         }));
         setSalas(mapped);
       } catch (err) {
@@ -84,8 +83,12 @@ export default function AdminTurismoPage() {
       <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-12">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[#5A1E02]">Gestión de Salas del Museo</h2>
-            <p className="text-sm text-[#4A3B31]/70 mt-1">Administra las salas del museo</p>
+            <h2 className="text-2xl font-bold text-[#5A1E02]">
+              Gestión de Salas del Museo
+            </h2>
+            <p className="text-sm text-[#4A3B31]/70 mt-1">
+              Administra las salas del museo
+            </p>
           </div>
 
           <button
@@ -166,7 +169,11 @@ export default function AdminTurismoPage() {
         {/* Confirm dialog for deleting salas */}
         <ConfirmDialog
           isOpen={!!confirmDelete}
-          title={confirmDelete ? `Eliminar sala "${confirmDelete.title ?? ''}"` : 'Eliminar sala'}
+          title={
+            confirmDelete
+              ? `Eliminar sala "${confirmDelete.title ?? ""}"`
+              : "Eliminar sala"
+          }
           message="Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta sala del museo?"
           confirmText="Eliminar"
           cancelText="Cancelar"
@@ -183,7 +190,9 @@ export default function AdminTurismoPage() {
               setConfirmDelete(null);
             } catch (err) {
               console.error("Error deleting sala:", err);
-              alert("No se pudo eliminar la sala. Revisa la consola para más detalles.");
+              alert(
+                "No se pudo eliminar la sala. Revisa la consola para más detalles."
+              );
             } finally {
               setDeletingId(null);
             }

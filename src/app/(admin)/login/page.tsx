@@ -1,51 +1,55 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
-import { pb } from '@/lib/pocketbase';
-import { isAuthenticated } from '@/lib/auth';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
+import { pb } from "@/lib/pocketbase";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     // Redirigir si ya está autenticado
     if (isAuthenticated()) {
-      router.push('/admin/dashboard');
+      router.push("/admin/dashboard");
     }
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
-      const authData = await pb.collection('users').authWithPassword(email, password);
-      
+      const authData = await pb
+        .collection("users")
+        .authWithPassword(email, password);
+
       if (pb.authStore.isValid) {
         // Guardar el token en cookies para que funcione en Server Components
-        await fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        await fetch("/api/auth/set-cookie", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token: authData.token,
             model: authData.record,
           }),
         });
-        
-        router.push('/admin/dashboard');
+
+        router.push("/admin/dashboard");
       }
     } catch (err: unknown) {
-      console.error('Error de autenticación:', err);
-      setError('Credenciales inválidas. Por favor, verifica tu correo y contraseña.');
+      console.error("Error de autenticación:", err);
+      setError(
+        "Credenciales inválidas. Por favor, verifica tu correo y contraseña."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +84,9 @@ export default function LoginPage() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-[#4A3B31] font-medium">Correo electrónico</span>
+                <span className="label-text text-[#4A3B31] font-medium">
+                  Correo electrónico
+                </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -100,7 +106,9 @@ export default function LoginPage() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-[#4A3B31] font-medium">Contraseña</span>
+                <span className="label-text text-[#4A3B31] font-medium">
+                  Contraseña
+                </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

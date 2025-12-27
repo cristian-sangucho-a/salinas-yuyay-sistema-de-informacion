@@ -20,8 +20,14 @@ export default function CrearSalaInlinePage() {
   const portadaInputRef = useRef<HTMLInputElement>(null);
   const galeriaInputRef = useRef<HTMLInputElement>(null);
 
-  const portadaUrl = useMemo(() => (portada ? URL.createObjectURL(portada) : null), [portada]);
-  const galeriaUrls = useMemo(() => galeria.map((f) => URL.createObjectURL(f)), [galeria]);
+  const portadaUrl = useMemo(
+    () => (portada ? URL.createObjectURL(portada) : null),
+    [portada]
+  );
+  const galeriaUrls = useMemo(
+    () => galeria.map((f) => URL.createObjectURL(f)),
+    [galeria]
+  );
 
   // This page is create-only. Edición se maneja en la página de editar.
 
@@ -68,32 +74,58 @@ export default function CrearSalaInlinePage() {
 
   return (
     <main className="flex-1">
-      <AdminHeader title="Panel Administrativo" subtitle="Salas del Museo" backHref="/admin/salas_museo" backLabel="Salas" />
+      <AdminHeader
+        title="Panel Administrativo"
+        subtitle="Salas del Museo"
+        backHref="/admin/salas_museo"
+        backLabel="Salas"
+      />
       <form onSubmit={handleSubmit}>
         <article className="max-w-4xl mx-auto my-8 relative">
           {/* Botón Guardar flotante */}
           <div className="fixed bottom-8 right-8 z-50 flex items-center gap-4">
             {status && (
-              <Alert 
-                type={status.includes("Error") ? "error" : status.includes("éxito") || status.includes("creada") ? "success" : "info"}
+              <Alert
+                type={
+                  status.includes("Error")
+                    ? "error"
+                    : status.includes("éxito") || status.includes("creada")
+                    ? "success"
+                    : "info"
+                }
                 className="shadow-lg max-w-md"
               >
                 {status}
               </Alert>
             )}
-            <button type="submit" className="btn btn-primary btn-lg btn-circle shadow-lg" aria-label="Guardar Sala">
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-circle shadow-lg"
+              aria-label="Guardar Sala"
+            >
               <FaSave size={24} />
             </button>
           </div>
 
           {/* Portada */}
-          <input type="file" accept="image/*" ref={portadaInputRef} onChange={handlePortadaChange} className="hidden" />
+          <input
+            type="file"
+            accept="image/*"
+            ref={portadaInputRef}
+            onChange={handlePortadaChange}
+            className="hidden"
+          />
           <div
             className="w-full h-72 md:h-96 overflow-hidden rounded-b-md relative bg-base-200 flex items-center justify-center cursor-pointer group"
             onClick={() => portadaInputRef.current?.click()}
           >
             {portadaUrl || existingPortadaUrl ? (
-              <Image src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"} alt="Portada" fill className="object-cover" />
+              <Image
+                src={portadaUrl ?? existingPortadaUrl ?? "/placeholder.png"}
+                alt="Portada"
+                fill
+                className="object-cover"
+              />
             ) : (
               <div className="text-center text-base-content/50">
                 <FaImage size={48} className="mx-auto" />
@@ -115,7 +147,9 @@ export default function CrearSalaInlinePage() {
                 onChange={(e) => setPublico(e.target.checked)}
                 className="checkbox checkbox-primary"
               />
-              <label htmlFor="publico" className="text-sm">Marcar como público</label>
+              <label htmlFor="publico" className="text-sm">
+                Marcar como público
+              </label>
             </div>
             <input
               type="text"
@@ -147,16 +181,39 @@ export default function CrearSalaInlinePage() {
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {existingGaleriaUrls.map((url, i) => (
-                  <div key={`existing-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
-                    <Image src={url} alt={`Imagen de galería existente ${i + 1}`} fill className="object-cover" />
+                  <div
+                    key={`existing-${i}`}
+                    className="h-44 overflow-hidden rounded shadow-sm relative"
+                  >
+                    <Image
+                      src={url}
+                      alt={`Imagen de galería existente ${i + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 ))}
                 {galeriaUrls.map((url, i) => (
-                  <div key={`new-${i}`} className="h-44 overflow-hidden rounded shadow-sm relative">
-                    <Image src={url} alt={`Imagen de galería ${i + 1}`} fill className="object-cover" />
+                  <div
+                    key={`new-${i}`}
+                    className="h-44 overflow-hidden rounded shadow-sm relative"
+                  >
+                    <Image
+                      src={url}
+                      alt={`Imagen de galería ${i + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 ))}
-                <input type="file" accept="image/*" multiple ref={galeriaInputRef} onChange={handleGaleriaChange} className="hidden" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={galeriaInputRef}
+                  onChange={handleGaleriaChange}
+                  className="hidden"
+                />
                 <div
                   className="h-44 rounded shadow-sm border-2 border-dashed border-base-300 flex flex-col items-center justify-center text-base-content/50 hover:bg-base-200 hover:border-primary cursor-pointer transition-colors"
                   onClick={() => galeriaInputRef.current?.click()}
@@ -172,7 +229,9 @@ export default function CrearSalaInlinePage() {
 
       <footer className="mt-8">
         <div className="max-w-4xl mx-auto px-4 md:px-8 lg:px-16 py-4">
-          <p className="text-sm text-center text-[#4A3B31]/60">Creado por Hakan Team</p>
+          <p className="text-sm text-center text-[#4A3B31]/60">
+            Creado por Hakan Team
+          </p>
         </div>
       </footer>
     </main>
