@@ -1,11 +1,11 @@
-'use server';
+"use server";
 
-import nodemailer from 'nodemailer';
-import type { Activo, Solicitud } from './types';
-import { pb } from './pocketbase';
+import nodemailer from "nodemailer";
+import type { Activo, Solicitud } from "./types";
+import { pb } from "./pocketbase";
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
@@ -69,7 +69,9 @@ function getEmailTemplate(solicitud: Solicitud, activo: Activo): string {
                   
                   <!-- Saludo -->
                   <p style="margin: 0 0 24px 0; color: #4A3B31; font-size: 16px; line-height: 1.6; font-weight: 300;">
-                    Estimado/a <strong style="color: #5A1E02; font-weight: 500;">${solicitud.nombre} ${solicitud.apellido}</strong>,
+                    Estimado/a <strong style="color: #5A1E02; font-weight: 500;">${
+                      solicitud.nombre
+                    } ${solicitud.apellido}</strong>,
                   </p>
                   
                   <p style="margin: 0 0 32px 0; color: #4A3B31; font-size: 16px; line-height: 1.7; font-weight: 300;">
@@ -91,37 +93,53 @@ function getEmailTemplate(solicitud: Solicitud, activo: Activo): string {
                           <tr>
                             <td style="padding: 0 0 12px 0;">
                               <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Título</span>
-                              <span style="display: block; color: #4A3B31; font-size: 16px; font-weight: 400; line-height: 1.5;">${activo.titulo}</span>
+                              <span style="display: block; color: #4A3B31; font-size: 16px; font-weight: 400; line-height: 1.5;">${
+                                activo.titulo
+                              }</span>
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 12px 0; border-top: 1px solid #D9C3A3;">
                               <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Descripción</span>
-                              <span style="display: block; color: #4A3B31; font-size: 15px; font-weight: 300; line-height: 1.6;">${activo.descripcion}</span>
+                              <span style="display: block; color: #4A3B31; font-size: 15px; font-weight: 300; line-height: 1.6;">${
+                                activo.descripcion
+                              }</span>
                             </td>
                           </tr>
-                          ${activo.anio || activo.autor ? `
+                          ${
+                            activo.anio || activo.autor
+                              ? `
                           <tr>
                             <td style="padding: 12px 0 0 0; border-top: 1px solid #D9C3A3;">
                               <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                  ${activo.anio ? `
+                                  ${
+                                    activo.anio
+                                      ? `
                                   <td width="50%" style="padding-right: 12px;">
                                     <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Año</span>
                                     <span style="display: block; color: #4A3B31; font-size: 15px; font-weight: 400;">${activo.anio}</span>
                                   </td>
-                                  ` : ''}
-                                  ${activo.autor ? `
+                                  `
+                                      : ""
+                                  }
+                                  ${
+                                    activo.autor
+                                      ? `
                                   <td width="50%" style="padding-left: 12px;">
                                     <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Autor</span>
                                     <span style="display: block; color: #4A3B31; font-size: 15px; font-weight: 400;">${activo.autor}</span>
                                   </td>
-                                  ` : ''}
+                                  `
+                                      : ""
+                                  }
                                 </tr>
                               </table>
                             </td>
                           </tr>
-                          ` : ''}
+                          `
+                              : ""
+                          }
                         </table>
                       </td>
                     </tr>
@@ -142,21 +160,29 @@ function getEmailTemplate(solicitud: Solicitud, activo: Activo): string {
                           <tr>
                             <td style="padding: 0 0 12px 0;">
                               <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Motivo</span>
-                              <span style="display: block; color: #4A3B31; font-size: 14px; font-weight: 300; line-height: 1.6;">${solicitud.motivo}</span>
+                              <span style="display: block; color: #4A3B31; font-size: 14px; font-weight: 300; line-height: 1.6;">${
+                                solicitud.motivo
+                              }</span>
                             </td>
                           </tr>
-                          ${solicitud.institucion ? `
+                          ${
+                            solicitud.institucion
+                              ? `
                           <tr>
                             <td style="padding: 12px 0; border-top: 1px solid #D9C3A3;">
                               <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Institución</span>
                               <span style="display: block; color: #4A3B31; font-size: 14px; font-weight: 400;">${solicitud.institucion}</span>
                             </td>
                           </tr>
-                          ` : ''}
+                          `
+                              : ""
+                          }
                           <tr>
                             <td style="padding: 12px 0 0 0; border-top: 1px solid #D9C3A3;">
                               <span style="display: block; color: #8B3C10; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Correo Electrónico</span>
-                              <span style="display: block; color: #4A3B31; font-size: 14px; font-weight: 400;">${solicitud.correo}</span>
+                              <span style="display: block; color: #4A3B31; font-size: 14px; font-weight: 400;">${
+                                solicitud.correo
+                              }</span>
                             </td>
                           </tr>
                         </table>
@@ -165,22 +191,30 @@ function getEmailTemplate(solicitud: Solicitud, activo: Activo): string {
                   </table>
 
                   <!-- Archivos Adjuntos -->
-                  ${activo.archivos && activo.archivos.length > 0 ? `
+                  ${
+                    activo.archivos && activo.archivos.length > 0
+                      ? `
                   <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 0 32px 0; background-color: #F8F3ED; border-radius: 4px; border: 1px solid #D6A77A;">
                     <tr>
                       <td style="padding: 16px 24px;">
                         <span style="display: block; color: #5A1E02; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
                           Archivos Adjuntos (${activo.archivos.length})
                         </span>
-                        ${activo.archivos.map(file => `
+                        ${activo.archivos
+                          .map(
+                            (file) => `
                           <div style="padding: 8px 0; border-top: 1px solid #D9C3A3;">
                             <span style="color: #4A3B31; font-size: 14px; font-weight: 300;">${file}</span>
                           </div>
-                        `).join('')}
+                        `
+                          )
+                          .join("")}
                       </td>
                     </tr>
                   </table>
-                  ` : ''}
+                  `
+                      : ""
+                  }
 
                   <!-- Nota Importante -->
                   <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0; background-color: #FFF9F0; border-left: 4px solid #B63A1B; border-radius: 4px;">
@@ -236,20 +270,22 @@ export async function sendApprovalEmail(
   try {
     // Descargar archivos del activo
     const attachments = [];
-    
+
     if (activo.archivos && activo.archivos.length > 0) {
       for (const archivo of activo.archivos) {
         try {
           const fileUrl = pb.files.getURL(activo, archivo);
           const response = await fetch(fileUrl);
-          
+
           if (!response.ok) {
-            console.error(`Error descargando archivo ${archivo}: ${response.statusText}`);
+            console.error(
+              `Error descargando archivo ${archivo}: ${response.statusText}`
+            );
             continue;
           }
-          
+
           const buffer = await response.arrayBuffer();
-          
+
           attachments.push({
             filename: archivo,
             content: Buffer.from(buffer),
@@ -262,7 +298,7 @@ export async function sendApprovalEmail(
 
     const mailOptions = {
       from: {
-        name: 'Archivo Histórico de Salinas',
+        name: "Archivo Histórico de Salinas",
         address: process.env.GMAIL_USER!,
       },
       to: solicitud.correo,
@@ -272,13 +308,16 @@ export async function sendApprovalEmail(
     };
 
     await transporter.sendMail(mailOptions);
-    
+
     return { success: true };
   } catch (error: unknown) {
-    console.error('Error enviando correo:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Error desconocido al enviar correo'
+    console.error("Error enviando correo:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Error desconocido al enviar correo",
     };
   }
 }

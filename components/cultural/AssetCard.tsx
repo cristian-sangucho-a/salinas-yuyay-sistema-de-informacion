@@ -1,10 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { FaCalendar, FaUser, FaFile, FaPaperPlane, FaChevronDown } from 'react-icons/fa';
-import type { Activo } from '@/lib/types';
-import SolicitudModal from './SolicitudModal';
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  FaCalendar,
+  FaUser,
+  FaFile,
+  FaPaperPlane,
+  FaChevronDown,
+} from "react-icons/fa";
+import type { Activo } from "@/lib/types";
+import SolicitudModal from "./SolicitudModal";
 
 interface AssetCardProps {
   asset: Activo;
@@ -13,12 +19,12 @@ interface AssetCardProps {
 export default function AssetCard({ asset }: AssetCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const categoryName = asset.expand?.categoria?.nombre ?? 'Sin categoría';
+  const categoryName = asset.expand?.categoria?.nombre ?? "Sin categoría";
   const fileCount = asset.archivos?.length ?? 0;
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('a')) {
+    if (target.closest("button") || target.closest("a")) {
       e.preventDefault();
       e.stopPropagation();
     }
@@ -26,7 +32,7 @@ export default function AssetCard({ asset }: AssetCardProps) {
 
   return (
     <>
-      <div 
+      <div
         onClick={handleCardClick}
         className="block bg-white border border-[#D9C3A3] rounded-lg p-5 hover:shadow-md transition-shadow"
       >
@@ -78,21 +84,24 @@ export default function AssetCard({ asset }: AssetCardProps) {
               className="flex items-center justify-between w-full text-sm font-semibold text-[#5A1E02] hover:text-[#8B3C10] transition-colors mb-2"
             >
               <span>Archivos disponibles ({fileCount})</span>
-              <FaChevronDown 
-                className={`w-3 h-3 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+              <FaChevronDown
+                className={`w-3 h-3 transition-transform duration-300 ${
+                  isExpanded ? "rotate-180" : ""
+                }`}
               />
             </button>
 
-            <div 
+            <div
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               }`}
             >
               <div className="space-y-2 mt-3">
                 {asset.archivos.map((archivo, index) => {
-                  const extension = archivo.split('.').pop()?.toUpperCase() || 'FILE';
+                  const extension =
+                    archivo.split(".").pop()?.toUpperCase() || "FILE";
                   return (
-                    <div 
+                    <div
                       key={index}
                       className="flex items-center gap-2 p-2 bg-[#F8F3ED] rounded border border-[#D9C3A3] text-xs animate-in fade-in slide-in-from-top-2 duration-300"
                       style={{ animationDelay: `${index * 50}ms` }}

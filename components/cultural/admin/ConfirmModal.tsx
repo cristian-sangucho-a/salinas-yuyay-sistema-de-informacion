@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
+import React from "react";
+import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface ConfirmModalProps {
   message: string;
   confirmText?: string;
   cancelText?: string;
-  type?: 'success' | 'warning' | 'danger';
+  type?: "success" | "warning" | "danger";
   onConfirm: () => void;
   onCancel: () => void;
   isProcessing?: boolean;
@@ -19,9 +19,9 @@ export default function ConfirmModal({
   isOpen,
   title,
   message,
-  confirmText = 'Confirmar',
-  cancelText = 'Cancelar',
-  type = 'warning',
+  confirmText = "Confirmar",
+  cancelText = "Cancelar",
+  type = "warning",
   onConfirm,
   onCancel,
   isProcessing = false,
@@ -30,9 +30,9 @@ export default function ConfirmModal({
 
   const getIcon = () => {
     switch (type) {
-      case 'success':
+      case "success":
         return <FaCheckCircle className="w-16 h-16 text-[#7C8B56]" />;
-      case 'danger':
+      case "danger":
         return <FaExclamationTriangle className="w-16 h-16 text-[#B63A1B]" />;
       default:
         return <FaExclamationTriangle className="w-16 h-16 text-[#D6A77A]" />;
@@ -41,12 +41,12 @@ export default function ConfirmModal({
 
   const getConfirmButtonClass = () => {
     switch (type) {
-      case 'success':
-        return 'bg-[#7C8B56] hover:bg-[#7C8B56]/90';
-      case 'danger':
-        return 'bg-[#B63A1B] hover:bg-[#B63A1B]/90';
+      case "success":
+        return "bg-success hover:bg-success/90";
+      case "danger":
+        return "bg-warning hover:bg-warning/90";
       default:
-        return 'bg-[#5A1E02] hover:bg-[#8B3C10]';
+        return "bg-accent hover:bg-accent/90";
     }
   };
 
@@ -64,18 +64,18 @@ export default function ConfirmModal({
           <div className="mb-4 animate-in zoom-in duration-500 delay-100">
             {getIcon()}
           </div>
-          
+
           <h3 className="text-2xl font-bold text-[#5A1E02] text-center mb-2">
             {title}
           </h3>
-          
-          <p className="text-[#4A3B31] text-center leading-relaxed whitespace-pre-line">
+
+          <p className="text-primary text-center leading-relaxed whitespace-pre-line">
             {message}
           </p>
         </div>
 
         {/* Botones */}
-        <div className="flex gap-3 p-6 bg-[#F8F3ED] rounded-b-xl">
+        <div className="flex gap-3 p-6 bg-background rounded-b-xl">
           <button
             onClick={onCancel}
             disabled={isProcessing}
@@ -83,7 +83,7 @@ export default function ConfirmModal({
           >
             {cancelText}
           </button>
-          
+
           <button
             onClick={onConfirm}
             disabled={isProcessing}

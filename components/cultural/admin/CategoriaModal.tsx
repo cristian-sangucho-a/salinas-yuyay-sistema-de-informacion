@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import { FaTimes, FaCheckCircle, FaImage, FaUpload } from 'react-icons/fa';
-import type { Categoria } from '@/lib/types';
-import { createCategoria, updateCategoria } from '@/lib/admin-data';
-import { getFileUrl } from '@/lib/data';
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { FaTimes, FaCheckCircle, FaImage, FaUpload } from "react-icons/fa";
+import type { Categoria } from "@/lib/types";
+import { createCategoria, updateCategoria } from "@/lib/admin-data";
+import { getFileUrl } from "@/lib/data";
 
 interface CategoriaModalProps {
   isOpen: boolean;
@@ -13,15 +13,19 @@ interface CategoriaModalProps {
   categoria: Categoria | null;
 }
 
-export default function CategoriaModal({ isOpen, onClose, categoria }: CategoriaModalProps) {
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
+export default function CategoriaModal({
+  isOpen,
+  onClose,
+  categoria,
+}: CategoriaModalProps) {
+  const [nombre, setNombre] = useState("");
+  const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState<File | null>(null);
-  const [imagenPreview, setImagenPreview] = useState<string>('');
+  const [imagenPreview, setImagenPreview] = useState<string>("");
   const [removeImage, setRemoveImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,18 +35,18 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
       if (categoria) {
         setNombre(categoria.nombre);
         setDescripcion(categoria.descripcion);
-        const existingImage = getFileUrl(categoria, 'imagen');
-        setImagenPreview(existingImage || '');
+        const existingImage = getFileUrl(categoria, "imagen");
+        setImagenPreview(existingImage || "");
         setImagen(null);
         setRemoveImage(false);
       } else {
-        setNombre('');
-        setDescripcion('');
+        setNombre("");
+        setDescripcion("");
         setImagen(null);
-        setImagenPreview('');
+        setImagenPreview("");
         setRemoveImage(false);
       }
-      setError('');
+      setError("");
       setSubmitSuccess(false);
     } else {
       setIsVisible(false);
@@ -53,10 +57,10 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setError('La imagen no debe superar los 5MB');
+        setError("La imagen no debe superar los 5MB");
         return;
       }
-      
+
       setImagen(file);
       setRemoveImage(false);
       const reader = new FileReader();
@@ -69,24 +73,24 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
 
   const handleRemoveImage = () => {
     setImagen(null);
-    setImagenPreview('');
+    setImagenPreview("");
     setRemoveImage(true);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!nombre.trim()) {
-      setError('El nombre es requerido');
+      setError("El nombre es requerido");
       return;
     }
 
     if (!descripcion.trim()) {
-      setError('La descripción es requerida');
+      setError("La descripción es requerida");
       return;
     }
 
@@ -97,7 +101,7 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
         await updateCategoria(categoria.id, {
           nombre: nombre.trim(),
           descripcion: descripcion.trim(),
-          imagen: removeImage ? null : (imagen || undefined),
+          imagen: removeImage ? null : imagen || undefined,
         });
       } else {
         await createCategoria({
@@ -113,8 +117,9 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
         onClose(true);
       }, 2000);
     } catch (err: unknown) {
-      console.error('Error al guardar categoría:', err);
-      const message = err instanceof Error ? err.message : 'Error al guardar la categoría';
+      console.error("Error al guardar categoría:", err);
+      const message =
+        err instanceof Error ? err.message : "Error al guardar la categoría";
       setError(message);
     } finally {
       setIsSubmitting(false);
@@ -124,21 +129,23 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-        isVisible ? 'bg-black/60 backdrop-blur-sm' : 'bg-black/0'
+        isVisible ? "bg-black/60 backdrop-blur-sm" : "bg-black/0"
       }`}
       onClick={() => !isSubmitting && onClose(false)}
     >
-      <div 
+      <div
         className={`bg-[#F8F3ED] rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-all duration-300 ${
-          isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-4'
+          isVisible
+            ? "scale-100 opacity-100 translate-y-0"
+            : "scale-95 opacity-0 translate-y-4"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white text-[#5A1E02] px-6 py-4 rounded-t-xl flex items-center justify-between border-b border-[#D9C3A3]">
           <h2 className="text-xl font-bold">
-            {categoria ? 'Editar Categoría' : 'Nueva Categoría'}
+            {categoria ? "Editar Categoría" : "Nueva Categoría"}
           </h2>
           <button
             onClick={() => onClose(false)}
@@ -154,7 +161,7 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
           <div className="p-10 text-center animate-in fade-in zoom-in duration-500">
             <FaCheckCircle className="w-20 h-20 text-[#7C8B56] mx-auto mb-4 animate-in zoom-in duration-700" />
             <h3 className="text-2xl font-bold text-[#5A1E02] mb-3">
-              {categoria ? '¡Categoría Actualizada!' : '¡Categoría Creada!'}
+              {categoria ? "¡Categoría Actualizada!" : "¡Categoría Creada!"}
             </h3>
             <p className="text-[#4A3B31]">
               La categoría ha sido guardada exitosamente.
@@ -163,14 +170,23 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
             <p className="text-sm text-[#4A3B31]/80">
-              {categoria ? 'Modifica los datos de la categoría.' : 'Completa el formulario para crear una nueva categoría.'} Los campos marcados con <span className="text-[#B63A1B] font-semibold">*</span> son obligatorios.
+              {categoria
+                ? "Modifica los datos de la categoría."
+                : "Completa el formulario para crear una nueva categoría."}{" "}
+              Los campos marcados con{" "}
+              <span className="text-[#B63A1B] font-semibold">*</span> son
+              obligatorios.
             </p>
 
             <div className="space-y-4">
-              <div className="form-control animate-in slide-in-from-bottom duration-300" style={{ animationDelay: '100ms' }}>
+              <div
+                className="form-control animate-in slide-in-from-bottom duration-300"
+                style={{ animationDelay: "100ms" }}
+              >
                 <label className="label pb-1">
                   <span className="label-text text-[#4A3B31] text-sm font-semibold">
-                    Nombre de la categoría <span className="text-[#B63A1B]">*</span>
+                    Nombre de la categoría{" "}
+                    <span className="text-[#B63A1B]">*</span>
                   </span>
                 </label>
                 <input
@@ -189,7 +205,10 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
                 </label>
               </div>
 
-              <div className="form-control animate-in slide-in-from-bottom duration-300" style={{ animationDelay: '200ms' }}>
+              <div
+                className="form-control animate-in slide-in-from-bottom duration-300"
+                style={{ animationDelay: "200ms" }}
+              >
                 <label className="label pb-1">
                   <span className="label-text text-[#4A3B31] text-sm font-semibold">
                     Descripción <span className="text-[#B63A1B]">*</span>
@@ -206,14 +225,19 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
                 />
               </div>
 
-              <div className="form-control animate-in slide-in-from-bottom duration-300" style={{ animationDelay: '300ms' }}>
+              <div
+                className="form-control animate-in slide-in-from-bottom duration-300"
+                style={{ animationDelay: "300ms" }}
+              >
                 <label className="label pb-1">
                   <span className="label-text text-[#4A3B31] text-sm font-semibold">
                     Imagen
                   </span>
-                  <span className="label-text-alt text-[#4A3B31]/50 text-xs">(Opcional)</span>
+                  <span className="label-text-alt text-[#4A3B31]/50 text-xs">
+                    (Opcional)
+                  </span>
                 </label>
-                
+
                 {imagenPreview && !removeImage ? (
                   <div className="relative w-full h-56 bg-[#D9C3A3] rounded-lg overflow-hidden mb-3 group">
                     <Image
@@ -262,7 +286,9 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
                     className="btn btn-outline border-[#D9C3A3] text-[#5A1E02] hover:bg-[#7C8B56]/10 hover:border-[#7C8B56] w-full disabled:opacity-50"
                   >
                     <FaUpload className="w-4 h-4 mr-2" />
-                    {imagenPreview && !removeImage ? 'Cambiar imagen' : 'Seleccionar imagen'}
+                    {imagenPreview && !removeImage
+                      ? "Cambiar imagen"
+                      : "Seleccionar imagen"}
                   </button>
                 </div>
               </div>
@@ -293,8 +319,10 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
                     <span className="loading loading-spinner loading-sm"></span>
                     Guardando...
                   </span>
+                ) : categoria ? (
+                  "Guardar cambios"
                 ) : (
-                  categoria ? 'Guardar cambios' : 'Crear categoría'
+                  "Crear categoría"
                 )}
               </button>
             </div>

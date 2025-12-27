@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaDownload } from 'react-icons/fa';
-import type { Activo } from '@/lib/types';
-import { deleteActivo, downloadActivoArchivosAsZip } from '@/lib/admin-data';
-import ConfirmDialog from './ConfirmDialog';
+import React, { useState } from "react";
+import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaDownload } from "react-icons/fa";
+import type { Activo } from "@/lib/types";
+import { deleteActivo, downloadActivoArchivosAsZip } from "@/lib/admin-data";
+import ConfirmDialog from "./ConfirmDialog";
 
 interface ActivosTableProps {
   activos: Activo[];
@@ -12,7 +12,11 @@ interface ActivosTableProps {
   onDelete: () => void;
 }
 
-export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTableProps) {
+export default function ActivosTable({
+  activos,
+  onEdit,
+  onDelete,
+}: ActivosTableProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -32,8 +36,8 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
       await deleteActivo(confirmDialog.activo.id);
       onDelete();
     } catch (error) {
-      console.error('Error al eliminar activo:', error);
-      alert('Error al eliminar el activo.');
+      console.error("Error al eliminar activo:", error);
+      alert("Error al eliminar el activo.");
     } finally {
       setDeletingId(null);
     }
@@ -41,7 +45,7 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
 
   const handleDownload = async (activo: Activo) => {
     if (!activo.archivos || activo.archivos.length === 0) {
-      alert('Este activo no tiene archivos para descargar');
+      alert("Este activo no tiene archivos para descargar");
       return;
     }
 
@@ -51,19 +55,24 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
 
       if (result.success && result.blob) {
         const url = window.URL.createObjectURL(result.blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.download = `${activo.titulo.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_archivos.zip`;
+        link.download = `${activo.titulo
+          .replace(/[^a-z0-9]/gi, "_")
+          .toLowerCase()}_archivos.zip`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       } else {
-        alert(result.error || 'Error al descargar los archivos');
+        alert(result.error || "Error al descargar los archivos");
       }
     } catch (error: unknown) {
-      console.error('Error al descargar archivos:', error);
-      const message = error instanceof Error ? error.message : 'Error al descargar los archivos';
+      console.error("Error al descargar archivos:", error);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Error al descargar los archivos";
       alert(message);
     } finally {
       setDownloadingId(null);
@@ -94,11 +103,15 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
             </thead>
             <tbody>
               {activos.map((activo) => {
-                const categoryName = activo.expand?.categoria?.nombre || 'Sin categoría';
+                const categoryName =
+                  activo.expand?.categoria?.nombre || "Sin categoría";
                 const fileCount = activo.archivos?.length || 0;
 
                 return (
-                  <tr key={activo.id} className="hover:bg-[#F8F3ED] transition-colors border-b border-[#D9C3A3]">
+                  <tr
+                    key={activo.id}
+                    className="hover:bg-[#F8F3ED] transition-colors border-b border-[#D9C3A3]"
+                  >
                     <td>
                       <div>
                         <span className="font-semibold text-[#5A1E02]">
@@ -143,7 +156,11 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleDownload(activo)}
-                          disabled={downloadingId === activo.id || !activo.archivos || activo.archivos.length === 0}
+                          disabled={
+                            downloadingId === activo.id ||
+                            !activo.archivos ||
+                            activo.archivos.length === 0
+                          }
                           className="btn btn-sm bg-[#7C8B56] hover:bg-[#7C8B56]/80 text-white border-none gap-1 disabled:opacity-50"
                           title="Descargar archivos"
                         >

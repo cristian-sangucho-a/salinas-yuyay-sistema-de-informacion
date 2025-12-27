@@ -1,9 +1,5 @@
 import { pb } from "./pocketbase"; // Importa la instancia de Pocketbase
-import {
-  type Categoria,
-  type Activo,
-  Solicitud,
-} from "./types"; // Importa los tipos
+import { type Categoria, type Activo } from "./types"; // Importa los tipos
 import type { ListResult, RecordModel } from "pocketbase"; // Importa tipos necesarios
 
 /**
@@ -19,20 +15,20 @@ export function getFileUrl(
   }
 
   try {
-        if (specificFilename) {
+    if (specificFilename) {
       return pb.files.getURL(record, specificFilename);
     }
 
-      const fileValue = record[filenameField];
+    const fileValue = record[filenameField];
 
-      // Manejar campo de archivo Múltiple (como 'archivos' en Activo)
-      if (Array.isArray(fileValue) && fileValue.length > 0) {
+    // Manejar campo de archivo Múltiple (como 'archivos' en Activo)
+    if (Array.isArray(fileValue) && fileValue.length > 0) {
       // Devuelve la URL del primer archivo de la lista
       // Usa la nueva sintaxis pb.files.getURL()
       return pb.files.getURL(record, fileValue[0]);
-      }
-      // Manejar campo de archivo Único (como 'imagen' en Categoria)
-      else if (typeof fileValue === "string" && fileValue) {
+    }
+    // Manejar campo de archivo Único (como 'imagen' en Categoria)
+    else if (typeof fileValue === "string" && fileValue) {
       // Usa la nueva sintaxis pb.files.getURL()
       return pb.files.getURL(record, fileValue);
     }
@@ -134,7 +130,6 @@ export async function getActivoById(id: string): Promise<Activo | null> {
     return null;
   }
 }
-
 
 /**
  * Crea una solicitud para un activo.

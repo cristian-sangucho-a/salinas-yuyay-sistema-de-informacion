@@ -1,4 +1,5 @@
 import type { TarjetaItem } from "@/lib/types";
+import Image from "next/image";
 
 // Definimos que las props del componente incluyen un objeto llamado 'datos'
 interface Props {
@@ -14,14 +15,14 @@ export default function Tarjeta({ item, reverse = false }: Props) {
         <div className="md:w-1/2 h-1/2 md:h-full relative overflow-hidden">
           {item?.portada ? (
             // fallback to regular img when image is an external url or missing loader
-            <img src={item.portada} alt={item.titulo} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
+            <Image src={item.portada} alt={item.titulo} fill className="object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
           ) : (
             <div className="w-full h-full bg-base-200 flex items-center justify-center text-base-content/50">
               Imagen de sala
             </div>
           )}
           {/* overlay hover */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div aria-hidden className="pointer-events-none absolute bottom-3 right-3 opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
             <span className="badge badge-primary shadow">Ver más</span>
           </div>

@@ -1,47 +1,54 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import type { Solicitud } from '@/lib/types';
-import { updateSolicitudEstado } from '@/lib/admin-data';
-import { FaCheck, FaTimes, FaEnvelope, FaBuilding } from 'react-icons/fa';
-import ConfirmModal from './ConfirmModal';
-import ResultModal from './ResultModal';
+import React, { useState } from "react";
+import type { Solicitud } from "@/lib/types";
+import { updateSolicitudEstado } from "@/lib/admin-data";
+import { FaCheck, FaTimes, FaEnvelope, FaBuilding } from "react-icons/fa";
+import ConfirmModal from "./ConfirmModal";
+import ResultModal from "./ResultModal";
 
 interface SolicitudesTableProps {
   solicitudes: Solicitud[];
   onUpdate: () => void;
 }
 
-export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesTableProps) {
+export default function SolicitudesTable({
+  solicitudes,
+  onUpdate,
+}: SolicitudesTableProps) {
   const [processingId, setProcessingId] = useState<string | null>(null);
-  
+
   // Modal de confirmación
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
     id: string;
-    estado: 'aprobado' | 'rechazado';
+    estado: "aprobado" | "rechazado";
     solicitud: Solicitud | null;
   }>({
     isOpen: false,
-    id: '',
-    estado: 'aprobado',
+    id: "",
+    estado: "aprobado",
     solicitud: null,
   });
 
   // Modal de resultado
   const [resultModal, setResultModal] = useState<{
     isOpen: boolean;
-    type: 'success' | 'error';
+    type: "success" | "error";
     title: string;
     message: string;
   }>({
     isOpen: false,
-    type: 'success',
-    title: '',
-    message: '',
+    type: "success",
+    title: "",
+    message: "",
   });
 
-  const handleOpenConfirm = (id: string, estado: 'aprobado' | 'rechazado', solicitud: Solicitud) => {
+  const handleOpenConfirm = (
+    id: string,
+    estado: "aprobado" | "rechazado",
+    solicitud: Solicitud
+  ) => {
     setConfirmModal({
       isOpen: true,
       id,
@@ -52,40 +59,54 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
 
   const handleConfirmAction = async () => {
     const { id, estado, solicitud } = confirmModal;
-    
+
     if (!solicitud) return;
 
     try {
       setProcessingId(id);
       const result = await updateSolicitudEstado(id, estado);
 
-      setConfirmModal({ isOpen: false, id: '', estado: 'aprobado', solicitud: null });
+      setConfirmModal({
+        isOpen: false,
+        id: "",
+        estado: "aprobado",
+        solicitud: null,
+      });
 
       if (result.success) {
         setResultModal({
           isOpen: true,
-          type: 'success',
-          title: estado === 'aprobado' ? '¡Solicitud Aprobada!' : 'Solicitud Rechazada',
-          message: estado === 'aprobado' 
-            ? `La solicitud de ${solicitud.nombre} ${solicitud.apellido} ha sido aprobada exitosamente.\n\nSe ha enviado un correo electrónico a ${solicitud.correo} con los archivos adjuntos.`
-            : `La solicitud de ${solicitud.nombre} ${solicitud.apellido} ha sido rechazada.`,
+          type: "success",
+          title:
+            estado === "aprobado"
+              ? "¡Solicitud Aprobada!"
+              : "Solicitud Rechazada",
+          message:
+            estado === "aprobado"
+              ? `La solicitud de ${solicitud.nombre} ${solicitud.apellido} ha sido aprobada exitosamente.\n\nSe ha enviado un correo electrónico a ${solicitud.correo} con los archivos adjuntos.`
+              : `La solicitud de ${solicitud.nombre} ${solicitud.apellido} ha sido rechazada.`,
         });
         onUpdate();
       } else {
         setResultModal({
           isOpen: true,
-          type: 'error',
-          title: 'Error al Procesar Solicitud',
-          message: result.error || 'No se pudo actualizar la solicitud. Por favor, intente nuevamente.',
+          type: "error",
+          title: "Error al Procesar Solicitud",
+          message:
+            result.error ||
+            "No se pudo actualizar la solicitud. Por favor, intente nuevamente.",
         });
       }
     } catch (error: unknown) {
-      console.error('Error:', error);
-      const message = error instanceof Error ? error.message : 'Ocurrió un error al procesar la solicitud.';
+      console.error("Error:", error);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Ocurrió un error al procesar la solicitud.";
       setResultModal({
         isOpen: true,
-        type: 'error',
-        title: 'Error Inesperado',
+        type: "error",
+        title: "Error Inesperado",
         message: message,
       });
     } finally {
@@ -95,14 +116,14 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
 
   const getStatusBadge = (estado: string) => {
     switch (estado) {
-      case 'pendiente':
-        return 'badge badge-warning text-warning-content';
-      case 'aprobado':
-        return 'badge badge-success text-success-content';
-      case 'rechazado':
-        return 'badge badge-error text-error-content';
+      case "pendiente":
+        return "badge badge-warning text-warning-content";
+      case "aprobado":
+        return "badge badge-success text-success-content";
+      case "rechazado":
+        return "badge badge-error text-error-content";
       default:
-        return 'badge badge-neutral';
+        return "badge badge-neutral";
     }
   };
 
@@ -130,11 +151,15 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
             </thead>
             <tbody>
               {solicitudes.map((solicitud) => {
-                const activoTitulo = solicitud.expand?.activo?.titulo || 'Activo no encontrado';
+                const activoTitulo =
+                  solicitud.expand?.activo?.titulo || "Activo no encontrado";
                 const isLoading = processingId === solicitud.id;
 
                 return (
-                  <tr key={solicitud.id} className="hover:bg-[#F8F3ED] transition-colors border-b border-[#D9C3A3]">
+                  <tr
+                    key={solicitud.id}
+                    className="hover:bg-[#F8F3ED] transition-colors border-b border-[#D9C3A3]"
+                  >
                     <td>
                       <div className="font-semibold text-[#5A1E02]">
                         {solicitud.nombre} {solicitud.apellido}
@@ -150,27 +175,37 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
                         </div>
                       )}
                     </td>
-                    
+
                     <td className="text-sm text-[#4A3B31]/80">
                       {activoTitulo}
                     </td>
-                    
+
                     <td className="text-sm text-[#4A3B31]/80 max-w-xs">
                       <p className="line-clamp-3">{solicitud.motivo}</p>
                     </td>
 
                     <td className="text-center">
-                      <span className={`badge badge-sm ${getStatusBadge(solicitud.estado)}`}>
+                      <span
+                        className={`badge badge-sm ${getStatusBadge(
+                          solicitud.estado
+                        )}`}
+                      >
                         {solicitud.estado}
                       </span>
                     </td>
 
                     <td>
                       <div className="flex items-center justify-center gap-2">
-                        {solicitud.estado === 'pendiente' ? (
+                        {solicitud.estado === "pendiente" ? (
                           <>
                             <button
-                              onClick={() => handleOpenConfirm(solicitud.id, 'aprobado', solicitud)}
+                              onClick={() =>
+                                handleOpenConfirm(
+                                  solicitud.id,
+                                  "aprobado",
+                                  solicitud
+                                )
+                              }
                               disabled={isLoading}
                               className="btn btn-sm bg-[#7C8B56] hover:bg-[#7C8B56]/80 text-white border-none gap-1"
                             >
@@ -182,7 +217,13 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
                               Aprobar
                             </button>
                             <button
-                              onClick={() => handleOpenConfirm(solicitud.id, 'rechazado', solicitud)}
+                              onClick={() =>
+                                handleOpenConfirm(
+                                  solicitud.id,
+                                  "rechazado",
+                                  solicitud
+                                )
+                              }
                               disabled={isLoading}
                               className="btn btn-sm bg-[#B63A1B] hover:bg-[#B63A1B]/80 text-white border-none gap-1"
                             >
@@ -195,7 +236,9 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
                             </button>
                           </>
                         ) : (
-                          <span className="text-xs text-[#4A3B31]/50 italic">Gestionada</span>
+                          <span className="text-xs text-[#4A3B31]/50 italic">
+                            Gestionada
+                          </span>
                         )}
                       </div>
                     </td>
@@ -210,17 +253,30 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
       {/* Modal de Confirmación */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
-        title={confirmModal.estado === 'aprobado' ? '¿Aprobar Solicitud?' : '¿Rechazar Solicitud?'}
+        title={
+          confirmModal.estado === "aprobado"
+            ? "¿Aprobar Solicitud?"
+            : "¿Rechazar Solicitud?"
+        }
         message={
-          confirmModal.estado === 'aprobado'
+          confirmModal.estado === "aprobado"
             ? `¿Está seguro de aprobar la solicitud de ${confirmModal.solicitud?.nombre} ${confirmModal.solicitud?.apellido}?\n\nSe enviará un correo electrónico con los archivos adjuntos a:\n${confirmModal.solicitud?.correo}`
             : `¿Está seguro de rechazar la solicitud de ${confirmModal.solicitud?.nombre} ${confirmModal.solicitud?.apellido}?`
         }
-        confirmText={confirmModal.estado === 'aprobado' ? 'Aprobar y Enviar' : 'Rechazar'}
+        confirmText={
+          confirmModal.estado === "aprobado" ? "Aprobar y Enviar" : "Rechazar"
+        }
         cancelText="Cancelar"
-        type={confirmModal.estado === 'aprobado' ? 'success' : 'danger'}
+        type={confirmModal.estado === "aprobado" ? "success" : "danger"}
         onConfirm={handleConfirmAction}
-        onCancel={() => setConfirmModal({ isOpen: false, id: '', estado: 'aprobado', solicitud: null })}
+        onCancel={() =>
+          setConfirmModal({
+            isOpen: false,
+            id: "",
+            estado: "aprobado",
+            solicitud: null,
+          })
+        }
         isProcessing={processingId !== null}
       />
 
@@ -230,7 +286,14 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
         type={resultModal.type}
         title={resultModal.title}
         message={resultModal.message}
-        onClose={() => setResultModal({ isOpen: false, type: 'success', title: '', message: '' })}
+        onClose={() =>
+          setResultModal({
+            isOpen: false,
+            type: "success",
+            title: "",
+            message: "",
+          })
+        }
       />
     </>
   );

@@ -13,14 +13,13 @@ export default function FeatureItem({
   icon,
   title,
   description,
-  variant: _variant = "primary",
   layout = "default",
 }: FeatureItemProps) {
   if (layout === "slim") {
     return (
       <div className="flex-1">
         <div className="flex items-center justify-center gap-2 py-2 px-3 cursor-pointer transition-colors hover:bg-primary-content/10 h-full">
-          <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-primary-content">
+          <div className="shrink-0 w-4 h-4 flex items-center justify-center text-primary-content">
             {icon}
           </div>
           <h3 className="font-medium text-primary-content text-xs whitespace-nowrap">
@@ -33,7 +32,7 @@ export default function FeatureItem({
 
   return (
     <div className="flex items-start gap-4 group">
-      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-content/10 flex items-center justify-center text-primary-content">
+      <div className="shrink-0 w-12 h-12 rounded-full bg-primary-content/10 flex items-center justify-center text-primary-content">
         {icon}
       </div>
       <div className="flex-1 pt-1">
