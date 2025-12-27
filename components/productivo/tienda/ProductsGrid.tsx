@@ -13,7 +13,6 @@ interface ProductsGridProps {
   showViewAllButton?: boolean;
   viewAllHref?: string;
   viewAllText?: string;
-  onAddToCart?: (productId: string) => void;
 }
 
 export default function ProductsGrid({
@@ -23,7 +22,6 @@ export default function ProductsGrid({
   showViewAllButton = false,
   viewAllHref = "/tienda/productos",
   viewAllText = "VER TODOS LOS PRODUCTOS",
-  onAddToCart,
 }: ProductsGridProps) {
   return (
     <section id="productos" className="py-16 md:py-20 bg-base-100">
@@ -40,12 +38,10 @@ export default function ProductsGrid({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product, index) => (
+          {products.map((product) => (
             <ProductCard
               key={product.id}
               {...product}
-              delay={index * 100}
-              onAddToCart={onAddToCart}
             />
           ))}
         </div>

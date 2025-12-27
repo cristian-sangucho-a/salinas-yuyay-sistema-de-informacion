@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaPlus, FaArrowLeft, FaFolder, FaFile, FaEnvelope } from 'react-icons/fa';
-import { logout, getAuthUser, isAuthenticated } from '@/lib/auth';
+import { FaPlus, FaArrowLeft } from 'react-icons/fa';
+import { getAuthUser, isAuthenticated } from '@/lib/auth';
 import type { Activo, Categoria } from '@/lib/types';
 import ActivosTable from '@cultural/admin/ActivosTable';
 import ActivoModal from '@cultural/admin/ActivoModal';
@@ -12,7 +12,7 @@ import CulturalNavTabs from '@cultural/admin/CulturalNavTabs';
 import { getActivos, getCategorias } from '@/lib/data';
 export default function ActivosAdminPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const [activos, setActivos] = useState<Activo[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [isLoading, setIsLoading] = useState(true);

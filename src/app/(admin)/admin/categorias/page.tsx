@@ -2,15 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  FaPlus,
-  FaArrowLeft,
-  FaFolder,
-  FaFile,
-  FaEnvelope,
-} from "react-icons/fa";
-import { logout, getAuthUser, isAuthenticated } from "@/lib/auth";
+import { FaPlus } from "react-icons/fa";
+import { getAuthUser, isAuthenticated } from "@/lib/auth";
 import { getCategorias } from "@/lib/data";
 import type { Categoria } from "@/lib/types";
 import CategoriasGrid from "@cultural/admin/CategoriasGrid";
@@ -19,7 +12,7 @@ import CulturalNavTabs from "@cultural/admin/CulturalNavTabs";
 import AdminHeader from "@components/molecules/AdminHeader";
 export default function CategoriasAdminPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,11 +45,6 @@ export default function CategoriasAdminPage() {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
   const handleCreate = () => {
     setEditingCategoria(null);
     setIsModalOpen(true);
@@ -86,7 +74,10 @@ export default function CategoriasAdminPage() {
   return (
     <div className="min-h-screen bg-[#F8F3ED]">
       {/* Header simple con botón Dashboard */}
-      <AdminHeader title="Panel Administrativo" subtitle="Archivo Histórico de Salinas" />
+      <AdminHeader
+        title="Panel Administrativo"
+        subtitle="Archivo Histórico de Salinas"
+      />
       <CulturalNavTabs />
 
       {/* Contenido principal */}

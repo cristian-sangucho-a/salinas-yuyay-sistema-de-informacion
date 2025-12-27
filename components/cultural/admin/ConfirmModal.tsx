@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FaCheckCircle, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
+import { FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 
 interface ConfirmModalProps {
   isOpen: boolean;

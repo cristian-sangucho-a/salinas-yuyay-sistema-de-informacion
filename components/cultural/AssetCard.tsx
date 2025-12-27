@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FaCalendar, FaUser, FaFile, FaPaperPlane, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaCalendar, FaUser, FaFile, FaPaperPlane, FaChevronDown } from 'react-icons/fa';
 import type { Activo } from '@/lib/types';
 import SolicitudModal from './SolicitudModal';
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaCalendarAlt, FaLandmark, FaTicketAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaLandmark } from "react-icons/fa";
 
 const TurismoNavTabs = () => {
   return (

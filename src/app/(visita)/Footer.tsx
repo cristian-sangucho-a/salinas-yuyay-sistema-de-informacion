@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link'; // Link sigue importado por si lo necesitas en otro lado, aunque no se usa aquí
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram } from 'react-icons/fa'; // Importa iconos necesarios
 
 export default function Footer() {
