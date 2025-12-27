@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Eye, Plus, Minus, Check } from "lucide-react";
+import { ShoppingCart, Eye, Plus, Minus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Button from "@atoms/Button";
 import Text from "@atoms/Text";

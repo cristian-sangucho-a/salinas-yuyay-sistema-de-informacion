@@ -18,6 +18,7 @@ import {
   updateProducto,
   deleteProductoImage,
 } from "@/lib/admin-data-productivo";
+import { ClientResponseError } from "pocketbase";
 import { getSubcategoriasByCategoria } from "@/lib/data/tienda/subcategorias";
 import { getFileUrl } from "@/lib/data";
 import Image from "next/image";
@@ -42,6 +43,8 @@ export default function ProductModal({
   categorias,
 }: ProductModalProps) {
   const [nombre, setNombre] = useState("");
+  const [slug, setSlug] = useState("");
+  const [isSlugEdited, setIsSlugEdited] = useState(false);
   const [descripcion, setDescripcion] = useState("");
   const [pvp1, setPvp1] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
@@ -82,6 +85,8 @@ export default function ProductModal({
 
   const resetForm = () => {
     setNombre("");
+    setSlug("");
+    setIsSlugEdited(false);
     setDescripcion("");
     setPvp1("");
     setCategoriaId(categorias[0]?.id || "");
@@ -107,6 +112,8 @@ export default function ProductModal({
       setTimeout(() => setIsVisible(true), 10);
       if (producto) {
         setNombre(producto.nombre || "");
+        setSlug(producto.slug || "");
+        setIsSlugEdited(true); // Si editamos, asumimos que el slug ya está definido y no queremos autogenerarlo al cambiar nombre accidentalmente
         setDescripcion(producto.descripcion || "");
         setPvp1(producto.pvp1?.toString() || "");
         setCategoriaId(producto.categoria || "");
@@ -135,6 +142,24 @@ export default function ProductModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, producto, categorias]);
+
+  const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setNombre(newName);
+    if (!isSlugEdited) {
+      const newSlug = newName
+        .toLowerCase()
+        .trim()
+        .replace(/[\s\W-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      setSlug(newSlug);
+    }
+  };
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSlug(e.target.value);
+    setIsSlugEdited(true);
+  };
 
   const handleCategoriaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCatId = e.target.value;
@@ -245,6 +270,7 @@ export default function ProductModal({
       // Crear en PocketBase
       const productData = {
         nombre,
+        slug,
         descripcion,
         pvp1: parseFloat(pvp1),
         categoria: categoriaId,
@@ -335,6 +361,7 @@ export default function ProductModal({
       // Crear en PocketBase
       const productData = {
         nombre,
+        slug,
         descripcion,
         pvp1: parseFloat(pvp1),
         categoria: categoriaId,
@@ -363,10 +390,13 @@ export default function ProductModal({
       setTimeout(() => {
         onClose(true);
       }, 1500);
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("Error saving product:", err);
+      if (err instanceof ClientResponseError && err.data) {
+        console.error("Validation Errors:", err.data);
+      }
       const errorMsg = err instanceof Error ? err.message : "Error desconocido";
       setError(errorMsg);
-      console.error("Error saving product:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -445,9 +475,25 @@ export default function ProductModal({
                     <input
                       type="text"
                       value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
+                      onChange={handleNombreChange}
                       className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none text-base-content"
                       placeholder="Ej: Mermelada de Frutilla"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text font-medium text-primary">
+                        Slug (URL) *
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      value={slug}
+                      onChange={handleSlugChange}
+                      className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none text-base-content font-mono text-sm"
+                      placeholder="ej-mermelada-de-frutilla"
                       required
                     />
                   </div>

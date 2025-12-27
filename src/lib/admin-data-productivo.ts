@@ -4,7 +4,7 @@ import type {
   CategoriaProducto,
   SubcategoriaProducto,
 } from "./types/productivo";
-import { ListResult } from "pocketbase";
+import { ListResult, ClientResponseError } from "pocketbase";
 
 // --- PRODUCTOS ---
 
@@ -36,6 +36,7 @@ export async function createProducto(data: {
   subcategoria?: string;
   estado: "A" | "I";
   destacado: boolean;
+  slug?: string;
   contifico_id?: string; // ID del producto en Contífico
   imagenes?: File[];
   ingredientes?: string;
@@ -43,13 +44,24 @@ export async function createProducto(data: {
 }): Promise<Producto> {
   const formData = new FormData();
   formData.append("nombre", data.nombre);
+  
+  // Usar slug proporcionado o generar uno básico
+  const slug = data.slug || data.nombre
+    .toLowerCase()
+    .trim()
+    .replace(/[\s\W-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  formData.append("slug", slug);
+
   formData.append("descripcion", data.descripcion);
   formData.append("pvp1", data.pvp1.toString());
   formData.append("categoria", data.categoria);
   if (data.subcategoria) formData.append("subcategoria", data.subcategoria);
   formData.append("estado", data.estado);
   formData.append("destacado", data.destacado.toString());
+  
   if (data.contifico_id) formData.append("contifico_id", data.contifico_id);
+  
   if (data.ingredientes) formData.append("ingredientes", data.ingredientes);
   if (data.condicionesAlmacenamiento)
     formData.append(
@@ -63,7 +75,14 @@ export async function createProducto(data: {
     });
   }
 
-  return await pb.collection("productos").create(formData);
+  try {
+    return await pb.collection("productos").create(formData);
+  } catch (err: unknown) {
+    if (err instanceof ClientResponseError) {
+      console.error("PocketBase Create Error Details:", err.data);
+    }
+    throw err;
+  }
 }
 
 export async function updateProducto(
@@ -76,6 +95,7 @@ export async function updateProducto(
     subcategoria?: string;
     estado?: "A" | "I";
     destacado?: boolean;
+    slug?: string;
     contifico_id?: string; // ID del producto en Contífico
     imagenes?: File[];
     imagenesToDelete?: string[];
@@ -86,6 +106,7 @@ export async function updateProducto(
   const formData = new FormData();
 
   if (data.nombre !== undefined) formData.append("nombre", data.nombre);
+  if (data.slug !== undefined) formData.append("slug", data.slug);
   if (data.descripcion !== undefined)
     formData.append("descripcion", data.descripcion);
   if (data.pvp1 !== undefined) formData.append("pvp1", data.pvp1.toString());
