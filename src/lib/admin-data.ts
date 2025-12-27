@@ -266,11 +266,12 @@ export async function downloadActivoArchivosAsZip(activo: Activo): Promise<{ suc
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     
     return { success: true, blob: zipBlob };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creando ZIP:', error);
+    const message = error instanceof Error ? error.message : 'Error al crear el archivo ZIP';
     return { 
       success: false, 
-      error: error.message || 'Error al crear el archivo ZIP' 
+      error: message 
     };
   }
 }
@@ -300,7 +301,7 @@ export async function updateSolicitudEstado(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // Actualizar el estado de la solicitud
-    const updatedSolicitud = await pb.collection('solicitud').update<Solicitud>(id, {
+    await pb.collection('solicitud').update<Solicitud>(id, {
       estado,
     });
 
@@ -328,11 +329,12 @@ export async function updateSolicitudEstado(
     }
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error updating solicitud ${id} to ${estado}:`, error);
+    const message = error instanceof Error ? error.message : 'Error al actualizar la solicitud';
     return {
       success: false,
-      error: error.message || 'Error al actualizar la solicitud',
+      error: message,
     };
   }
 }

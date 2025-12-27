@@ -34,7 +34,7 @@ export async function checkAuth(): Promise<boolean> {
     // Verificar que el token siga siendo válido contra la colección de usuarios
     await pb.collection('users').authRefresh();
     return true;
-  } catch (error) {
+  } catch {
     pb.authStore.clear();
     return false;
   }

@@ -112,9 +112,10 @@ export default function CategoriaModal({ isOpen, onClose, categoria }: Categoria
         setSubmitSuccess(false);
         onClose(true);
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error al guardar categoría:', err);
-      setError(err.message || 'Error al guardar la categoría');
+      const message = err instanceof Error ? err.message : 'Error al guardar la categoría';
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }

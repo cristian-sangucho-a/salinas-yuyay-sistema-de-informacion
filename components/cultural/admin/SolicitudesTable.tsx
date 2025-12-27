@@ -79,13 +79,14 @@ export default function SolicitudesTable({ solicitudes, onUpdate }: SolicitudesT
           message: result.error || 'No se pudo actualizar la solicitud. Por favor, intente nuevamente.',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error:', error);
+      const message = error instanceof Error ? error.message : 'Ocurrió un error al procesar la solicitud.';
       setResultModal({
         isOpen: true,
         type: 'error',
         title: 'Error Inesperado',
-        message: error.message || 'Ocurrió un error al procesar la solicitud.',
+        message: message,
       });
     } finally {
       setProcessingId(null);

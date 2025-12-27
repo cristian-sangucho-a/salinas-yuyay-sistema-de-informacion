@@ -61,9 +61,10 @@ export default function ActivosTable({ activos, onEdit, onDelete }: ActivosTable
       } else {
         alert(result.error || 'Error al descargar los archivos');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error al descargar archivos:', error);
-      alert(error.message || 'Error al descargar los archivos');
+      const message = error instanceof Error ? error.message : 'Error al descargar los archivos';
+      alert(message);
     } finally {
       setDownloadingId(null);
     }

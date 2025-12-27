@@ -274,11 +274,11 @@ export async function sendApprovalEmail(
     await transporter.sendMail(mailOptions);
     
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error enviando correo:', error);
     return { 
       success: false, 
-      error: error.message || 'Error al enviar el correo electrónico' 
+      error: error instanceof Error ? error.message : 'Error desconocido al enviar correo'
     };
   }
 }
