@@ -1,9 +1,14 @@
 "use client";
-import { BsDatabase } from "react-icons/bs";
-import Link from 'next/link';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+export default function HeroSection({ onSearch }: HeroSectionProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     // Aplicar scroll suave en el documento
     document.documentElement.style.scrollBehavior = 'smooth';
@@ -11,35 +16,68 @@ export default function HeroSection() {
       document.documentElement.style.scrollBehavior = 'auto';
     };
   }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch?.(value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchTerm.trim()) {
+      e.preventDefault();
+      const target = document.querySelector('#archivo-historico-search');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    onSearch?.('');
+  };
+
   return (
     <section
-      className="relative flex items-center min-h-[calc(100vh-10rem)] bg-cover bg-center bg-no-repeat"
+      className="relative flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/salinas-background.jpg')" }}
     >
-      <div className="absolute inset-0 bg-base-100 opacity-80"></div>
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60"></div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full py-16 md:py-24 lg:py-32">
+      {/* Contenido */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 text-center">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-white">
+          Descubre el patrimonio cultural digital de Salinas
+        </h1>
+        
+        <p className="text-lg md:text-xl text-gray-100 mb-12 max-w-2xl mx-auto">
+          Busca y comparte arte, documentos, fotografías y más de la valiosa memoria histórica y cultural de Salinas de Guaranda, Ecuador.
+        </p>
 
-        <div className="flex flex-col justify-center text-center lg:text-left">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-primary">
-            Saisal: <br className="hidden md:inline" /> Memoria Viva
-          </h1>
-          <p className="text-lg md:text-xl text-base-content mb-8 max-w-xl mx-auto lg:mx-0">
-            Un repositorio digital dedicado a preservar y compartir la valiosa memoria histórica y cultural de Salinas de Guaranda, Ecuador.
-          </p>
-          <div className="flex justify-center lg:justify-start">
-            <Link
-              href="/cultural#archivo-historico-search"
-              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center btn btn-primary rounded-lg focus:ring-4 focus:ring-primary/30 w-full sm:w-auto"
-            >
-              Explorar Archivo
-            </Link>
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center mt-12 lg:mt-0">
-          <div className="w-full max-w-[200px] aspect-square rounded-lg overflow-hidden shadow-md border border-base-300 bg-white p-4 flex items-center justify-center">
-            <BsDatabase className="text-primary" size={150} />
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto">
+          <div className="relative">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none z-10" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleChange}
+              onKeyPress={handleKeyPress}
+              placeholder="Buscar categorías..."
+              className="input input-bordered w-full pl-12 pr-12 border-gray-300 bg-white focus:border-primary focus:outline-none text-[#4A3B31] h-16 text-base rounded-lg shadow-lg"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors z-10 p-2"
+                aria-label="Limpiar búsqueda"
+              >
+                <FaTimes className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>

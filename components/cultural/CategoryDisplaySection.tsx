@@ -45,7 +45,7 @@ export default function CategoryDisplaySection({
   }, [categorias, selectedCategoryId]);
 
   return (
-    <section className="bg-base-200 py-12 md:py-16">
+    <section id="archivo-historico-search" className="bg-base-200 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 space-y-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-base-300">
           <div>
