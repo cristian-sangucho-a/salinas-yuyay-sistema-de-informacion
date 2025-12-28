@@ -1,5 +1,6 @@
 import { loadAuthFromCookies } from "@/lib/server-auth";
 import type { SalaMuseo } from "@/lib/types/turismo";
+import { pb } from "@/lib/pocketbase";
 
 /**
  * Obtener todas las salas de museo con autenticación desde cookies (Server Component)
@@ -37,5 +38,15 @@ export async function getSalaMuseoByIdServer(id: string): Promise<SalaMuseo | nu
 }
 
 export function generarUrlImagenSala(collectionId: string, itemId: string, filename: string): string {
-  return `http://127.0.0.1:8090/api/files/${collectionId}/${itemId}/${filename}`;
+  if (!collectionId || !itemId || !filename) {
+    return '';
+  }
+  
+  // Crear un objeto mock con las propiedades necesarias para pb.files.getURL
+  const mockRecord = {
+    id: itemId,
+    collectionId: collectionId,
+  };
+  
+  return pb.files.getURL(mockRecord as any, filename);
 }

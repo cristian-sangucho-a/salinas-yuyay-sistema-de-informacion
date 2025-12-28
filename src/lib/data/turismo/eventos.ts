@@ -31,7 +31,17 @@ export async function obtenerEventoById(id: string): Promise<Evento | null> {
 }
 
 export function generarUrlImagen(collectionId: string, itemId: string, filename: string): string {
-  return `http://127.0.0.1:8090/api/files/${collectionId}/${itemId}/${filename}`;
+  if (!collectionId || !itemId || !filename) {
+    return '';
+  }
+  
+  // Crear un objeto mock con las propiedades necesarias para pb.files.getURL
+  const mockRecord = {
+    id: itemId,
+    collectionId: collectionId,
+  };
+  
+  return pb.files.getURL(mockRecord as any, filename);
 }
 
 export async function updateEvento(
