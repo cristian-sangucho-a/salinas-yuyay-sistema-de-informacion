@@ -47,7 +47,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60"></div>
 
       {/* Contenido */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 text-center -translate-y-6 md:-translate-y-10">
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-white">
           Descubre el patrimonio cultural digital de Salinas
         </h1>
