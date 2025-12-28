@@ -1,11 +1,8 @@
 export const SALINAS_YUYAY = {
-  nombre: "Home Connect LLC.",
+  nombre: "Salinas Yuyay",
 
-  descripcion: `Join Home Connect LLC. today and take control 
-                of your real estate journey. Effortlessly manage properties, 
-                transactions, and relationships all in one powerful, transparent 
-                platform. Empower your business. Get started now!`,
-  logo: "/images/logo.png",
+  descripcion: `Un ecosistema integrado de desarrollo comunitario, cultura viva y turismo sostenible en el corazón de los Andes.`,
+  logo: "/logo.png",
   email: "",
   telefono: "",
   redesSociales: {
@@ -60,5 +57,166 @@ export const SALINAS_YUYAY = {
         variant: "neutral" as const,
       },
     ],
+  },
+  landing: {
+    hero: {
+      title: "Salinas Yuyay",
+      subtitle:
+        "Un ecosistema integrado de desarrollo comunitario, cultura viva y turismo sostenible en el corazón de los Andes.",
+      portals: [
+        {
+          id: "productivo",
+          title: "TIENDA",
+          description:
+            "Descubre el sabor de nuestra tierra. Quesos, chocolates y textiles de calidad exportación.",
+          icon: "FaShoppingBag",
+          bgImage: "from-secondary/80 to-secondary/40",
+          colorClass: "bg-secondary",
+        },
+        {
+          id: "cultural",
+          title: "CULTURA",
+          description:
+            "Memoria viva de un pueblo. Explora nuestro archivo histórico y fotográfico.",
+          icon: "FaLandmark",
+          bgImage: "from-primary/80 to-primary/40",
+          colorClass: "bg-primary",
+        },
+        {
+          id: "turismo",
+          title: "TURISMO",
+          description:
+            "Vive la experiencia Salinas. Rutas, museos y paisajes inolvidables.",
+          icon: "FaMapMarkedAlt",
+          bgImage: "from-neutral/80 to-neutral/40",
+          colorClass: "bg-neutral",
+        },
+      ],
+    },
+    statsTicker: [
+      { icon: "FaLeaf", text: "Productos 100% Orgánicos" },
+      { icon: "FaHistory", text: "50+ Años de Historia" },
+      { icon: "FaTicketAlt", text: "Turismo Comunitario" },
+      { icon: "FaShoppingBag", text: "Envíos a todo el país" },
+    ],
+    dynamicContent: {
+      productivo: {
+        title: "Tienda El Salinerito",
+        subtitle: "Calidad y Tradición",
+        description:
+          "Nuestros productos son el resultado de décadas de trabajo comunitario y perfeccionamiento artesanal. Desde los famosos quesos hasta los chocolates de aroma fino.",
+        features: [
+          {
+            icon: "FaShoppingBag",
+            title: "Quesos Maduros",
+            text: "Variedades suizas y andinas",
+          },
+          { icon: "FaLeaf", title: "Chocolates", text: "Cacao fino de aroma" },
+          {
+            icon: "FaTicketAlt",
+            title: "Textiles",
+            text: "Lana de alpaca y oveja",
+          },
+        ],
+        cta: "Ir a la Tienda",
+        link: "/tienda",
+        color: "text-secondary",
+        bg: "bg-secondary/10",
+      },
+      cultural: {
+        title: "Archivo Histórico",
+        subtitle: "Memoria Viva",
+        description:
+          "Explora miles de documentos, fotografías y testimonios que narran la transformación de Salinas de Guaranda. Un legado para las futuras generaciones.",
+        features: [
+          {
+            icon: "FaHistory",
+            title: "Documentos",
+            text: "Actas y registros históricos",
+          },
+          {
+            icon: "FaUser",
+            title: "Fotografías",
+            text: "Imágenes de la época",
+          },
+          { icon: "FaLandmark", title: "Relatos", text: "Historias de vida" },
+        ],
+        cta: "Explorar Archivo",
+        link: "/cultural",
+        color: "text-primary",
+        bg: "bg-primary/10",
+      },
+      turismo: {
+        title: "Visita Salinas",
+        subtitle: "Experiencias Únicas",
+        description:
+          "Ven y conoce de cerca nuestras fábricas, minas de sal y paisajes impresionantes. Organiza tu visita y vive el turismo comunitario.",
+        features: [
+          {
+            icon: "FaMapMarkedAlt",
+            title: "Rutas",
+            text: "Senderos y miradores",
+          },
+          {
+            icon: "FaTicketAlt",
+            title: "Fábricas",
+            text: "Proceso productivo",
+          },
+          {
+            icon: "FaGlobeAmericas",
+            title: "Hospedaje",
+            text: "Hoteles comunitarios",
+          },
+        ],
+        cta: "Planificar Visita",
+        link: "/turismo",
+        color: "text-neutral",
+        bg: "bg-neutral/10",
+      },
+    },
+    impact: {
+      title: "Nuestro Impacto Comunitario",
+      stats: [
+        { value: "50+", label: "Años de Historia" },
+        { value: "120+", label: "Familias Productoras" },
+        { value: "300+", label: "Productos Únicos" },
+        { value: "10k+", label: "Visitas Anuales" },
+      ],
+    },
+    faq: {
+      subtitle: "Dudas Comunes",
+      title: "Preguntas Frecuentes",
+      items: [
+        {
+          q: "¿Cómo puedo comprar productos desde otra ciudad?",
+          a: "Realizamos envíos seguros a todo el Ecuador a través de nuestra tienda en línea. El tiempo de entrega es de 24 a 48 horas.",
+        },
+        {
+          q: "¿Es necesario reservar para visitar las minas de sal?",
+          a: "Sí, recomendamos reservar con anticipación, especialmente en feriados, para garantizar disponibilidad de guías comunitarios.",
+        },
+        {
+          q: "¿Qué horarios de atención tiene el museo?",
+          a: "El museo y el centro de interpretación atienden de Miércoles a Domingo, de 09:00 a 17:00.",
+        },
+        {
+          q: "¿Aceptan pagos con tarjeta de crédito?",
+          a: "Sí, tanto en nuestra tienda física como en línea aceptamos todas las tarjetas de crédito y débito.",
+        },
+      ],
+    },
+    contact: {
+      subtitle: "Contáctanos",
+      title: "Estamos aquí para ayudarte",
+      description:
+        "¿Tienes dudas sobre tu pedido o quieres organizar una visita grupal? Escríbenos.",
+      location: {
+        title: "Ubicación Principal",
+        address: "Salinas de Guaranda, Provincia de Bolívar, Ecuador.",
+      },
+      email: { title: "Correo Electrónico", address: "info@salinasyuyay.com" },
+      phone: { title: "Teléfono / WhatsApp", number: "+593 99 123 4567" },
+      mapButton: "Ver en Google Maps",
+    },
   },
 };
