@@ -9,6 +9,11 @@ const roboto = Roboto({
 export const metadata = {
     title: 'SAISAL - Salinas Yuyay',
     description: 'Sistema de Archivo e Información de Salinas',
+    icons: {
+        icon: '/favicon.png',
+        shortcut: '/favicon.png',
+        apple: '/favicon.png',
+    },
 };
 
 export default function RootLayout({
