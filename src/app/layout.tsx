@@ -1,29 +1,29 @@
-import './globals.css';
-import { Roboto } from 'next/font/google';
+import "./globals.css";
+import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
-    subsets: ['latin'],
-    weight: ['400', '500', '700'],
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata = {
-    title: 'SAISAL - Salinas Yuyay',
-    description: 'Sistema de Archivo e Información de Salinas',
-    icons: {
-        icon: '/favicon.png',
-        shortcut: '/favicon.png',
-        apple: '/favicon.png',
-    },
+  title: "SAISAL - Salinas Yuyay",
+  description: "Sistema de Archivo e Información de Salinas",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <html lang="es" data-theme="salinas-yuyay">
-            <body className={roboto.className}>{children}</body>
-        </html>
-    );
+  return (
+    <html lang="es" data-theme="salinas-yuyay">
+      <body className={roboto.className}>{children}</body>
+    </html>
+  );
 }
