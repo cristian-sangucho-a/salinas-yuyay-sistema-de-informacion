@@ -22,7 +22,7 @@ export default function SearchHeader({ onSearch }: SearchHeaderProps) {
   };
 
   return (
-    <section className="bg-base-200 py-8 md:py-12">
+    <section id="archivo-historico-search" className="bg-base-200 py-8 md:py-12">
       <div className="max-w-4xl mx-auto px-4 md:px-8 lg:px-16">
         <div className="relative">
           <div className="relative">

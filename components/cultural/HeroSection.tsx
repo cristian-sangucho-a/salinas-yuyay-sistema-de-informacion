@@ -1,8 +1,16 @@
 "use client";
 import { BsDatabase } from "react-icons/bs";
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function HeroSection() {
+  useEffect(() => {
+    // Aplicar scroll suave en el documento
+    document.documentElement.style.scrollBehavior = 'smooth';
+    return () => {
+      document.documentElement.style.scrollBehavior = 'auto';
+    };
+  }, []);
   return (
     <section
       className="relative flex items-center min-h-[calc(100vh-10rem)] bg-cover bg-center bg-no-repeat"
