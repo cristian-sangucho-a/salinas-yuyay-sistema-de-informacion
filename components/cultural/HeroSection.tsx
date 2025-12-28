@@ -44,7 +44,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
       style={{ backgroundImage: "url('/salinas-background.jpg')" }}
     >
       {/* Overlay oscuro */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/50 to-black/60"></div>
 
       {/* Contenido */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 text-center -translate-y-6 md:-translate-y-10">

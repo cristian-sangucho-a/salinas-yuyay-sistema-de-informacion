@@ -44,7 +44,7 @@ export default function Carrusel({ item: events }: CarruselProps) {
           className="flex overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory w-full"
         >
           {events.map((item) => (
-            <div key={item.id as string} className="flex-shrink-0 w-screen snap-start">
+            <div key={item.id as string} className="shrink-0 w-screen snap-start">
               <CoverCard item={item} />
             </div>
           ))}
