@@ -1,8 +1,6 @@
 "use client";
-
-import React from 'react';
+import { BsDatabase } from "react-icons/bs";
 import Link from 'next/link';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function HeroSection() {
   return (
@@ -32,12 +30,8 @@ export default function HeroSection() {
         </div>
 
         <div className="flex justify-center items-center mt-12 lg:mt-0">
-          <div className="w-full max-w-xs aspect-square rounded-lg overflow-hidden shadow-md border border-base-300 bg-white p-4 flex items-center justify-center">
-            <DotLottieReact
-              src="/scan_document.lottie"
-              loop
-              autoplay
-            />
+          <div className="w-full max-w-[200px] aspect-square rounded-lg overflow-hidden shadow-md border border-base-300 bg-white p-4 flex items-center justify-center">
+            <BsDatabase className="text-primary" size={150} />
           </div>
         </div>
       </div>
