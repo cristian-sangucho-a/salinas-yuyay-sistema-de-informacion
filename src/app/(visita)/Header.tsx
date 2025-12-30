@@ -16,9 +16,13 @@ interface NavLink {
 
 interface NavbarProps {
   variant?: "transparent" | "solid";
+  scrollThreshold?: number;
 }
 
-export default function Navbar({ variant = "solid" }: NavbarProps) {
+export default function Navbar({
+  variant = "solid",
+  scrollThreshold = 20,
+}: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname(); // Obtiene la ruta actual
@@ -32,11 +36,13 @@ export default function Navbar({ variant = "solid" }: NavbarProps) {
   // Detectar scroll para cambiar estilo del header
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > scrollThreshold);
     };
     window.addEventListener("scroll", handleScroll);
+    // Check initial scroll position
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [scrollThreshold]);
 
   const isTransparent = variant === "transparent" && !isScrolled;
 
@@ -50,7 +56,7 @@ export default function Navbar({ variant = "solid" }: NavbarProps) {
   return (
     // Header con transición suave de fondo y color
     <nav
-      className={`transition-all duration-300 z-50 ${
+      className={`transition-all duration-1000 ease-in-out z-50 ${
         variant === "transparent" ? "fixed top-0 w-full" : "sticky top-0"
       } ${
         isTransparent

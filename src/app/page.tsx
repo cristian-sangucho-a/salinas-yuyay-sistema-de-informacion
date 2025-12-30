@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   FaShoppingBag,
@@ -109,11 +109,16 @@ const Portal = ({
   icon,
   bgImage,
   colorClass,
+  id,
   isActive,
   onMouseEnter,
   onMouseLeave,
   onClick,
 }: PortalProps) => {
+  const isProductivo = id === "productivo";
+  const isCultural = id === "cultural";
+  const isTurismo = id === "turismo";
+
   return (
     <div
       onClick={onClick}
@@ -138,66 +143,220 @@ const Portal = ({
         }`}
       ></div>
 
-      {/* Contenido */}
-      <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 z-20">
+      {/* Contenedor Flex para Contenido (Evita traslape) */}
+      <div className="absolute inset-0 z-20 flex flex-col pt-16 md:pt-0 justify-end md:justify-start">
+        {/* Parte Superior: Paneles Interactivos (Subsecciones) - Oculto en móvil */}
         <div
-          className={`mb-4 transform transition-all duration-500 ${
-            isActive
-              ? "scale-100 translate-y-0"
-              : "scale-75 translate-y-4 opacity-80"
+          className={`relative w-full transition-all duration-500 ease-in-out hidden md:block ${
+            isActive ? "md:h-[50%] md:flex-none" : "h-0 overflow-hidden"
           }`}
         >
-          <div
-            className={`w-16 h-16 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-lg ${
-              isActive ? "animate-pulse-slow" : ""
-            }`}
-          >
-            {React.isValidElement(iconMap[icon])
-              ? React.cloneElement(iconMap[icon], {
-                  size: 28,
-                } as { size: number })
-              : null}
-          </div>
+          {isActive && (
+            <div className="absolute inset-0 flex flex-col md:pt-20">
+              {/* Elementos específicos de Tienda (Productivo) */}
+              {isProductivo && (
+                <div className="flex-1 flex flex-col animate-fade-in">
+                  {/* Fila Superior: Categorías y Productos */}
+                  <div className="flex-1 flex border-b border-white/10">
+                    <Link
+                      href="/categorias"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex-1 border-r border-white/10 group/panel relative overflow-hidden hover:bg-white/5 transition-colors"
+                    >
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 transform group-hover/panel:scale-105 transition-transform duration-500">
+                        <span className="font-bold text-sm md:text-lg mb-1 text-center leading-tight">
+                          Ver categorías
+                        </span>
+                        <span className="text-[10px] md:text-xs opacity-80 uppercase tracking-widest text-center hidden md:block">
+                          de productos
+                        </span>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/productos"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex-1 group/panel relative overflow-hidden hover:bg-white/5 transition-colors"
+                    >
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 transform group-hover/panel:scale-105 transition-transform duration-500">
+                        <span className="font-bold text-sm md:text-lg mb-1 text-center leading-tight">
+                          Ver productos
+                        </span>
+                        <span className="text-[10px] md:text-xs opacity-80 uppercase tracking-widest text-center hidden md:block">
+                          Explorar todo
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+
+                  {/* Fila Inferior: Ir a la Tienda */}
+                  <Link
+                    href="/tienda"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 group/panel relative overflow-hidden hover:bg-white/5 transition-colors"
+                  >
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 transform group-hover/panel:scale-105 transition-transform duration-500">
+                      <span className="font-bold text-sm md:text-lg mb-1 text-center leading-tight">
+                        Ir a la tienda
+                      </span>
+                      <span className="text-[10px] md:text-xs opacity-80 uppercase tracking-widest text-center hidden md:block">
+                        principal
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )}
+
+              {/* Elementos específicos de Cultural */}
+              {isCultural && (
+                <div className="flex-1 flex flex-col animate-fade-in">
+                  <Link
+                    href="/cultural"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 group/panel relative overflow-hidden hover:bg-white/5 transition-colors"
+                  >
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 transform group-hover/panel:scale-105 transition-transform duration-500">
+                      <span className="font-bold text-sm md:text-lg mb-1 text-center leading-tight">
+                        Explorar archivo
+                      </span>
+                      <span className="text-[10px] md:text-xs opacity-80 uppercase tracking-widest text-center hidden md:block">
+                        histórico y cultural
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )}
+
+              {/* Elementos específicos de Turismo */}
+              {isTurismo && (
+                <div className="flex-1 flex flex-col animate-fade-in">
+                  <Link
+                    href="/turismo"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 group/panel relative overflow-hidden hover:bg-white/5 transition-colors"
+                  >
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 transform group-hover/panel:scale-105 transition-transform duration-500">
+                      <span className="font-bold text-sm md:text-lg mb-1 text-center leading-tight">
+                        Planificar visita
+                      </span>
+                      <span className="text-[10px] md:text-xs opacity-80 uppercase tracking-widest text-center hidden md:block">
+                        turismo comunitario
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        <div
-          className={`transition-all duration-500 ${
-            isActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-90"
-          }`}
-        >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight drop-shadow-lg">
-            {title}
-          </h2>
-          <p
-            className={`text-white/80 text-sm md:text-lg max-w-md transition-all duration-500 delay-100 ${
+        {/* Parte Inferior: Texto Principal */}
+        <div className="shrink-0 p-6 md:p-12 flex flex-col justify-end relative">
+          <div
+            className={`mb-4 transform transition-all duration-500 ${
               isActive
-                ? "opacity-100 max-h-20"
-                : "opacity-0 max-h-0 overflow-hidden"
+                ? "scale-100 translate-y-0"
+                : "scale-75 translate-y-4 opacity-80"
             }`}
           >
-            {subtitle}
-          </p>
+            <div
+              className={`w-16 h-16 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-lg ${
+                isActive ? "animate-pulse-slow" : ""
+              }`}
+            >
+              {React.isValidElement(iconMap[icon])
+                ? React.cloneElement(iconMap[icon], {
+                    size: 28,
+                  } as { size: number })
+                : null}
+            </div>
+          </div>
 
           <div
-            className={`mt-6 flex items-center text-accent font-bold uppercase tracking-widest text-sm transition-all duration-500 delay-200 ${
+            className={`transition-all duration-500 ${
               isActive
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-4"
+                ? "translate-y-0 opacity-100"
+                : "translate-y-4 opacity-90"
             }`}
           >
-            Ver Detalles <FaArrowRight className="ml-2 animate-bounce-x" />
+            <h2 className="text-2xl md:text-5xl font-bold text-white mb-2 tracking-tight drop-shadow-lg">
+              {title}
+            </h2>
+            <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-2">
+              <p
+                className={`text-white/80 text-sm md:text-lg max-w-md transition-all ${
+                  isActive
+                    ? "duration-500 delay-100 opacity-100 max-h-20"
+                    : "duration-200 delay-0 opacity-0 max-h-0 overflow-hidden"
+                }`}
+              >
+                <span className="hidden md:inline">{subtitle}</span>
+              </p>
+
+              <div
+                className={`flex items-center text-accent font-bold uppercase tracking-widest text-sm md:text-xl whitespace-nowrap transition-all ${
+                  isActive
+                    ? "duration-500 delay-200 opacity-100 translate-x-0"
+                    : "duration-200 delay-0 opacity-0 -translate-x-4"
+                }`}
+              >
+                Leer más <FaArrowRight className="ml-3 animate-bounce-x" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div
-        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap transition-all duration-500 ${
-          isActive ? "opacity-0 scale-50" : "opacity-100 scale-100"
+        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-rotate-90 whitespace-nowrap transition-all ${
+          isActive
+            ? "duration-200 opacity-0 scale-50"
+            : "duration-500 opacity-100 scale-100"
         }`}
       >
-        <span className="text-2xl font-bold text-white/50 uppercase tracking-[0.2em] group-hover:text-white transition-colors">
+        <span className="text-xl md:text-2xl font-bold text-white/50 uppercase tracking-[0.2em] group-hover:text-white transition-colors">
           {title}
         </span>
+      </div>
+    </div>
+  );
+};
+
+// 4.5 Componente de Pestañas de Sección
+const SectionTabs = ({
+  activeSection,
+  onSectionChange,
+}: {
+  activeSection: string;
+  onSectionChange: (section: string) => void;
+}) => {
+  const portals = SALINAS_YUYAY.landing.hero.portals;
+
+  return (
+    <div className="flex justify-center mb-6 animate-fade-in-down w-full">
+      <div className="overflow-x-auto max-w-full pb-2 no-scrollbar px-1">
+        <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max">
+          {portals.map((portal) => {
+            const isActive = activeSection === portal.id;
+            return (
+              <button
+                key={portal.id}
+                onClick={() => onSectionChange(portal.id)}
+                className={`px-4 py-2 md:px-6 md:py-2.5 rounded-xl md:rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative overflow-hidden ${
+                  isActive
+                    ? "text-white shadow-md scale-105"
+                    : "text-base-content/60 hover:text-base-content hover:bg-white/10"
+                }`}
+              >
+                {isActive && (
+                  <div
+                    className={`absolute inset-0 ${portal.colorClass} opacity-100 -z-10`}
+                  ></div>
+                )}
+                <span className="relative z-10">{portal.title}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -213,7 +372,7 @@ const DynamicContent = ({ section }: { section: string | null }) => {
   if (!data) return null;
 
   return (
-    <div className="animate-fade-in-up py-12">
+    <div className="animate-fade-in-up py-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-0 overflow-hidden">
@@ -464,6 +623,20 @@ const ContactSection = () => {
 export default function Home() {
   const [activePortal, setActivePortal] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [headerThreshold, setHeaderThreshold] = useState(20);
+
+  useEffect(() => {
+    // Ajustar el umbral para que el header cambie justo al pasar la sección Hero
+    // Restamos un poco para asegurar la transición suave antes de llegar al contenido
+    setHeaderThreshold(window.innerHeight - 100);
+
+    const handleResize = () => {
+      setHeaderThreshold(window.innerHeight - 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handlePortalClick = (section: string) => {
     setSelectedSection(section);
@@ -476,7 +649,7 @@ export default function Home() {
 
   return (
     <CartProvider>
-      <Navbar variant="transparent" />
+      <Navbar variant="transparent" scrollThreshold={headerThreshold} />
       <CartDrawer />
       <main className="min-h-screen w-full flex flex-col bg-base-300 font-sans overflow-x-hidden">
         {/* SECCIÓN 1: PORTALES (HERO) - Ocupa toda la pantalla inicial */}
@@ -513,9 +686,13 @@ export default function Home() {
         {selectedSection && (
           <section
             id="dynamic-content"
-            className="min-h-[80vh] flex items-center justify-center bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500"
+            className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
           >
             <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+              <SectionTabs
+                activeSection={selectedSection}
+                onSectionChange={setSelectedSection}
+              />
               <DynamicContent section={selectedSection} />
             </div>
           </section>

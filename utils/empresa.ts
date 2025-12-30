@@ -11,11 +11,7 @@ export const SALINAS_YUYAY = {
     instagram: "https://instagram.com/ezva",
     linkedin: "https://linkedin.com/company/ezva",
   },
-  contacto: {
-    nombre: "Ezva Support",
-    email: "",
-    telefono: "",
-  },
+
   tienda: {
     textos: {
       hero: {
