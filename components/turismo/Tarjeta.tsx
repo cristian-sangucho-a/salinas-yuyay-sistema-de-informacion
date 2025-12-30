@@ -34,21 +34,21 @@ export default function Tarjeta({ item, reverse = false }: Props) {
           {/* overlay hover */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-100 transition-opacity duration-300 group-hover:opacity-100"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute bottom-3 right-3 opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0"
+            className="pointer-events-none absolute bottom-3 right-3 opacity-100 translate-y-0 transition-all duration-300 group-hover:bottom-4 group-hover:right-4"
           >
-            <span className="badge badge-primary shadow">Ver más</span>
+            <span className="badge badge-primary shadow">Conoce más</span>
           </div>
         </div>
-        <div className="md:w-1/2 p-6 flex items-center h-1/2 md:h-full">
+        <div className="md:w-1/2 p-6 flex items-center h-1/2 md:h-full bg-gradient-to-b from-white/95 to-white/85 md:bg-base-100">
           <div>
-            <h3 className="text-xl font-semibold text-base-content">
+            <h3 className="text-lg md:text-xl font-semibold text-base-content">
               {item.titulo}
             </h3>
-            <p className="text-base-content/70 mt-2">
+            <p className="text-sm md:text-base text-base-content/70 mt-2">
               {item.eslogan ?? "Descripción breve de la sala del museo."}
             </p>
           </div>

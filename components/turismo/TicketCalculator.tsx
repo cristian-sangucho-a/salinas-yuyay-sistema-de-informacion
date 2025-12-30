@@ -92,6 +92,10 @@ export default function TicketCalculator() {
   return (
     <section id="boletos" className="py-8">
       <div className="max-w-2xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl md:text-5xl font-bold mb-3">Asegura tu entrada al pasado</h2>
+          <p className="text-lg text-base-content/70">Compra tus boletos hoy y vive la experiencia de nuestras culturas ancestrales.</p>
+        </div>
         <h3 className="text-2xl font-bold mb-4">Visitanos. Reserva tus entradas al museo</h3>
         <div className="flex flex-col gap-3">
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
