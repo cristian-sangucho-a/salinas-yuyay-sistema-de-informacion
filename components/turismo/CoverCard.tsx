@@ -30,7 +30,7 @@ export default function CoverCard({ item }: CoverCardProps) {
         <h3 className="font-semibold text-3xl text-base-content">
           {item.titulo}
         </h3>
-        <p className="text-base text-base-content/80 mt-2">{item.eslogan}</p>
+        <p className="hidden md:block text-base text-base-content/80 mt-2">{item.eslogan}</p>
       </div>
     </article>
   );
