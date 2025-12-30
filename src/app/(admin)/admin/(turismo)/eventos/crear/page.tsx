@@ -1,19 +1,36 @@
 "use client";
-import { useState, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "quill/dist/quill.snow.css";
 import { FaImage, FaSave, FaPlus, FaCalendar, FaUsers } from "react-icons/fa";
 import AdminHeader from "@components/molecules/AdminHeader";
 import Alert from "@components/molecules/Alert";
 import { createEvento } from "@/lib/data/turismo/eventos";
+import type QuillType from "quill";
 
 export default function CrearEventoInlinePage() {
   const router = useRouter();
+  const ejemploContenido = `
+  <h2>Encabezado H2 de ejemplo</h2>
+  <p><strong>Negrita</strong>, <em>itálica</em>, <u>subrayado</u>, <s>tachado</s> y <a href="https://example.com" target="_blank">enlace</a>.</p>
+  <p style="color:#1d4ed8;">Texto con color azul</p>
+  <blockquote>Esta es una cita breve para ilustrar el bloque de cita.</blockquote>
+  <ol>
+    <li>Elemento numerado uno</li>
+    <li>Elemento numerado dos</li>
+  </ol>
+  <ul>
+    <li>Viñeta uno</li>
+    <li>Viñeta dos</li>
+  </ul>
+  <p><span style="background-color: #fef08a;">Texto con resaltado</span> y cierre del ejemplo.</p>
+  `;
   const [titulo, setTitulo] = useState("");
-  const [resumen, setResumen] = useState("");
-  const [contenido, setContenido] = useState("");
+  const [eslogan, setEslogan] = useState("");
+  const [contenido, setContenido] = useState(ejemploContenido);
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null);
   const [fechaFin, setFechaFin] = useState<Date | null>(null);
   const [organizadores, setOrganizadores] = useState("");
@@ -25,6 +42,65 @@ export default function CrearEventoInlinePage() {
 
   const portadaInputRef = useRef<HTMLInputElement>(null);
   const galeriaInputRef = useRef<HTMLInputElement>(null);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const quillRef = useRef<QuillType | null>(null);
+
+  useEffect(() => {
+    let handler: (() => void) | null = null;
+    const removeToolbar = () => {
+      const container = editorContainerRef.current;
+      const maybeToolbar = container?.previousElementSibling;
+      if (maybeToolbar && maybeToolbar.classList.contains("ql-toolbar")) {
+        maybeToolbar.remove();
+      }
+    };
+    const initEditor = async () => {
+      if (!editorContainerRef.current || quillRef.current) return;
+      removeToolbar();
+      const Quill = (await import("quill")).default;
+      const quill = new Quill(editorContainerRef.current, {
+        theme: "snow",
+        placeholder: "Escribe el contenido del evento aquí...",
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ color: [] }, { background: [] }],
+            ["link", "blockquote"],
+            ["clean"],
+          ],
+        },
+      });
+
+      quillRef.current = quill;
+      if (contenido) {
+        quill.root.innerHTML = contenido;
+      }
+
+      handler = () => {
+        if (!quillRef.current) return;
+        setContenido(quillRef.current.root.innerHTML);
+      };
+      quill.on("text-change", handler);
+    };
+
+    void initEditor();
+
+    return () => {
+      if (quillRef.current && handler) {
+        quillRef.current.off("text-change", handler);
+      }
+      quillRef.current = null;
+      removeToolbar();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (quillRef.current && quillRef.current.root.innerHTML !== contenido) {
+      quillRef.current.root.innerHTML = contenido;
+    }
+  }, [contenido]);
 
   const portadaUrl = useMemo(
     () => (portada ? URL.createObjectURL(portada) : null),
@@ -51,7 +127,7 @@ export default function CrearEventoInlinePage() {
     if (
       !titulo ||
       !contenido ||
-      !resumen ||
+      !eslogan ||
       !fechaInicio ||
       !fechaFin ||
       !organizadores
@@ -64,7 +140,7 @@ export default function CrearEventoInlinePage() {
     try {
       const created = await createEvento({
         titulo,
-        resumen,
+        eslogan: eslogan,
         contenido,
         fecha_de_inicio: fechaInicio ?? new Date(),
         fecha_de_finalizacion: fechaFin ?? undefined,
@@ -77,7 +153,7 @@ export default function CrearEventoInlinePage() {
       setStatus(`Evento creado con éxito: ${created.id}`);
       // Reset form
       setTitulo("");
-      setResumen("");
+      setEslogan("");
       setContenido("");
       setFechaInicio(null);
       setFechaFin(null);
@@ -181,11 +257,11 @@ export default function CrearEventoInlinePage() {
               className="text-3xl md:text-4xl font-bold bg-transparent border-b-2 border-transparent focus:border-primary outline-none w-full mb-4 transition-colors"
             />
 
-            {/* Resumen Editable */}
+            {/* Eslogan Editable */}
             <textarea
-              value={resumen}
-              onChange={(e) => setResumen(e.target.value)}
-              placeholder="Escribe un resumen corto del evento (máx 120 caracteres)..."
+              value={eslogan}
+              onChange={(e) => setEslogan(e.target.value)}
+              placeholder="Escribe un eslogan corto del evento (máx 120 caracteres)..."
               className="text-lg text-base-content/70 bg-transparent border-b-2 border-transparent focus:border-primary outline-none w-full mb-6 transition-colors"
               rows={2}
               maxLength={120}
@@ -241,13 +317,12 @@ export default function CrearEventoInlinePage() {
 
             {/* Contenido Editable */}
             <h2 className="text-2xl font-semibold mb-4">Contenido Principal</h2>
-            <textarea
-              value={contenido}
-              onChange={(e) => setContenido(e.target.value)}
-              placeholder="Escribe el contenido del evento aquí. Puedes usar saltos de línea."
-              className="prose max-w-none text-base-content/90 mt-4 bg-transparent border-b-2 border-transparent focus:border-primary outline-none w-full transition-colors"
-              rows={10}
-            />
+            <div className="bg-base-200 border border-base-300 rounded-lg">
+              <div
+                ref={editorContainerRef}
+                className="prose max-w-none text-base-content/90 min-h-[320px]"
+              />
+            </div>
 
             {/* Galería Editable */}
             <section className="mt-12">

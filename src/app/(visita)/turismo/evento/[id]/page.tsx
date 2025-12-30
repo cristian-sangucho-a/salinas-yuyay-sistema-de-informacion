@@ -57,9 +57,10 @@ export default async function EventPage({ params }: Props) {
             )}
           </div>
 
-          <div className="prose max-w-none text-base-content/90 mt-4 whitespace-pre-wrap">
-            {evento.contenido}
-          </div>
+          <div
+            className="prose max-w-none text-base-content/90 mt-4 evento-content"
+            dangerouslySetInnerHTML={{ __html: evento.contenido || "" }}
+          />
 
           {evento.galeria.length > 0 && (
             <section className="mt-12">
