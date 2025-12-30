@@ -147,6 +147,14 @@ body {
   margin-bottom: 1rem;
 }
 
+.evento-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
 .evento-content ol,
 .evento-content ul {
   list-style-type: inherit;
