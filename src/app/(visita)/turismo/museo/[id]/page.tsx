@@ -37,12 +37,13 @@ export default async function SalaPage({ params }: Props) {
 
         <div className="p-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">{sala.titulo}</h1>
-          {sala.resumen && (
-            <p className="text-base-content/70 mb-6">{sala.resumen}</p>
+          {sala.eslogan && (
+            <p className="text-base-content/70 mb-6">{sala.eslogan}</p>
           )}
-          <div className="prose max-w-none text-base-content/90 mt-4 whitespace-pre-wrap">
-            {sala.contenido}
-          </div>
+          <div
+            className="prose max-w-none text-base-content/90 mt-4 evento-content"
+            dangerouslySetInnerHTML={{ __html: sala.contenido || "" }}
+          />
 
           {sala.galeria.length > 0 && (
             <section className="mt-12">

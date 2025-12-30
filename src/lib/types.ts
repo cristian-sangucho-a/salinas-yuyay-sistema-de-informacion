@@ -62,5 +62,5 @@ export interface TarjetaItem {
     id: string;
     titulo: string;
     portada?: string; // URL completa o relativa
-    resumen?: string; // texto corto de acompañamiento
+    eslogan?: string; // texto corto de acompañamiento
 }
