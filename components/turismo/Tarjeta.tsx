@@ -49,7 +49,7 @@ export default function Tarjeta({ item, reverse = false }: Props) {
               {item.titulo}
             </h3>
             <p className="text-base-content/70 mt-2">
-              {item.resumen ?? "Descripción breve de la sala del museo."}
+              {item.eslogan ?? "Descripción breve de la sala del museo."}
             </p>
           </div>
         </div>
