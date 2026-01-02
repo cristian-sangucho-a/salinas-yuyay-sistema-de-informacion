@@ -34,6 +34,13 @@ interface ProductModalProps {
   onClose: (shouldRefresh: boolean) => void;
   producto: Producto | null;
   categorias: CategoriaProducto[];
+  initialContificoData?: {
+    id: string;
+    nombre: string;
+    descripcion: string;
+    pvp1: number;
+    estado: "A" | "I";
+  } | null;
 }
 
 export default function ProductModal({
@@ -41,6 +48,7 @@ export default function ProductModal({
   onClose,
   producto,
   categorias,
+  initialContificoData,
 }: ProductModalProps) {
   const [nombre, setNombre] = useState("");
   const [slug, setSlug] = useState("");
@@ -51,7 +59,6 @@ export default function ProductModal({
   const [subcategoriaId, setSubcategoriaId] = useState("");
   const [estado, setEstado] = useState<"A" | "I">("A");
   const [destacado, setDestacado] = useState(false);
-  const [crearEnContifico, setCrearEnContifico] = useState(false);
   const [ingredientes, setIngredientes] = useState("");
   const [condicionesAlmacenamiento, setCondicionesAlmacenamiento] = useState<
     "Refrigeracion" | "Seco" | "Congelación"
@@ -92,7 +99,6 @@ export default function ProductModal({
     setSubcategoriaId("");
     setEstado("A");
     setDestacado(false);
-    setCrearEnContifico(false);
     setIngredientes("");
     setCondicionesAlmacenamiento("Seco");
     setImagenesExistentes([]);
@@ -131,6 +137,31 @@ export default function ProductModal({
         if (producto.categoria) {
           loadSubcategorias(producto.categoria);
         }
+      } else if (initialContificoData) {
+        // Pre-llenar datos para importación
+        setNombre(initialContificoData.nombre || "");
+        const newSlug = (initialContificoData.nombre || "")
+          .toLowerCase()
+          .trim()
+          .replace(/[\s\W-]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+        setSlug(newSlug);
+        setIsSlugEdited(false);
+        setDescripcion(initialContificoData.descripcion || "");
+        setPvp1(initialContificoData.pvp1?.toString() || "");
+        setCategoriaId(categorias[0]?.id || "");
+        setSubcategoriaId("");
+        setEstado(initialContificoData.estado || "A");
+        setDestacado(false);
+        setIngredientes("");
+        setCondicionesAlmacenamiento("Seco");
+        setImagenesExistentes([]);
+        setImagenesNuevas([]);
+        setImagenesAEliminar([]);
+
+        if (categorias.length > 0) {
+          loadSubcategorias(categorias[0].id);
+        }
       } else {
         resetForm();
       }
@@ -140,7 +171,7 @@ export default function ProductModal({
       setIsVisible(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, producto, categorias]);
+  }, [isOpen, producto, categorias, initialContificoData]);
 
   const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
@@ -241,7 +272,6 @@ export default function ProductModal({
   const handleContificoFieldsSubmit = async (
     fields: ContificoAdditionalFields
   ) => {
-    setShowContificoModal(false);
     setIsSubmitting(true);
 
     try {
@@ -250,13 +280,8 @@ export default function ProductModal({
         descripcion,
         pvp1: parseFloat(pvp1),
         estado,
-        tipo: "PRO",
-        porcentaje_iva: "12",
-        minimo: "1.0",
-        pvp_manual: false,
-        para_supereasy: false,
-        para_comisariato: fields.para_comisariato || false,
-        ...fields,
+        minimo: fields.minimo || "1.0",
+        codigo: fields.codigo,
       };
 
       const contificoId = await createProductInContifico(contificoData);
@@ -284,6 +309,7 @@ export default function ProductModal({
 
       await createProducto(productData);
 
+      setShowContificoModal(false);
       setSubmitSuccess(true);
       setTimeout(() => {
         onClose(true);
@@ -291,6 +317,7 @@ export default function ProductModal({
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Error desconocido";
       setError(errorMsg);
+      // No cerramos el modal de Contífico si hay error, para que el usuario pueda corregir
       console.error("Error creating product in Contífico:", err);
     } finally {
       setIsSubmitting(false);
@@ -322,36 +349,14 @@ export default function ProductModal({
     try {
       let contificoId: string | undefined = undefined;
 
-      // Si el usuario desea crear en Contífico, primero creamos allá
-      if (crearEnContifico && !producto) {
-        const contificoData = {
-          nombre,
-          descripcion,
-          pvp1: parseFloat(pvp1),
-          estado,
-          tipo: "PRO",
-          porcentaje_iva: "12",
-          minimo: "1.0",
-          pvp_manual: false,
-          para_supereasy: false,
-          para_comisariato: false,
-        };
-
-        try {
-          const result = await createProductInContifico(contificoData);
-          contificoId = result || undefined;
-
-          // Si retorna null, el modal se mostró, esperar respuesta
-          if (contificoId === null) {
-            setIsSubmitting(false);
-            return;
-          }
-        } catch (err) {
-          const errorMsg =
-            err instanceof Error ? err.message : "Error desconocido";
-          setError(
-            `Error al crear en Contífico: ${errorMsg}. Intenta crear solo en el sistema local.`
-          );
+      // Si es un producto nuevo
+      if (!producto) {
+        // Si estamos importando (tenemos datos iniciales de Contífico), usamos ese ID
+        if (initialContificoData) {
+          contificoId = initialContificoData.id;
+        } else {
+          // Si es creación nueva, abrir modal de Contífico
+          setShowContificoModal(true);
           setIsSubmitting(false);
           return;
         }
@@ -633,35 +638,13 @@ export default function ProductModal({
                         type="checkbox"
                         checked={destacado}
                         onChange={(e) => setDestacado(e.target.checked)}
-                        className="checkbox checkbox-primary"
+                        className="checkbox checked:checkbox-neutral"
                       />
                       <span className="label-text font-medium text-primary">
                         Producto Destacado
                       </span>
                     </label>
                   </div>
-
-                  {!producto && (
-                    <div className="form-control">
-                      <label className="label cursor-pointer justify-start gap-4">
-                        <input
-                          type="checkbox"
-                          checked={crearEnContifico}
-                          onChange={(e) =>
-                            setCrearEnContifico(e.target.checked)
-                          }
-                          className="checkbox checkbox-accent"
-                        />
-                        <span className="label-text font-medium text-accent">
-                          Crear también en Contífico
-                        </span>
-                      </label>
-                      <Text color="muted" className="text-xs ml-9 mt-1">
-                        El producto se creará en el sistema Contífico y se
-                        vinculará automáticamente.
-                      </Text>
-                    </div>
-                  )}
 
                   <div className="form-control w-full">
                     <label className="label">
@@ -830,9 +813,12 @@ export default function ProductModal({
           setShowContificoModal(false);
           setPendingContificoCreation(false);
           setIsSubmitting(false);
+          setError(""); // Limpiar error al cerrar
         }}
         onSubmit={handleContificoFieldsSubmit}
         isLoading={isSubmitting}
+        productName={nombre}
+        externalError={error}
       />
     </div>
   );
