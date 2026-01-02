@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { FaEdit, FaTrash, FaImage } from "react-icons/fa";
+import { FaEdit, FaTrash, FaImage, FaEye } from "react-icons/fa";
 import type { Producto } from "@/lib/types/productivo";
 import { deleteProducto } from "@/lib/admin-data-productivo";
 import DeleteProductModal from "./DeleteProductModal";
+import ProductDetailsModal from "./ProductDetailsModal";
 import ConfirmationModal from "@components/molecules/ConfirmationModal";
 import { getFileUrl } from "@/lib/data";
 import Image from "next/image";
@@ -27,6 +28,10 @@ export default function ProductsTable({
     isOpen: boolean;
     producto: Producto | null;
   }>({ isOpen: false, producto: null });
+  const [detailsModal, setDetailsModal] = useState<{
+    isOpen: boolean;
+    producto: Producto | null;
+  }>({ isOpen: false, producto: null });
   const [errorModal, setErrorModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -39,6 +44,10 @@ export default function ProductsTable({
 
   const handleDeleteClick = (producto: Producto) => {
     setConfirmDialog({ isOpen: true, producto });
+  };
+
+  const handleViewClick = (producto: Producto) => {
+    setDetailsModal({ isOpen: true, producto });
   };
 
   const deleteProductFromContifico = async (id: string) => {
@@ -197,6 +206,15 @@ export default function ProductsTable({
                     <td>
                       <div className="flex items-center justify-center gap-2">
                         <Button
+                          onClick={() => handleViewClick(producto)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-info hover:bg-info/10"
+                          title="Ver Detalles"
+                        >
+                          <FaEye />
+                        </Button>
+                        <Button
                           onClick={() => onEdit(producto)}
                           variant="ghost"
                           size="sm"
@@ -235,6 +253,12 @@ export default function ProductsTable({
         onConfirm={handleConfirmDelete}
         productName={confirmDialog.producto?.nombre || ""}
         hasContificoId={!!confirmDialog.producto?.contifico_id}
+      />
+
+      <ProductDetailsModal
+        isOpen={detailsModal.isOpen}
+        onClose={() => setDetailsModal({ isOpen: false, producto: null })}
+        producto={detailsModal.producto}
       />
 
       {/* Error Modal */}
