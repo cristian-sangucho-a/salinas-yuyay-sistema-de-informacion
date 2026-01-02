@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FaEdit, FaTrash, FaImage } from "react-icons/fa";
 import type { Producto } from "@/lib/types/productivo";
 import { deleteProducto } from "@/lib/admin-data-productivo";
-import ConfirmDialog from "@components/cultural/admin/ConfirmDialog";
+import DeleteProductModal from "./DeleteProductModal";
 import ConfirmationModal from "@components/molecules/ConfirmationModal";
 import { getFileUrl } from "@/lib/data";
 import Image from "next/image";
@@ -41,11 +41,38 @@ export default function ProductsTable({
     setConfirmDialog({ isOpen: true, producto });
   };
 
-  const handleConfirmDelete = async () => {
+  const deleteProductFromContifico = async (id: string) => {
+    const response = await fetch(`/api/contifico/productos/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(text);
+      } catch {
+        errorData = { message: text };
+      }
+      throw new Error(
+        errorData.error ||
+          errorData.mensaje ||
+          errorData.message ||
+          "Error al eliminar de Contífico"
+      );
+    }
+  };
+
+  const handleConfirmDelete = async (deleteFromContifico: boolean) => {
     if (!confirmDialog.producto) return;
 
     try {
       setDeletingId(confirmDialog.producto.id);
+
+      if (deleteFromContifico && confirmDialog.producto.contifico_id) {
+        await deleteProductFromContifico(confirmDialog.producto.contifico_id);
+      }
+
       await deleteProducto(confirmDialog.producto.id);
       onDelete();
     } catch (error) {
@@ -54,10 +81,13 @@ export default function ProductsTable({
         isOpen: true,
         title: "Error al Eliminar",
         message:
-          "No se pudo eliminar el producto. Por favor, intenta de nuevo.",
+          error instanceof Error
+            ? error.message
+            : "No se pudo eliminar el producto. Por favor, intenta de nuevo.",
       });
     } finally {
       setDeletingId(null);
+      setConfirmDialog({ isOpen: false, producto: null });
     }
   };
 
@@ -199,15 +229,12 @@ export default function ProductsTable({
         </div>
       </div>
 
-      <ConfirmDialog
+      <DeleteProductModal
         isOpen={confirmDialog.isOpen}
-        title="Eliminar Producto"
-        message={`¿Estás seguro de que deseas eliminar el producto "${confirmDialog.producto?.nombre}"? Esta acción no se puede deshacer.`}
-        confirmText="Eliminar"
-        cancelText="Cancelar"
+        onClose={() => setConfirmDialog({ isOpen: false, producto: null })}
         onConfirm={handleConfirmDelete}
-        onCancel={() => setConfirmDialog({ isOpen: false, producto: null })}
-        type="danger"
+        productName={confirmDialog.producto?.nombre || ""}
+        hasContificoId={!!confirmDialog.producto?.contifico_id}
       />
 
       {/* Error Modal */}
