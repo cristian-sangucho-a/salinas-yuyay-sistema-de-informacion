@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaSignOutAlt, FaFolder } from "react-icons/fa";
 import { logout, getAuthUser, isAuthenticated } from "@/lib/auth";
+import { Button } from "@components/atoms";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -49,13 +50,14 @@ export default function DashboardPage() {
                 {String(user?.email || "")}
               </p>
             </div>
-            <button
+            <Button
               onClick={handleLogout}
-              className="btn btn-sm bg-secondary hover:bg-error text-white border-none gap-2"
+              variant="secondary"
+              className="btn btn-smhover:bg-error border-none gap-2"
             >
               <FaSignOutAlt className="w-4 h-4" />
               Cerrar Sesión
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -90,7 +92,7 @@ export default function DashboardPage() {
           {/* Turístico - activado */}
           <Link
             href="/admin/eventos"
-            className="bg-white border border-base-300 rounded-lg p-6 hover:shadow-lg transition-all flex flex-col"
+            className="bg-white border border-base-300 rounded-lg p-6 hover:shadow-lg transition-all group"
           >
             <div className="flex items-center gap-4 mb-4">
               <div className="w-14 h-14 bg-primary rounded-lg flex items-center justify-center group-hover:bg-secondary transition-colors">
