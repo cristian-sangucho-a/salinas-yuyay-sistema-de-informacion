@@ -269,6 +269,41 @@ export default function ProductModal({
     }
   };
 
+  const updateProductInContifico = async (
+    id: string,
+    contificoData: Record<string, unknown>
+  ): Promise<void> => {
+    try {
+      const response = await fetch(`/api/contifico/productos/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(contificoData),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        let errorData;
+        try {
+          errorData = JSON.parse(text);
+        } catch {
+          errorData = { message: text };
+        }
+
+        throw new Error(
+          errorData.error ||
+            errorData.mensaje ||
+            errorData.message ||
+            "Error al actualizar en Contífico"
+        );
+      }
+    } catch (err) {
+      console.error("Error updating product in Contifico:", err);
+      throw err;
+    }
+  };
+
   const handleContificoFieldsSubmit = async (
     fields: ContificoAdditionalFields
   ) => {
@@ -379,6 +414,17 @@ export default function ProductModal({
       };
 
       if (producto) {
+        // Update Contifico if linked
+        if (producto.contifico_id) {
+          const contificoData = {
+            nombre,
+            descripcion,
+            pvp1: parseFloat(pvp1),
+            estado,
+          };
+          await updateProductInContifico(producto.contifico_id, contificoData);
+        }
+
         // Update
         for (const img of imagenesAEliminar) {
           await deleteProductoImage(producto.id, img);
