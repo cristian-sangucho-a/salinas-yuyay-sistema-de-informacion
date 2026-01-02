@@ -1,5 +1,75 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const apiKey = process.env.CONTIFICO_API_KEY;
+  const token = process.env.CONTIFICO_API_TOKEN;
+  const { id } = await params;
+
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "Server configuration error: Missing CONTIFICO_API_KEY" },
+      { status: 500 }
+    );
+  }
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "Product ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const apiUrl = process.env.CONTIFICO_API_URL;
+    const url = new URL(`${apiUrl}/producto/${id}/`);
+
+    // Add POS token if available
+    if (token) {
+      url.searchParams.append("pos", token);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        Authorization: apiKey,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { message: errorText };
+      }
+
+      return NextResponse.json(
+        {
+          error:
+            errorData.mensaje ||
+            errorData.error ||
+            "Error fetching product from Contifico",
+          details: errorData,
+        },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Error interno";
+    console.error("Error fetching Contifico product:", error);
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -25,9 +95,8 @@ export async function PATCH(
   try {
     const body = await request.json();
 
-    const url = new URL(
-      `https://api.contifico.com/sistema/api/v1/producto/${id}/`
-    );
+    const apiUrl = process.env.CONTIFICO_API_URL;
+    const url = new URL(`${apiUrl}/producto/${id}/`);
 
     // Add POS token if available
     if (token) {
@@ -106,9 +175,8 @@ export async function DELETE(
   }
 
   try {
-    const url = new URL(
-      `https://api.contifico.com/sistema/api/v1/producto/${id}/`
-    );
+    const apiUrl = process.env.CONTIFICO_API_URL;
+    const url = new URL(`${apiUrl}/producto/${id}/`);
 
     // Add POS token if available
     if (token) {
