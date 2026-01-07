@@ -50,7 +50,7 @@ export default function CategoryDisplaySection({
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-base-300">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-primary">
-              Categorías de Archivos
+              Categorías de archivos
             </h2>
             <p className="text-base-content/70 mt-1">
               {searchTerm 
