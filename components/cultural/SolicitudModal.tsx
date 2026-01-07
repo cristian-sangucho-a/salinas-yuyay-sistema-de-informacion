@@ -112,7 +112,7 @@ export default function SolicitudModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white text-[#5A1E02] px-6 py-4 rounded-t-xl flex items-center justify-between border-b border-[#D9C3A3]">
-          <h2 className="text-xl font-bold">Solicitar Archivo</h2>
+          <h2 className="text-xl font-bold">Solicitar archivos</h2>
           <button
             onClick={onClose}
             className="text-[#B63A1B] hover:bg-[#B63A1B]/10 rounded-full p-1 transition-all duration-200 hover:rotate-90"
