@@ -72,7 +72,7 @@ export const SALINAS_YUYAY = {
         },
         {
           id: "cultural",
-          title: "CULTURA",
+          title: "ARCHIVO",
           description:
             "Memoria viva de un pueblo. Explora nuestro archivo histórico y fotográfico.",
           icon: "FaLandmark",
