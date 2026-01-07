@@ -3,6 +3,7 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { FaImage, FaPlus, FaSave } from "react-icons/fa";
+import "quill/dist/quill.snow.css";
 import AdminHeader from "@components/molecules/AdminHeader";
 import Alert from "@components/molecules/Alert";
 
@@ -11,13 +12,14 @@ import { getSalaMuseoById } from "@/lib/data/turismo/salas-museo";
 import { generarUrlImagen } from "@/lib/data/turismo/eventos";
 
 import { updateSalaMuseo } from "@/lib/data/turismo/salas-museo";
+import type QuillType from "quill";
 
 export default function EditarSalaPage() {
   const params = useParams();
   const id = params?.id as string | undefined;
 
   const [titulo, setTitulo] = useState("");
-  const [resumen, setResumen] = useState("");
+  const [eslogan, setEslogan] = useState("");
   const [contenido, setContenido] = useState("");
   const [portada, setPortada] = useState<File | null>(null);
   const [galeria, setGaleria] = useState<File[]>([]);
@@ -30,6 +32,8 @@ export default function EditarSalaPage() {
 
   const portadaInputRef = useRef<HTMLInputElement>(null);
   const galeriaInputRef = useRef<HTMLInputElement>(null);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const quillRef = useRef<QuillType | null>(null);
 
   const portadaUrl = useMemo(
     () => (portada ? URL.createObjectURL(portada) : null),
@@ -39,6 +43,58 @@ export default function EditarSalaPage() {
     () => galeria.map((f) => URL.createObjectURL(f)),
     [galeria]
   );
+
+  useEffect(() => {
+    let handler: (() => void) | null = null;
+    const removeToolbar = () => {
+      const container = editorContainerRef.current;
+      const parent = container?.parentElement;
+      parent?.querySelectorAll(".ql-toolbar").forEach((node) => node.remove());
+    };
+    const initEditor = async () => {
+      if (!editorContainerRef.current || quillRef.current) return;
+      removeToolbar();
+      editorContainerRef.current.innerHTML = "";
+      const Quill = (await import("quill")).default;
+      const quill = new Quill(editorContainerRef.current, {
+        theme: "snow",
+        placeholder: "Describe la sala...",
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ color: [] }, { background: [] }],
+            ["link", "blockquote"],
+            ["clean"],
+          ],
+        },
+      });
+      quillRef.current = quill;
+      if (contenido) {
+        quill.root.innerHTML = contenido;
+      }
+      handler = () => {
+        if (!quillRef.current) return;
+        setContenido(quillRef.current.root.innerHTML);
+      };
+      quill.on("text-change", handler);
+    };
+    void initEditor();
+    return () => {
+      if (quillRef.current && handler) {
+        quillRef.current.off("text-change", handler);
+      }
+      quillRef.current = null;
+      removeToolbar();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (quillRef.current && quillRef.current.root.innerHTML !== contenido) {
+      quillRef.current.root.innerHTML = contenido;
+    }
+  }, [contenido]);
 
   useEffect(() => {
     if (!id) return;
@@ -51,11 +107,16 @@ export default function EditarSalaPage() {
           return;
         }
         setTitulo(String(sala.titulo ?? ""));
-        setResumen(String(sala.resumen ?? ""));
-        setContenido(String(sala.contenido ?? ""));
+        const contentFromServer = String(sala.contenido ?? "");
+        setEslogan(String(sala.eslogan ?? ""));
+        setContenido(contentFromServer);
         setPublico(
           sala.publico === undefined ? undefined : Boolean(sala.publico)
         );
+
+        if (quillRef.current) {
+          quillRef.current.root.innerHTML = contentFromServer;
+        }
 
         const portadaUrl = generarUrlImagen(
           sala.collectionId,
@@ -99,8 +160,11 @@ export default function EditarSalaPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id) return setStatus("ID de sala no especificado");
-    if (!titulo || !resumen || !contenido) {
-      setStatus("Error: Título, Resumen y Contenido son obligatorios.");
+
+    const editorContent = quillRef.current?.root.innerHTML || contenido;
+
+    if (!titulo || !eslogan || !editorContent) {
+      setStatus("Error: Título, Eslogan y Contenido son obligatorios.");
       return;
     }
     setStatus("Enviando... (edit)");
@@ -108,8 +172,8 @@ export default function EditarSalaPage() {
     try {
       const updated = await updateSalaMuseo(id, {
         titulo,
-        resumen,
-        contenido,
+        eslogan,
+        contenido: editorContent,
         portada: portada ?? undefined,
         nuevosGaleria: galeria.length > 0 ? galeria : undefined,
         publico: publico === undefined ? undefined : Boolean(publico),
@@ -207,22 +271,21 @@ export default function EditarSalaPage() {
             />
 
             <textarea
-              value={resumen}
-              onChange={(e) => setResumen(e.target.value)}
-              placeholder="Resumen corto de la sala (máx 200 caracteres)"
+              value={eslogan}
+              onChange={(e) => setEslogan(e.target.value)}
+              placeholder="Eslogan corto de la sala (máx 200 caracteres)"
               className="text-lg text-base-content/70 bg-transparent border-b-2 border-transparent focus:border-primary outline-none w-full mb-6 transition-colors"
               rows={2}
               maxLength={200}
             />
 
             <h2 className="text-2xl font-semibold mb-4">Contenido</h2>
-            <textarea
-              value={contenido}
-              onChange={(e) => setContenido(e.target.value)}
-              placeholder="Describe la sala. Puedes usar saltos de línea."
-              className="prose max-w-none text-base-content/90 mt-4 bg-transparent border-b-2 border-transparent focus:border-primary outline-none w-full transition-colors"
-              rows={10}
-            />
+            <div className="bg-base-200 border border-base-300 rounded-lg">
+              <div
+                ref={editorContainerRef}
+                className="prose max-w-none text-base-content/90 min-h-[320px]"
+              />
+            </div>
 
             <section className="mt-12">
               <h2 className="text-2xl font-semibold mb-6">Galería</h2>

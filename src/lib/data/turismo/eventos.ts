@@ -48,7 +48,7 @@ export async function updateEvento(
   id: string,
   data: {
     titulo?: string;
-    resumen?: string | null;
+    eslogan?: string | null;
     contenido?: string | null;
     fecha_de_inicio?: string | Date | null;
     fecha_de_finalizacion?: string | Date | null;
@@ -62,7 +62,7 @@ export async function updateEvento(
   const formData = new FormData();
 
   if (data.titulo !== undefined) formData.append('titulo', data.titulo);
-  if (data.resumen !== undefined) formData.append('resumen', data.resumen ?? '');
+  if (data.eslogan !== undefined) formData.append('eslogan', data.eslogan ?? '');
   if (data.contenido !== undefined) formData.append('contenido', data.contenido ?? '');
 
   if (data.fecha_de_inicio !== undefined) {
@@ -116,7 +116,7 @@ export async function updateEvento(
 // Función para crear un nuevo evento (admin)
 export async function createEvento(data: {
   titulo: string;
-  resumen?: string;
+  eslogan?: string;
   contenido?: string;
   fecha_de_inicio: string | Date;
   fecha_de_finalizacion?: string | Date;
@@ -127,7 +127,7 @@ export async function createEvento(data: {
 }): Promise<Evento> {
   const formData = new FormData();
   formData.append('titulo', data.titulo);
-  if (data.resumen !== undefined) formData.append('resumen', data.resumen);
+  if (data.eslogan !== undefined) formData.append('eslogan', data.eslogan ?? '');
   if (data.contenido !== undefined) formData.append('contenido', data.contenido);
 
   // fechas: enviar como ISO strings

@@ -7,7 +7,7 @@ import { getCachedCategoriasConSubcategorias } from "@/lib/cache/categorias";
 import type { Product } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
-  title: "Todos los Productos | SAISAL",
+  title: "Todos los productos | SAISAL",
   description:
     "Descubre todos nuestros productos artesanales de Salinas de Guaranda.",
 };
@@ -54,7 +54,7 @@ export default async function ProductosPage({
     <main className="min-h-screen bg-base-100">
       {/* Header */}
       <PageHeader
-        title="Todos los Productos"
+        title="Todos los productos"
         description="Explora nuestra colección completa de productos artesanales de Salinas de Guaranda."
         actions={<ProductSearch />}
         breadcrumbs={[{ label: "Productos" }]}

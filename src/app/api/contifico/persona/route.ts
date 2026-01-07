@@ -13,18 +13,16 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
+    const apiUrl = process.env.CONTIFICO_API_URL;
 
-    const response = await fetch(
-      `https://api.contifico.com/sistema/api/v1/persona/?pos=${token}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${apiKey}`,
-        },
-        body: JSON.stringify(body),
-      }
-    );
+    const response = await fetch(`${apiUrl}/persona/?pos=${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
       const errorData = await response.text();

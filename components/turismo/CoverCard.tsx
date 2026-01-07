@@ -26,11 +26,11 @@ export default function CoverCard({ item }: CoverCardProps) {
       {/* overlay para mejorar legibilidad del texto */}
       <div className="absolute inset-0 bg-gradient-to-t from-base-100/80 via-transparent to-transparent" />
 
-      <div className="absolute left-4 md:left-20 lg:left-24 bottom-0 p-6 max-w-3xl">
+      <div className="absolute inset-x-0 bottom-0 p-6 bg-white/60 md:bg-transparent md:left-20 lg:left-24 md:inset-x-auto md:max-w-3xl rounded-none md:rounded-lg shadow md:shadow-none">
         <h3 className="font-semibold text-3xl text-base-content">
           {item.titulo}
         </h3>
-        <p className="text-base text-base-content/80 mt-2">{item.eslogan}</p>
+        <p className="hidden md:block text-base text-base-content/80 mt-2">{item.eslogan}</p>
       </div>
     </article>
   );

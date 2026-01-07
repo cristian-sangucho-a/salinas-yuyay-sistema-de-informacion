@@ -6,7 +6,7 @@ export interface Evento {
     titulo: string;
     fecha_de_inicio: string; // ISO datetime
     fecha_de_finalizacion: string; // ISO datetime
-    resumen: string;
+    eslogan: string;
     contenido: string;
     publico: boolean;
     organizadores: string;
@@ -18,7 +18,7 @@ export interface SalaMuseo {
     id: string;
     collectionId: string; 
     titulo: string;
-    resumen: string;
+    eslogan: string;
     contenido: string;
     portada: string; // filename
     galeria: string[];

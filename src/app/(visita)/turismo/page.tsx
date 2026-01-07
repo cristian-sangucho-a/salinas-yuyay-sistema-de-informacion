@@ -21,14 +21,14 @@ export default async function VisitaPage() {
     id: ev.id,
     titulo: ev.titulo,
     portada: generarUrlImagen(ev.collectionId, ev.id, ev.portada),
-    eslogan: ev.resumen,
+    eslogan: ev.eslogan,
   }));
 
   const salasResp: SalaMuseo[] = await obtenerSalasMuseoServer();
   salas = salasResp.map((sala) => ({
     id: sala.id,
     titulo: sala.titulo,
-    resumen: sala.resumen,
+    eslogan: sala.eslogan,
     portada: generarUrlImagen(sala.collectionId, sala.id, sala.portada),
   }));
   return (

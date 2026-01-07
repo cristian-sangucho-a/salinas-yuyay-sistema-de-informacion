@@ -1,6 +1,6 @@
 import "../globals.css";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Navbar from "./Header";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@components/productivo/tienda/CartDrawer";
 

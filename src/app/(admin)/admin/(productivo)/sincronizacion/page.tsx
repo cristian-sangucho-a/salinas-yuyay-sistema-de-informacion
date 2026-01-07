@@ -26,6 +26,7 @@ import {
   validateDateRange,
   getPreviousWeekDateRange,
 } from "@/lib/utils/dateUtils";
+import ProductModal from "@components/productivo/admin/ProductModal";
 
 type SyncStatus = "unlinked" | "diff" | "synced";
 
@@ -33,6 +34,9 @@ export default function SincronizacionPage() {
   const [activeTab, setActiveTab] = useState<SyncStatus>("unlinked");
   const [categorias, setCategorias] = useState<CategoriaProducto[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [selectedContificoProduct, setSelectedContificoProduct] =
+    useState<ContificoProducto | null>(null);
 
   // Initialize date range
   const { fechaInicial: initialFechaInicial, fechaFinal: initialFechaFinal } =
@@ -106,31 +110,8 @@ export default function SincronizacionPage() {
       return;
     }
 
-    await executeSyncOperation({
-      title: "Importar Producto",
-      message: `¿Importar "${cProd.nombre}" como nuevo producto?`,
-      buttonLabel: "Importar",
-      onExecute: async () => {
-        await createProducto({
-          nombre: cProd.nombre,
-          descripcion: cProd.descripcion || "",
-          pvp1: parseFloat(cProd.pvp1),
-          estado: cProd.estado,
-          categoria: categorias[0]?.id,
-          destacado: false,
-          contifico_id: cProd.id,
-        });
-      },
-      onSuccess: {
-        title: "¡Importación Exitosa!",
-        message: `Producto importado como: ${cProd.nombre}`,
-      },
-      onRefresh: () => {
-        syncData.setUnlinkedItems((prev) =>
-          prev.filter((item) => item.contifico.id !== cProd.id)
-        );
-      },
-    });
+    setSelectedContificoProduct(cProd);
+    setIsProductModalOpen(true);
   };
 
   const handleSyncUpdate = async (
@@ -516,6 +497,35 @@ export default function SincronizacionPage() {
         confirmText="Entendido"
         onConfirm={errorModal.close}
         onCancel={errorModal.close}
+      />
+
+      {/* Product Modal for Import */}
+      <ProductModal
+        isOpen={isProductModalOpen}
+        onClose={(shouldRefresh) => {
+          setIsProductModalOpen(false);
+          setSelectedContificoProduct(null);
+          if (shouldRefresh) {
+            refreshProductList(
+              syncData.allContificoProducts,
+              syncData.setLocalProducts,
+              syncData.processComparison
+            );
+          }
+        }}
+        producto={null}
+        categorias={categorias}
+        initialContificoData={
+          selectedContificoProduct
+            ? {
+                id: selectedContificoProduct.id,
+                nombre: selectedContificoProduct.nombre,
+                descripcion: selectedContificoProduct.descripcion || "",
+                pvp1: parseFloat(selectedContificoProduct.pvp1),
+                estado: selectedContificoProduct.estado,
+              }
+            : null
+        }
       />
     </div>
   );

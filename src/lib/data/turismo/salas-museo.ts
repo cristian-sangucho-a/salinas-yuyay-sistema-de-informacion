@@ -36,7 +36,7 @@ export async function updateSalaMuseo(
   id: string,
   data: {
     titulo?: string;
-    resumen?: string | null;
+    eslogan?: string | null;
     contenido?: string | null;
     portada?: File | null; // null => clear
     nuevosGaleria?: File[];
@@ -47,7 +47,7 @@ export async function updateSalaMuseo(
   const formData = new FormData();
 
   if (data.titulo !== undefined) formData.append('titulo', data.titulo);
-  if (data.resumen !== undefined) formData.append('resumen', data.resumen ?? '');
+  if (data.eslogan !== undefined) formData.append('eslogan', data.eslogan ?? '');
   if (data.contenido !== undefined) formData.append('contenido', data.contenido ?? '');
 
   if (data.portada) {
@@ -77,7 +77,7 @@ export async function updateSalaMuseo(
 // Funciones para Sala de Museo
 export async function createSalaMuseo(data: {
   titulo: string;
-  resumen?: string;
+  eslogan?: string;
   contenido?: string;
   portada?: File;
   galeria?: File[];
@@ -85,7 +85,7 @@ export async function createSalaMuseo(data: {
 }): Promise<SalaMuseo> {
   const formData = new FormData();
   formData.append('titulo', data.titulo);
-  if (data.resumen !== undefined) formData.append('resumen', data.resumen);
+  if (data.eslogan !== undefined) formData.append('eslogan', data.eslogan ?? '');
   if (data.contenido !== undefined) formData.append('contenido', data.contenido);
   if (data.portada) formData.append('portada', data.portada);
   if (data.galeria && data.galeria.length > 0) {

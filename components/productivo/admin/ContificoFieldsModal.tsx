@@ -11,17 +11,13 @@ interface ContificoFieldsModalProps {
   onClose: () => void;
   onSubmit: (fields: ContificoAdditionalFields) => void;
   isLoading?: boolean;
+  productName?: string;
+  externalError?: string;
 }
 
 export interface ContificoAdditionalFields {
   codigo: string;
-  codigo_barra: string;
-  pvp2?: string;
-  pvp3?: string;
-  pvp4?: string;
-  pvp_comisariato?: string;
-  para_comisariato?: boolean;
-  codigo_sap?: string;
+  minimo: string;
 }
 
 export default function ContificoFieldsModal({
@@ -29,25 +25,39 @@ export default function ContificoFieldsModal({
   onClose,
   onSubmit,
   isLoading = false,
+  productName = "",
+  externalError = "",
 }: ContificoFieldsModalProps) {
   const [codigo, setCodigo] = useState("");
-  const [codigoBarras, setCodigoBarras] = useState("");
-  const [pvp2, setPvp2] = useState("");
-  const [pvp3, setPvp3] = useState("");
-  const [pvp4, setPvp4] = useState("");
-  const [paraComisariato, setParaComisariato] = useState(false);
-  const [pvpComisariato, setPvpComisariato] = useState("");
-  const [codigoSap, setCodigoSap] = useState("");
+  const [minimo, setMinimo] = useState("1.0");
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (externalError) {
+      setError(externalError);
+    }
+  }, [externalError]);
+
+  useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
+      setError(""); // Clear error on open
+      // Generate code if empty
+      if (!codigo) {
+        const timestamp = Date.now().toString().slice(-6);
+        const namePrefix = productName
+          ? productName
+              .substring(0, 3)
+              .toUpperCase()
+              .replace(/[^A-Z0-9]/g, "X")
+          : "PROD";
+        setCodigo(`${namePrefix}-${timestamp}`);
+      }
     } else {
       setIsVisible(false);
     }
-  }, [isOpen]);
+  }, [isOpen, productName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,20 +68,14 @@ export default function ContificoFieldsModal({
       return;
     }
 
-    if (!codigoBarras.trim()) {
-      setError("El código de barras es requerido");
+    if (!minimo.trim()) {
+      setError("El stock mínimo es requerido");
       return;
     }
 
     const fields: ContificoAdditionalFields = {
       codigo: codigo.trim(),
-      codigo_barra: codigoBarras.trim(),
-      ...(pvp2 && { pvp2 }),
-      ...(pvp3 && { pvp3 }),
-      ...(pvp4 && { pvp4 }),
-      ...(paraComisariato && { para_comisariato: true }),
-      ...(pvpComisariato && { pvp_comisariato: pvpComisariato }),
-      ...(codigoSap && { codigo_sap: codigoSap }),
+      minimo: minimo.trim(),
     };
 
     onSubmit(fields);
@@ -79,13 +83,7 @@ export default function ContificoFieldsModal({
 
   const handleClose = () => {
     setCodigo("");
-    setCodigoBarras("");
-    setPvp2("");
-    setPvp3("");
-    setPvp4("");
-    setParaComisariato(false);
-    setPvpComisariato("");
-    setCodigoSap("");
+    setMinimo("1.0");
     setError("");
     onClose();
   };
@@ -139,164 +137,44 @@ export default function ContificoFieldsModal({
               </div>
             )}
 
-            {/* Campos Obligatorios */}
-            <div>
-              <Title variant="h4" className="font-bold text-primary mb-4">
-                Campos Obligatorios
-              </Title>
-
-              <div className="space-y-4">
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text font-medium text-primary">
-                      Código del Producto *
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    value={codigo}
-                    onChange={(e) => setCodigo(e.target.value)}
-                    className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                    placeholder="Ej: 00024"
-                    disabled={isLoading}
-                  />
-                  <Text color="muted" className="text-xs mt-1">
-                    Código único del producto en Contífico
-                  </Text>
-                </div>
-
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text font-medium text-primary">
-                      Código de Barras *
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    value={codigoBarras}
-                    onChange={(e) => setCodigoBarras(e.target.value)}
-                    className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                    placeholder="Ej: 000000011115"
-                    disabled={isLoading}
-                  />
-                  <Text color="muted" className="text-xs mt-1">
-                    Código de barras estándar del producto
-                  </Text>
-                </div>
+            <div className="space-y-4">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text font-medium text-primary">
+                    Código del Producto *
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  value={codigo}
+                  onChange={(e) => setCodigo(e.target.value)}
+                  className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
+                  placeholder="Ej: 00024"
+                  disabled={isLoading}
+                />
+                <Text color="muted" className="text-xs mt-1">
+                  Código único del producto en Contífico
+                </Text>
               </div>
-            </div>
 
-            {/* Campos Opcionales */}
-            <div>
-              <Title variant="h4" className="font-bold text-primary mb-4">
-                Campos Opcionales
-              </Title>
-
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-medium text-primary">
-                        PVP 2
-                      </span>
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={pvp2}
-                      onChange={(e) => setPvp2(e.target.value)}
-                      className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                      placeholder="0.00"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-medium text-primary">
-                        PVP 3
-                      </span>
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={pvp3}
-                      onChange={(e) => setPvp3(e.target.value)}
-                      className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                      placeholder="0.00"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-medium text-primary">
-                        PVP 4
-                      </span>
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={pvp4}
-                      onChange={(e) => setPvp4(e.target.value)}
-                      className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                      placeholder="0.00"
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-control">
-                  <label className="label cursor-pointer justify-start gap-4">
-                    <input
-                      type="checkbox"
-                      checked={paraComisariato}
-                      onChange={(e) => setParaComisariato(e.target.checked)}
-                      className="checkbox checkbox-primary"
-                      disabled={isLoading}
-                    />
-                    <span className="label-text font-medium text-primary">
-                      Válido para Comisariato
-                    </span>
-                  </label>
-                </div>
-
-                {paraComisariato && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="form-control w-full">
-                      <label className="label">
-                        <span className="label-text font-medium text-primary">
-                          PVP Comisariato
-                        </span>
-                      </label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={pvpComisariato}
-                        onChange={(e) => setPvpComisariato(e.target.value)}
-                        className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                        placeholder="0.00"
-                        disabled={isLoading}
-                      />
-                    </div>
-
-                    <div className="form-control w-full">
-                      <label className="label">
-                        <span className="label-text font-medium text-primary">
-                          Código SAP
-                        </span>
-                      </label>
-                      <input
-                        type="text"
-                        value={codigoSap}
-                        onChange={(e) => setCodigoSap(e.target.value)}
-                        className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
-                        placeholder="Ej: 000000000040009212"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                )}
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text font-medium text-primary">
+                    Stock Mínimo *
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={minimo}
+                  onChange={(e) => setMinimo(e.target.value)}
+                  className="input input-bordered w-full bg-white border-base-300 focus:border-accent focus:outline-none"
+                  placeholder="1.0"
+                  disabled={isLoading}
+                />
+                <Text color="muted" className="text-xs mt-1">
+                  Valor mínimo de stock que debe estar disponible
+                </Text>
               </div>
             </div>
 

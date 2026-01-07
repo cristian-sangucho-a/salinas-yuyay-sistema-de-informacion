@@ -57,7 +57,7 @@ export default function AdminTurismoPage() {
         const mapped = items.map((it: SalaMuseo) => ({
           id: it.id,
           title: it.titulo,
-          description: it.resumen,
+          description: it.eslogan,
           image:
             generarUrlImagen(it.collectionId, it.id, it.portada) ?? undefined,
         }));

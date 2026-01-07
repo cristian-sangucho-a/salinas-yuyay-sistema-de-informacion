@@ -11,17 +11,26 @@ interface Persona {
   razon_social: string; // Nombre completo
   email: string;
   telefonos: string;
-  direccion: string;
   tipo: "N" | "J"; // Natural o Jurídica
   es_cliente: boolean;
   es_proveedor: boolean;
 }
 
-export default function CheckoutForm() {
-  const [cedula, setCedula] = useState("");
+interface CheckoutFormProps {
+  onNext: (persona: Persona) => void;
+  onBack: () => void;
+  initialData?: Persona | null;
+}
+
+export default function CheckoutForm({
+  onNext,
+  onBack,
+  initialData,
+}: CheckoutFormProps) {
+  const [cedula, setCedula] = useState(initialData?.cedula || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [persona, setPersona] = useState<Persona | null>(null);
+  const [persona, setPersona] = useState<Persona | null>(initialData || null);
   const [isNewUser, setIsNewUser] = useState(false);
 
   // Form state for new user registration
@@ -29,7 +38,6 @@ export default function CheckoutForm() {
     razon_social: "",
     email: "",
     telefonos: "",
-    direccion: "",
   });
 
   const handleSearchPersona = async () => {
@@ -73,9 +81,7 @@ export default function CheckoutForm() {
       console.error(err);
       // Si falla, asumimos que no existe o hubo error, permitimos registro manual
       setIsNewUser(true);
-      setError(
-        "No se pudo verificar la cédula. Puede registrarse manualmente."
-      );
+      setError("No se pudo verificar la cédula. Puede registrarse.");
     } finally {
       setIsLoading(false);
     }
@@ -96,6 +102,7 @@ export default function CheckoutForm() {
       const newPersona = {
         ...formData,
         cedula,
+        direccion: "S/N", // Dirección por defecto ya que se captura en el paso de envío
         tipo: cedula.length === 13 ? "J" : "N",
         es_cliente: true,
         es_proveedor: false,
@@ -116,7 +123,8 @@ export default function CheckoutForm() {
       setPersona(createdPersona);
       setIsNewUser(false);
 
-      alert("¡Usuario registrado correctamente!");
+      // Continuar automáticamente al registrar
+      onNext(createdPersona);
     } catch (err: unknown) {
       console.error(err);
       const message =
@@ -127,22 +135,14 @@ export default function CheckoutForm() {
     }
   };
 
-  const handleFinalizeOrder = () => {
-    if (!persona) return;
-    // Lógica para finalizar pedido con usuario existente
-    alert(
-      `Pedido procesado para: ${persona.razon_social}\n(Integración de Pedido Pendiente)`
-    );
-  };
-
   return (
-    <div className="bg-base-100 p-6 md:p-8 rounded-lg border border-base-200 shadow-sm h-fit sticky top-24">
-      <Title variant="h3" className="mb-6 font-bold">
-        Datos del Cliente
+    <div className="bg-base-100 p-4 md:p-8 rounded-lg border border-base-200 shadow-sm h-fit sticky top-24">
+      <Title variant="h3" className="mb-4 md:mb-6 font-bold text-lg md:text-xl">
+        Datos del cliente
       </Title>
 
       {/* Búsqueda de Cédula */}
-      <div className="form-control w-full mb-6">
+      <div className="form-control w-full mb-4 md:mb-6">
         <label className="label">
           <span className="label-text font-medium">Cédula o RUC</span>
         </label>
@@ -175,7 +175,6 @@ export default function CheckoutForm() {
                   razon_social: "",
                   email: "",
                   telefonos: "",
-                  direccion: "",
                 });
               }}
               variant="ghost"
@@ -213,7 +212,7 @@ export default function CheckoutForm() {
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-medium">
-                Nombre Completo / Razón Social
+                Nombre completo / Razón social
               </span>
             </label>
             <input
@@ -254,20 +253,6 @@ export default function CheckoutForm() {
             />
           </div>
 
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-medium">Dirección</span>
-            </label>
-            <input
-              type="text"
-              name="direccion"
-              value={formData.direccion}
-              onChange={handleInputChange}
-              className="input input-bordered w-full focus:input-primary"
-              required
-            />
-          </div>
-
           <Button
             type="submit"
             variant="primary"
@@ -281,7 +266,7 @@ export default function CheckoutForm() {
                 Registrando...
               </>
             ) : (
-              "Registrar y Finalizar Compra"
+              "Registrar y continuar"
             )}
           </Button>
         </form>
@@ -306,21 +291,17 @@ export default function CheckoutForm() {
               <p>
                 <span className="font-bold">Teléfono:</span> {persona.telefonos}
               </p>
-              <p>
-                <span className="font-bold">Dirección:</span>{" "}
-                {persona.direccion}
-              </p>
             </div>
           </div>
 
-          <Button
-            onClick={handleFinalizeOrder}
-            variant="primary"
-            size="lg"
-            className="w-full"
-          >
-            Finalizar Compra
-          </Button>
+          <div className="flex justify-between pt-4">
+            <Button variant="outline" onClick={onBack}>
+              Atrás
+            </Button>
+            <Button onClick={() => onNext(persona)} variant="primary" size="lg">
+              Continuar
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
   const fecha_final = searchParams.get("fecha_final");
 
   try {
-    const url = new URL("https://api.contifico.com/sistema/api/v1/producto/");
+    const apiUrl = process.env.CONTIFICO_API_URL;
+    const url = new URL(`${apiUrl}/producto/`);
 
     // Add POS token if available (consistent with persona route)
     if (token) {
@@ -83,7 +84,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const url = new URL("https://api.contifico.com/sistema/api/v1/producto/");
+    const apiUrl = process.env.CONTIFICO_API_URL;
+    const url = new URL(`${apiUrl}/producto/`);
 
     // Add POS token if available
     if (token) {

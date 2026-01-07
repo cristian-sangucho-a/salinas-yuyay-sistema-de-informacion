@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import CheckoutForm from "@components/productivo/tienda/checkout/CheckoutForm";
-import CheckoutCart from "@components/productivo/tienda/checkout/CheckoutCart";
+import CheckoutStepper from "@components/productivo/tienda/checkout/CheckoutStepper";
 import { PageHeader } from "@components/productivo/tienda";
 
 export const metadata: Metadata = {
@@ -19,17 +18,7 @@ export default function CheckoutPage() {
         ]}
       />
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Columna Izquierda: Carrito Editable */}
-          <div className="lg:col-span-2">
-            <CheckoutCart />
-          </div>
-
-          {/* Columna Derecha: Formulario de Cliente */}
-          <div className="lg:col-span-1">
-            <CheckoutForm />
-          </div>
-        </div>
+        <CheckoutStepper />
       </div>
     </main>
   );
