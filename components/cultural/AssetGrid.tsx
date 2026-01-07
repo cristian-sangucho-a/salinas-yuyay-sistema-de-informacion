@@ -14,7 +14,7 @@ export default function AssetGrid({ activos }: AssetGridProps) {
       <div className="max-w-4xl mx-auto px-4 md:px-8 lg:px-16">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-[#5A1E02] mb-2">
-            Activos Disponibles
+            Archivos disponibles
           </h2>
           <p className="text-[#4A3B31]/70">
             {activos.length} {activos.length === 1 ? 'activo encontrado' : 'activos encontrados'}

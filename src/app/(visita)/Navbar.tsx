@@ -27,7 +27,7 @@ export default function Navbar() {
   const navLinks: NavLink[] = [
     { href: "/tienda", label: "Tienda" },
     { href: "/turismo", label: "Turismo" },
-    { href: "/cultural", label: "Cultural" },
+    { href: "/cultural", label: "Historia Cultural" },
   ];
 
   return (

@@ -69,7 +69,7 @@ export default async function AssetPage({ params }: AssetPageProps) {
         {fileCount > 0 ? (
           <div>
             <h2 className="text-2xl font-bold text-[#5A1E02] mb-6">
-              Archivos Disponibles
+              Archivos disponibles
             </h2>
 
             <div className="space-y-4">
