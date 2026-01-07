@@ -18,6 +18,9 @@ export default function Navbar() {
   const pathname = usePathname(); // Obtiene la ruta actual
   const { totalItems, toggleCart } = useCart();
 
+  // Debug
+  console.log("Pathname actual:", pathname);
+
   // Cierra el menú móvil cuando cambia la ruta
   useEffect(() => {
     setIsOpen(false);
@@ -27,7 +30,7 @@ export default function Navbar() {
   const navLinks: NavLink[] = [
     { href: "/tienda", label: "Tienda" },
     { href: "/turismo", label: "Turismo" },
-    { href: "/cultural", label: "Historia" },
+    { href: "/cultural", label: "Archivo" },
   ];
 
   return (
@@ -56,8 +59,10 @@ export default function Navbar() {
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname.startsWith(link.href) // Comprueba si la ruta actual empieza con el href del enlace
                     ? "text-secondary font-semibold border-b-2 border-secondary" // Estilo activo
-                    : "text-base-content/80 hover:text-primary hover:bg-base-200" // Estilo inactivo con hover mejorado
+                    : "text-base-content/80 hover:text-primary hover:bg-base-200"
+                     // Estilo inactivo con hover mejorado
                 }`}
+                
               >
                 {link.label}
               </Link>
