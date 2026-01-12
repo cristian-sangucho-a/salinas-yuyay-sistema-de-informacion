@@ -41,12 +41,9 @@ export default function AssetCard({ asset }: AssetCardProps) {
             {categoryName}
           </span>
         </div>
-
-        <Link href={`/visita/cultural/activo/${asset.id}`}>
           <h3 className="text-lg font-bold text-[#5A1E02] mb-2 hover:text-[#8B3C10] transition-colors">
             {asset.titulo}
           </h3>
-        </Link>
 
         <p className="text-sm text-[#4A3B31]/70 mb-4 line-clamp-2">
           {asset.descripcion}
