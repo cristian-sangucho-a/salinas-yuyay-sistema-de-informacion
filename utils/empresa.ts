@@ -2,14 +2,15 @@ export const SALINAS_YUYAY = {
   nombre: "Salinas Yuyay",
 
   descripcion: `Un ecosistema integrado de desarrollo comunitario, cultura viva y turismo sostenible en el corazón de los Andes.`,
+  eslogan: "Preservando nuestra historia para el futuro.",
   logo: "/logo.png",
   email: "",
   telefono: "",
   redesSociales: {
-    facebook: "https://facebook.com/ezva",
-    twitter: "https://twitter.com/ezva",
-    instagram: "https://instagram.com/ezva",
-    linkedin: "https://linkedin.com/company/ezva",
+    facebook: "https://facebook.com/example",
+    twitter: "https://twitter.com/example",
+    instagram: "https://instagram.com/example",
+    linkedin: "https://linkedin.com/company/example",
   },
 
   tienda: {
@@ -71,7 +72,7 @@ export const SALINAS_YUYAY = {
         },
         {
           id: "cultural",
-          title: "CULTURA",
+          title: "ARCHIVO",
           description:
             "Memoria viva de un pueblo. Explora nuestro archivo histórico y fotográfico.",
           icon: "FaLandmark",

@@ -31,7 +31,7 @@ export default function CartDrawer() {
           <div className="flex items-center justify-between px-4 py-6 sm:px-6 border-b border-base-200">
             <h2 className="text-lg font-medium text-base-content flex items-center gap-2">
               <ShoppingBag className="w-5 h-5" />
-              Tu Carrito
+              Tu carrito
             </h2>
             <div className="flex items-center gap-2">
               {items.length > 0 && (
@@ -171,14 +171,14 @@ export default function CartDrawer() {
                   className="btn btn-primary w-full"
                   onClick={toggleCart}
                 >
-                  Finalizar Compra
+                  Finalizar compra
                 </Link>
                 <button
                   type="button"
                   className="btn btn-ghost w-full"
                   onClick={toggleCart}
                 >
-                  Continuar Comprando
+                  Continuar comprando
                 </button>
               </div>
             </div>

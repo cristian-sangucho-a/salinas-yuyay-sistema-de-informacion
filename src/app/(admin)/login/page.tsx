@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
 import { pb } from "@/lib/pocketbase";
 import { isAuthenticated } from "@/lib/auth";
+import Button from "@components/atoms/Button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -77,20 +78,20 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="alert bg-[#B63A1B]/10 border border-[#B63A1B]/30 text-[#B63A1B] text-sm animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="alert bg-primary/10 border border-primary/30 text-primary text-sm animate-in fade-in slide-in-from-top-2 duration-300">
                 <span>{error}</span>
               </div>
             )}
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-[#4A3B31] font-medium">
+                <span className="label-text text-primary font-medium">
                   Correo electrónico
                 </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaUser className="w-4 h-4 text-[#8B3C10]" />
+                  <FaUser className="w-4 h-4 text-secondary" />
                 </div>
                 <input
                   type="email"
@@ -106,13 +107,13 @@ export default function LoginPage() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-[#4A3B31] font-medium">
+                <span className="label-text text-primary font-medium">
                   Contraseña
                 </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaLock className="w-4 h-4 text-[#8B3C10]" />
+                  <FaLock className="w-4 h-4 text-secondary" />
                 </div>
                 <input
                   type="password"
@@ -126,10 +127,10 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="btn w-full bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2 transition-all disabled:bg-[#4A3B31]/50"
+              className="btn w-full border-none gap-2 transition-all"
             >
               {isLoading ? (
                 <>
@@ -142,7 +143,7 @@ export default function LoginPage() {
                   Iniciar Sesión
                 </>
               )}
-            </button>
+            </Button>
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-[#D9C3A3]">

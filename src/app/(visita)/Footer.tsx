@@ -6,8 +6,8 @@ import {
   FaEnvelope,
   FaFacebookF,
   FaInstagram,
-  FaTwitter,
-} from "react-icons/fa"; // Importa iconos necesarios
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { SALINAS_YUYAY } from "../../../utils/empresa";
 
 export default function Footer() {
@@ -24,62 +24,61 @@ export default function Footer() {
         <div className="border-t border-primary/20 mb-12"></div>
 
         {/* Contenido principal del footer (Ahora 3 columnas en lg) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-8">
-          {" "}
-          {/* Ajustado a lg:grid-cols-3 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-8 text-center">
           {/* Columna 1: Salinas de Guaranda */}
-          <div className="space-y-4">
-            <div className="flex flex-col items-start gap-4">
+          <div className="space-y-4 flex flex-col items-center">
+            <div className="flex flex-col items-center gap-4 w-full">
               {/* Logo grande */}
-              <Image
-                src={logo || "/logo.png"}
-                alt="Salinas Yuyay"
-                width={160}
-                height={160}
-                className="h-40 w-auto object-contain mix-blend-multiply -ml-2"
-              />
+              <div className="w-full flex justify-center">
+                <Image
+                  src={logo || "/logo.png"}
+                  alt="Salinas Yuyay"
+                  width={160}
+                  height={160}
+                  className="h-40 w-auto object-contain mix-blend-multiply"
+                />
+              </div>
               <div>
-                <p className="text-sm font-medium text-base-content leading-relaxed">
+                <p className="text-sm font-medium text-base-content leading-relaxed max-w-xs mx-auto">
                   {SALINAS_YUYAY.descripcion}
                 </p>
               </div>
             </div>
           </div>
           {/* Columna 2: Contacto */}
-          <div className="space-y-3">
+          <div className="space-y-3 flex flex-col items-center">
             <h3 className="font-bold text-lg text-primary">{contact.title}</h3>
-            <ul className="space-y-2 text-sm font-medium text-base-content">
-              <li className="flex items-start gap-2 group">
-                <FaMapMarkerAlt className="w-4 h-4 mt-1 text-secondary shrink-0 group-hover:scale-110 transition-transform" />{" "}
-                {/* Icono: Marrón arcilla */}
+            <ul className="space-y-2 text-sm font-medium text-base-content flex flex-col items-center">
+              <li className="flex items-center gap-2 group justify-center">
+                <FaMapMarkerAlt className="w-4 h-4 text-secondary shrink-0 group-hover:scale-110 transition-transform" />
                 <span className="group-hover:text-primary transition-colors">
                   {contact.location.address}
                 </span>
               </li>
-              <li className="flex items-start gap-2 group">
-                <FaPhoneAlt className="w-4 h-4 mt-1 text-secondary shrink-0 group-hover:scale-110 transition-transform" />
+              <li className="flex items-center gap-2 group justify-center">
+                <FaPhoneAlt className="w-4 h-4 text-secondary shrink-0 group-hover:scale-110 transition-transform" />
                 <a
                   href={`tel:${contact.phone.number}`}
                   className="hover:text-primary hover:translate-x-1 transition-all inline-block"
                 >
                   {contact.phone.number}
-                </a>{" "}
+                </a>
               </li>
-              <li className="flex items-start gap-2 group">
-                <FaEnvelope className="w-4 h-4 mt-1 text-secondary shrink-0 group-hover:scale-110 transition-transform" />
+              <li className="flex items-center gap-2 group justify-center">
+                <FaEnvelope className="w-4 h-4 text-secondary shrink-0 group-hover:scale-110 transition-transform" />
                 <a
                   href={`mailto:${contact.email.address}`}
                   className="hover:text-primary hover:translate-x-1 transition-all inline-block"
                 >
                   {contact.email.address}
-                </a>{" "}
+                </a>
               </li>
             </ul>
           </div>
           {/* Columna 3 (antes 4): Síguenos y Horario */}
-          <div className="space-y-3">
+          <div className="space-y-3 flex flex-col items-center">
             <h3 className="font-bold text-lg text-primary">Síguenos</h3>
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center">
               {/* Iconos sociales: Fondo Arena, icono Gris pizarra */}
               {redesSociales.facebook && (
                 <a
@@ -111,7 +110,7 @@ export default function Footer() {
                   aria-label="Twitter"
                   className="btn btn-square btn-ghost bg-base-300 text-base-content hover:bg-[#1DA1F2] hover:text-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
                 >
-                  <FaTwitter className="w-5 h-5" />
+                  <FaXTwitter className="w-5 h-5" />
                 </a>
               )}
             </div>
@@ -134,9 +133,7 @@ export default function Footer() {
             &copy; {currentYear} {SALINAS_YUYAY.nombre}. Todos los derechos
             reservados.
           </p>
-          <p className="mt-2 sm:mt-0">
-            Preservando nuestra historia para el futuro.
-          </p>
+          <p className="mt-2 sm:mt-0">{SALINAS_YUYAY.eslogan}</p>
         </div>
       </div>
     </footer>
