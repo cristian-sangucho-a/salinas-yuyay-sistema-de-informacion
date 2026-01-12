@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import { Plus } from "lucide-react"
 
 export interface LocationItem {
   id: string
@@ -58,6 +60,7 @@ type Props = {
 export default function LocationNavigator({ locations }: Props) {
   const data = useMemo(() => (locations && locations.length > 0 ? locations : defaultLocations), [locations])
   const [activeLocation, setActiveLocation] = useState<string | null>(data[0]?.id ?? null)
+  const router = useRouter()
 
   useEffect(() => {
     setActiveLocation(data[0]?.id ?? null)
@@ -85,12 +88,24 @@ export default function LocationNavigator({ locations }: Props) {
             key={location.id}
             className="relative flex-1 flex items-start justify-center cursor-pointer group"
             onMouseEnter={() => setActiveLocation(location.id)}
+            onClick={() => {
+              setActiveLocation(location.id)
+              // Only navigate on desktop (md breakpoint = 768px)
+              if (window.innerWidth >= 768) {
+                router.push(`/turismo/museo/${location.id}`)
+              }
+            }}
             role="button"
             tabIndex={0}
             onFocus={() => setActiveLocation(location.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
                 setActiveLocation(location.id)
+                // Only navigate on desktop
+                if (window.innerWidth >= 768) {
+                  router.push(`/turismo/museo/${location.id}`)
+                }
               }
             }}
           >
@@ -116,6 +131,19 @@ export default function LocationNavigator({ locations }: Props) {
           </div>
         ))}
       </div>
+
+      {/* Ver más button */}
+      {activeLocation && (
+        <button
+          onClick={() => router.push(`/turismo/museo/${activeLocation}`)}
+          className="md:hidden absolute bottom-6 left-6 z-20 bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 transition-all duration-200 hover:scale-105"
+          aria-label="Ver más detalles"
+        >
+          <span className="font-medium">Ver más</span>
+          <Plus className="w-4 h-4" />
+        </button>
+      )}
+
       <style jsx>{`
         @keyframes fadeImage {
           from {
