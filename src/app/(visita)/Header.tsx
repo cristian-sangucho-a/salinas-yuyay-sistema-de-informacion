@@ -65,7 +65,13 @@ export default function Navbar({
           : "bg-base-100 text-base-content shadow-sm"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+      <div
+        className={`mx-auto transition-all duration-1000 ease-in-out ${
+          isTransparent && pathname === "/"
+            ? "max-w-[95%] px-6 md:px-12"
+            : "max-w-7xl px-4 md:px-8 lg:px-16"
+        }`}
+      >
         <div className="flex justify-between items-center h-20">
           {/* Logo/Título Principal */}
           <div className="shrink-0 flex items-center h-full">
@@ -74,11 +80,15 @@ export default function Navbar({
               className="transition-all duration-300 hover:scale-105 inline-block h-full w-auto"
             >
               <Image
-                src="/salinas-yuyay.png"
+                src={
+                  isTransparent && pathname === "/"
+                    ? "/salinas-yuyay-white.png"
+                    : "/salinas-yuyay.png"
+                }
                 alt={SALINAS_YUYAY.nombre}
                 width={300}
                 height={100}
-                className="h-full w-auto object-contain py-2"
+                className="h-full w-auto object-contain py-2 transition-all duration-1000 ease-in-out"
                 priority
               />
             </Link>

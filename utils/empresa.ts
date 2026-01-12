@@ -91,22 +91,22 @@ export const SALINAS_YUYAY = {
       ],
     },
     statsTicker: [
-      { icon: "FaLeaf", text: "Productos 100% Orgánicos" },
-      { icon: "FaHistory", text: "50+ Años de Historia" },
-      { icon: "FaTicketAlt", text: "Turismo Comunitario" },
+      { icon: "FaLeaf", text: "Productos 100% orgánicos" },
+      { icon: "FaHistory", text: "50+ Años de historia" },
+      { icon: "FaTicketAlt", text: "Turismo comunitario" },
       { icon: "FaShoppingBag", text: "Envíos a todo el país" },
     ],
     dynamicContent: {
       productivo: {
-        title: "Tienda El Salinerito",
-        subtitle: "Calidad y Tradición",
+        title: "Tienda El salinerito",
+        subtitle: "Calidad y tradición",
         description:
           "Nuestros productos son el resultado de décadas de trabajo comunitario y perfeccionamiento artesanal. Desde los famosos quesos hasta los chocolates de aroma fino.",
         features: [
           {
             icon: "FaShoppingBag",
-            title: "Quesos Maduros",
-            text: "Variedades suizas y andinas",
+            title: "Quesos maduros",
+            text: "Variedade andinas",
           },
           { icon: "FaLeaf", title: "Chocolates", text: "Cacao fino de aroma" },
           {
@@ -115,14 +115,14 @@ export const SALINAS_YUYAY = {
             text: "Lana de alpaca y oveja",
           },
         ],
-        cta: "Ir a la Tienda",
+        cta: "Ir a la tienda",
         link: "/tienda",
         color: "text-secondary",
         bg: "bg-secondary/10",
       },
       cultural: {
-        title: "Archivo Histórico",
-        subtitle: "Memoria Viva",
+        title: "Archivo histórico",
+        subtitle: "Memoria viva",
         description:
           "Explora miles de documentos, fotografías y testimonios que narran la transformación de Salinas de Guaranda. Un legado para las futuras generaciones.",
         features: [
@@ -174,15 +174,15 @@ export const SALINAS_YUYAY = {
     impact: {
       title: "Nuestro Impacto Comunitario",
       stats: [
-        { value: "50+", label: "Años de Historia" },
-        { value: "120+", label: "Familias Productoras" },
-        { value: "300+", label: "Productos Únicos" },
-        { value: "10k+", label: "Visitas Anuales" },
+        { value: "50+", label: "Años de historia" },
+        { value: "120+", label: "Familias productoras" },
+        { value: "300+", label: "Productos únicos" },
+        { value: "10k+", label: "Visitas anuales" },
       ],
     },
     faq: {
-      subtitle: "Dudas Comunes",
-      title: "Preguntas Frecuentes",
+      subtitle: "Dudas comunes",
+      title: "Preguntas frecuentes",
       items: [
         {
           q: "¿Cómo puedo comprar productos desde otra ciudad?",
