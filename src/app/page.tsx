@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaShoppingBag,
   FaLandmark,
@@ -69,6 +70,7 @@ interface PortalProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onClick: () => void;
+  onExpand: () => void;
 }
 
 const Portal = ({
@@ -82,6 +84,7 @@ const Portal = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  onExpand,
 }: PortalProps) => {
   const isProductivo = id === "productivo";
   const isCultural = id === "cultural";
@@ -138,7 +141,15 @@ const Portal = ({
       ></div>
 
       {/* Contenedor Flex para Contenido (Evita traslape) */}
-      <div className="absolute inset-0 z-20 flex flex-col pt-16 md:pt-0 justify-end">
+      <div
+        className={`absolute inset-0 z-20 flex flex-col md:justify-end md:pt-0 transition-all duration-500
+          ${
+            isProductivo && !isActive
+              ? "justify-start pt-36"
+              : "justify-end pt-16"
+          }
+        `}
+      >
         {/* Parte Superior: Paneles Interactivos (Subsecciones) - Oculto en móvil */}
         <div
           className={`relative w-full transition-all duration-700 ease-in-out hidden md:block ${
@@ -288,7 +299,11 @@ const Portal = ({
               </p>
 
               <div
-                className={`flex items-center text-accent font-bold uppercase tracking-widest text-sm md:text-xl whitespace-nowrap transition-all ${
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onExpand();
+                }}
+                className={`flex items-center text-accent font-bold uppercase tracking-widest text-sm md:text-xl whitespace-nowrap transition-all cursor-pointer hover:text-white ${
                   isActive
                     ? "duration-500 delay-200 opacity-100 translate-x-0"
                     : "duration-200 delay-0 opacity-0 -translate-x-4"
@@ -604,6 +619,7 @@ const ContactSection = () => {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [activePortal, setActivePortal] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [headerThreshold, setHeaderThreshold] = useState(20);
@@ -621,12 +637,24 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handlePortalClick = (section: string) => {
+  const handleExpandClick = (section: string) => {
     setSelectedSection(section);
     // Scroll suave hacia la sección de contenido
     const contentElement = document.getElementById("dynamic-content");
     if (contentElement) {
-      contentElement.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        contentElement.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  };
+
+  const handlePortalClick = (section: string) => {
+    if (section === "productivo") {
+      router.push("/tienda");
+    } else if (section === "cultural") {
+      router.push("/cultural");
+    } else if (section === "turismo") {
+      router.push("/turismo");
     }
   };
 
@@ -658,6 +686,7 @@ export default function Home() {
                 onMouseEnter={() => setActivePortal(portal.id)}
                 onMouseLeave={() => setActivePortal(null)}
                 onClick={() => handlePortalClick(portal.id)}
+                onExpand={() => handleExpandClick(portal.id)}
               />
             ))}
           </div>
