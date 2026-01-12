@@ -54,40 +54,8 @@ const iconMap: Record<string, React.ReactElement> = {
 
 // --- Componentes Internos para esta Página ---
 
-// 1. Componente de Partículas (Fondo Atmosférico Global)
-const ParticleBackground = () => {
-  // Generamos posiciones aleatorias para las "partículas"
-  const particles = Array.from({ length: 30 }).map((_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    delay: `${Math.random() * 5}s`,
-    duration: `${10 + Math.random() * 20}s`,
-    size: `${Math.random() * 8 + 2}px`,
-  }));
-
-  return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Gradiente de fondo base que cambia sutilmente */}
-      <div className="absolute inset-0 bg-linear-to-b from-base-300 via-base-200 to-base-100 opacity-90"></div>
-
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full bg-white/30 blur-[1px] animate-float"
-          style={{
-            left: p.left,
-            top: p.top,
-            width: p.size,
-            height: p.size,
-            animationDelay: p.delay,
-            animationDuration: p.duration,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+// 1. Componente de Partículas (Fondo Atmosférico Global) - ELIMINADO
+// const ParticleBackground = () => { ... }
 
 // 2. Componente de Portal Interactivo
 interface PortalProps {
@@ -122,18 +90,44 @@ const Portal = ({
   return (
     <div
       onClick={onClick}
-      className={`relative flex-1 min-w-[100px] transition-all duration-700 ease-in-out overflow-hidden group border-r border-white/10 last:border-r-0 cursor-pointer
+      className={`relative flex-1 min-w-[100px] transition-all duration-1000 ease-in-out overflow-hidden group border-r border-white/10 last:border-r-0 cursor-pointer
         ${isActive ? "flex-3 md:flex-4" : "flex-1 hover:flex-[1.5]"}
       `}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {/* Fondo Imagen */}
+      {/* Fondo Imagen - Modificado para ser transparente y mostrar el fondo principal */}
       <div className="absolute inset-0 transition-transform duration-1000 ease-out group-hover:scale-110">
-        <div className={`absolute inset-0 ${colorClass} opacity-20`}></div>
         <div
-          className={`w-full h-full bg-linear-to-b ${bgImage} opacity-60 mix-blend-overlay`}
+          className={`absolute inset-0 ${colorClass} opacity-10 group-hover:opacity-30 transition-opacity duration-500`}
         ></div>
+
+        {/* Imagen de fondo específica para Tienda (Productivo) */}
+        {id === "productivo" && (
+          <div
+            className={`absolute inset-0 bg-[url('/productivo/subseccion-tienda.jpeg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}
+          ></div>
+        )}
+
+        {/* Imagen de fondo específica para Archivo (Cultural) */}
+        {id === "cultural" && (
+          <div
+            className={`absolute inset-0 bg-[url('/cultural/subseccion-archivo.jpeg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}
+          ></div>
+        )}
+
+        {/* Imagen de fondo específica para Turismo */}
+        {id === "turismo" && (
+          <div
+            className={`absolute inset-0 bg-[url('/turistico/subsecccion-turismo.jpg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}
+          ></div>
+        )}
       </div>
 
       {/* Overlay Gradiente */}
@@ -144,10 +138,10 @@ const Portal = ({
       ></div>
 
       {/* Contenedor Flex para Contenido (Evita traslape) */}
-      <div className="absolute inset-0 z-20 flex flex-col pt-16 md:pt-0 justify-end md:justify-start">
+      <div className="absolute inset-0 z-20 flex flex-col pt-16 md:pt-0 justify-end">
         {/* Parte Superior: Paneles Interactivos (Subsecciones) - Oculto en móvil */}
         <div
-          className={`relative w-full transition-all duration-500 ease-in-out hidden md:block ${
+          className={`relative w-full transition-all duration-700 ease-in-out hidden md:block ${
             isActive ? "md:h-[50%] md:flex-none" : "h-0 overflow-hidden"
           }`}
         >
@@ -250,29 +244,30 @@ const Portal = ({
         </div>
 
         {/* Parte Inferior: Texto Principal */}
-        <div className="shrink-0 p-6 md:p-12 flex flex-col justify-end relative">
+        <div className="shrink-0 p-6 md:p-12 flex flex-col justify-end items-center text-center relative">
           <div
-            className={`mb-4 transform transition-all duration-500 ${
+            className={`mb-6 transform transition-all duration-1000 ease-out ${
               isActive
                 ? "scale-100 translate-y-0"
-                : "scale-75 translate-y-4 opacity-80"
+                : "scale-90 translate-y-4 opacity-100"
             }`}
           >
+            {/* Icono sin background */}
             <div
-              className={`w-16 h-16 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-lg ${
+              className={`flex items-center justify-center text-white drop-shadow-lg ${
                 isActive ? "animate-pulse-slow" : ""
               }`}
             >
               {React.isValidElement(iconMap[icon])
                 ? React.cloneElement(iconMap[icon], {
-                    size: 28,
+                    size: 70, // Aumentado significativamente y con más opacidad
                   } as { size: number })
                 : null}
             </div>
           </div>
 
           <div
-            className={`transition-all duration-500 ${
+            className={`transition-all duration-1000 ease-out w-full ${
               isActive
                 ? "translate-y-0 opacity-100"
                 : "translate-y-4 opacity-90"
@@ -281,7 +276,7 @@ const Portal = ({
             <h2 className="text-2xl md:text-5xl font-bold text-white mb-2 tracking-tight drop-shadow-lg">
               {title}
             </h2>
-            <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-2">
+            <div className="w-full flex flex-col items-center gap-4 mt-2">
               <p
                 className={`text-white/80 text-sm md:text-lg max-w-md transition-all ${
                   isActive
@@ -304,18 +299,6 @@ const Portal = ({
             </div>
           </div>
         </div>
-      </div>
-
-      <div
-        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-rotate-90 whitespace-nowrap transition-all ${
-          isActive
-            ? "duration-200 opacity-0 scale-50"
-            : "duration-500 opacity-100 scale-100"
-        }`}
-      >
-        <span className="text-xl md:text-2xl font-bold text-white/50 uppercase tracking-[0.2em] group-hover:text-white transition-colors">
-          {title}
-        </span>
       </div>
     </div>
   );
@@ -656,9 +639,10 @@ export default function Home() {
         <section className="h-screen flex flex-col relative">
           {/* Contenedor Principal de Portales */}
           <div className="flex-1 flex flex-col md:flex-row relative">
-            {/* Fondo Global con Partículas (Visible en las uniones) */}
-            <div className="absolute inset-0 bg-base-300 z-0">
-              <ParticleBackground />
+            {/* Fondo Global con Partículas (Visible en las uniones y fondo) */}
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-[url('/vista-superior-salinas.png')] bg-cover bg-center opacity-100"></div>
+              <div className="absolute inset-0 bg-black/20"></div>
             </div>
 
             {SALINAS_YUYAY.landing.hero.portals.map((portal) => (
