@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation"; // Hook para saber la ruta activa
 import { FaBars, FaTimes } from "react-icons/fa"; // Iconos para menú móvil
 import { ShoppingCart } from "lucide-react";
@@ -65,18 +66,21 @@ export default function Navbar({
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo/Título Principal */}
-          <div className="shrink-0">
+          <div className="shrink-0 flex items-center h-full">
             <Link
               href="/"
-              className={`text-2xl font-bold transition-all duration-300 hover:scale-105 inline-block ${
-                isTransparent
-                  ? "text-white hover:text-gray-200 drop-shadow-md"
-                  : "text-primary hover:text-secondary"
-              }`}
+              className="transition-all duration-300 hover:scale-105 inline-block h-full w-auto"
             >
-              {SALINAS_YUYAY.nombre}
+              <Image
+                src="/salinas-yuyay.png"
+                alt={SALINAS_YUYAY.nombre}
+                width={300}
+                height={100}
+                className="h-full w-auto object-contain py-2"
+                priority
+              />
             </Link>
           </div>
 
