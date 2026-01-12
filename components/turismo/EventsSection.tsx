@@ -62,8 +62,8 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
 
         {/* Featured Event Card */}
         {featured && (
-          <div className="absolute right-6 top-1/2 -translate-y-1/2">
-            <div className="bg-white rounded-2xl px-6 py-4 flex items-center gap-6 shadow-2xl">
+          <div className="absolute md:right-6 right-0 left-0 md:left-auto top-1/2 -translate-y-1/2 md:w-auto w-full">
+            <div className="bg-white md:rounded-2xl px-6 py-4 flex items-center gap-6 shadow-2xl">
               <div className="flex items-center gap-3">
                 <span className="px-3 py-1 bg-neutral-800 text-white text-xs font-medium rounded-full">Proximamente</span>
                 <div>
@@ -92,7 +92,7 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
           
 
           {/* Event Cards */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 overflow-x-auto md:overflow-x-visible pb-2 pt-2 -mx-6 px-6 md:mx-0 md:px-0">
             {list.map((event, idx) => (
               <div
                 key={event.id}
@@ -102,7 +102,7 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
                 onKeyDown={(e) => {
                   if (e.key === "Enter") setSelectedIndex(idx)
                 }}
-                className={`relative w-52 h-32 rounded-xl overflow-hidden cursor-pointer group transition-transform duration-200 ${
+                className={`relative w-52 h-32 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group transition-transform duration-200 ${
                   selectedIndex === idx ? "scale-105 ring-2 ring-white/80" : ""
                 }`}
               >

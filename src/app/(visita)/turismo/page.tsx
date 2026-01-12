@@ -51,7 +51,7 @@ export default async function VisitaPage() {
     <main className="flex-1">
       <EventsSection events={eventosParaComponente} />
       <section className="max-w-4xl mx-auto px-6 py-12 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">RAÍCES</h2>
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">MUSEO</h2>
         <p className="mt-3 text-lg md:text-xl text-foreground/80">
           Conociendo el pasado para entender el presente.
         </p>
