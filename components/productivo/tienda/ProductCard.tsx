@@ -56,21 +56,28 @@ export default function ProductCard({
 
   if (variant === "list") {
     return (
-      <div className="group relative flex flex-col sm:flex-row bg-base-100 shadow-sm hover:shadow-md transition-all duration-300">
-        <div className="relative w-full sm:w-48 h-48 sm:h-auto shrink-0 bg-base-200 overflow-hidden">
+      <div className="group relative flex flex-col sm:flex-row bg-white border border-base-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-[1.01] transition-all duration-300">
+        <Link
+          href={`/productos/${slug}`}
+          className="relative w-full sm:w-48 h-48 sm:h-auto shrink-0 bg-base-200 overflow-hidden block"
+        >
           {image ? (
             <Image
               src={image}
               alt={name}
               fill
-              className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              className="object-cover object-center transition-transform duration-500"
             />
           ) : (
             <div className="flex items-center justify-center h-full w-full text-base-content/20">
               <span className="text-4xl">📦</span>
             </div>
           )}
-        </div>
+          <div className="absolute top-2 right-2 bg-base-100/90 backdrop-blur-sm text-base-content px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0 shadow-sm flex items-center gap-1 z-10">
+            <Eye className="w-3 h-3" />
+            <span className="text-[10px] font-bold">Ver detalles</span>
+          </div>
+        </Link>
 
         <div className="flex flex-1 flex-col justify-between p-6">
           <div>
@@ -79,7 +86,8 @@ export default function ProductCard({
                 {categoryName && (
                   <Text
                     variant="caption"
-                    className="font-bold tracking-wider text-primary uppercase mb-1 block"
+                    color="info"
+                    className="font-bold tracking-wider uppercase mb-1 block"
                   >
                     {categoryName}
                   </Text>
@@ -87,13 +95,13 @@ export default function ProductCard({
                 <div className="group-hover:text-primary transition-colors">
                   <Link href={`/productos/${slug}`}>
                     <span aria-hidden="true" className="absolute inset-0" />
-                    <Title variant="h4" className="font-bold">
+                    <Title variant="h4" className="font-bold text-base-content">
                       {name}
                     </Title>
                   </Link>
                 </div>
               </div>
-              <Title variant="h3" className="font-bold">
+              <Title variant="h3" className="font-bold text-accent">
                 ${price.toFixed(2)}
               </Title>
             </div>
@@ -102,33 +110,60 @@ export default function ProductCard({
             </Text>
           </div>
 
-          <div className="mt-4 flex items-center gap-4">
-            {quantity > 0 ? (
-              <div className="flex items-center border border-primary/20 bg-base-100 h-10 z-20 relative animate-in fade-in zoom-in duration-200">
-                <button
-                  onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-                  className="h-full px-3 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="w-8 text-center font-medium text-sm">
-                  {quantity}
-                </span>
-                <button
-                  onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
-                  className="h-full px-3 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <Button onClick={handleAddToCart} variant="outline">
+          <div className="mt-4 grid grid-cols-1 grid-rows-1 w-full sm:w-auto overflow-hidden">
+            <div
+              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
+                quantity > 0
+                  ? "-translate-y-full opacity-0 invisible"
+                  : "translate-y-0 opacity-100 visible"
+              }`}
+            >
+              <Button
+                onClick={handleAddToCart}
+                variant="outline"
+                className="h-12 w-full"
+              >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Agregar al Carrito
               </Button>
-            )}
-            <Link href={`/productos/${slug}`} className="relative z-10">
-              <Button variant="ghost" className="gap-2 rounded-none">
+            </div>
+
+            <div
+              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
+                quantity > 0
+                  ? "translate-y-0 opacity-100 visible"
+                  : "translate-y-full opacity-0 invisible"
+              }`}
+            >
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Button
+                  onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
+                  variant="error"
+                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                >
+                  <Minus className="w-5 h-5" />
+                </Button>
+                <div className="h-12 min-w-[3rem] px-2 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
+                  <span className="text-center font-bold text-base-content text-lg">
+                    {quantity}
+                  </span>
+                </div>
+                <Button
+                  onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
+                  variant="success"
+                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                >
+                  <Plus className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="mt-2">
+            <Link
+              href={`/productos/${slug}`}
+              className="relative z-10 w-full block"
+            >
+              <Button variant="ghost" className="gap-2 rounded-none w-full">
                 <Eye className="w-4 h-4" />
                 Ver detalles
               </Button>
@@ -140,7 +175,7 @@ export default function ProductCard({
   }
 
   return (
-    <div className="group relative bg-base-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+    <div className="group relative bg-white border border-base-200 rounded-xl overflow-hidden shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 flex flex-col h-full">
       <Link
         href={`/productos/${slug}`}
         className="relative aspect-square bg-base-200 overflow-hidden block"
@@ -150,13 +185,17 @@ export default function ProductCard({
             src={image}
             alt={name}
             fill
-            className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            className="object-cover object-center transition-transform duration-500"
           />
         ) : (
           <div className="flex items-center justify-center h-full w-full text-base-content/20">
             <span className="text-6xl">📦</span>
           </div>
         )}
+        <div className="absolute top-4 right-4 bg-base-100/95 backdrop-blur-md text-base-content px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0 shadow-lg flex items-center gap-2 z-10">
+          <Eye className="w-4 h-4" />
+          <span className="text-xs font-bold">Ver detalles</span>
+        </div>
       </Link>
 
       <div className="p-5 flex flex-col flex-1">
@@ -164,14 +203,19 @@ export default function ProductCard({
           {categoryName && (
             <Text
               variant="caption"
-              className="font-bold tracking-wider text-primary uppercase mb-1 block"
+              color="info"
+              className="font-bold tracking-wider uppercase mb-1 block"
             >
               {categoryName}
             </Text>
           )}
           <div className="group-hover:text-primary transition-colors">
             <Link href={`/productos/${slug}`}>
-              <Text variant="large" className="font-bold leading-tight">
+              <Text
+                variant="large"
+                color="default"
+                className="font-bold leading-tight"
+              >
                 {name}
               </Text>
             </Link>
@@ -187,36 +231,60 @@ export default function ProductCard({
         </Text>
 
         <div className="mt-auto flex items-center justify-between gap-3 pt-3">
-          <Title variant="h4" className="font-bold">
+          <Title variant="h4" className="font-bold text-accent">
             ${price.toFixed(2)}
           </Title>
 
-          {quantity > 0 ? (
-            <div className="flex items-center border border-primary/20 bg-base-100 h-10 z-20 relative animate-in fade-in zoom-in duration-200">
-              <button
-                onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-                className="h-full px-3 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
+          <div className="grid grid-cols-1 grid-rows-1 w-auto overflow-hidden relative z-20">
+            <div
+              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
+                quantity > 0
+                  ? "-translate-y-full opacity-0 invisible"
+                  : "translate-y-0 opacity-100 visible"
+              }`}
+            >
+              <Button
+                onClick={handleAddToCart}
+                variant="primary"
+                className="h-12 w-full"
               >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="w-8 text-center font-medium text-sm">
-                {quantity}
-              </span>
-              <button
-                onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
-                className="h-full px-3 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                <Text variant="button" color="inherit" as="span">
+                  Agregar
+                </Text>
+              </Button>
             </div>
-          ) : (
-            <Button onClick={handleAddToCart} variant="outline">
-              <ShoppingCart className="w-6 h-6" />
-              <Text variant="button" color="inherit" as="span">
-                Agregar
-              </Text>
-            </Button>
-          )}
+
+            <div
+              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
+                quantity > 0
+                  ? "translate-y-0 opacity-100 visible"
+                  : "translate-y-full opacity-0 invisible"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
+                  variant="error"
+                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                >
+                  <Minus className="w-5 h-5" />
+                </Button>
+                <div className="h-12 w-12 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
+                  <span className="text-center font-bold text-base-content text-lg">
+                    {quantity}
+                  </span>
+                </div>
+                <Button
+                  onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
+                  variant="success"
+                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                >
+                  <Plus className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
