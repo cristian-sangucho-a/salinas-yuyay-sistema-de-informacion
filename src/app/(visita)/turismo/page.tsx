@@ -1,5 +1,6 @@
 import SeccionTarjetas from "@components/turismo/SeccionTarjetas";
 import TicketCalculator from "@components/turismo/TicketCalculator";
+import EventsSection from "@components/turismo/EventsSection";
 
 import { obtenerEventosServer } from "@/lib/data/turismo/eventos-server";
 import { obtenerSalasMuseoServer } from "@/lib/data/turismo/salas-museo-server";
@@ -31,9 +32,16 @@ export default async function VisitaPage() {
     eslogan: sala.eslogan,
     portada: generarUrlImagen(sala.collectionId, sala.id, sala.portada),
   }));
+  const eventosParaComponente = (events ?? []).map((ev) => ({
+    id: ev.id,
+    title: ev.titulo,
+    subtitle: ev.eslogan ?? "",
+    image: generarUrlImagen(ev.collectionId, ev.id, ev.portada),
+    date: ev.fecha_de_inicio,
+  }));
   return (
     <main className="flex-1">
-      <Carrusel item={eventos} />
+      <EventsSection events={eventosParaComponente} />
       <SeccionTarjetas salas={salas} />
       <TicketCalculator />
     </main>
