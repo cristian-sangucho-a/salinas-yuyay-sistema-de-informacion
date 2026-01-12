@@ -5,6 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Button from "@atoms/Button";
 
 export default function CartDrawer() {
   const {
@@ -116,27 +117,31 @@ export default function CartDrawer() {
                         )}
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
-                        <div className="flex items-center border border-base-300 rounded-lg">
-                          <button
+                        <div className="flex items-center gap-2">
+                          <Button
                             onClick={() =>
                               updateQuantity(item.id, item.quantity - 1)
                             }
-                            className="p-1 hover:bg-base-200 rounded-l-lg transition-colors"
+                            variant="error"
+                            className="w-8 h-8 !p-0 rounded-lg shadow-sm min-h-0"
                             disabled={item.quantity <= 1}
                           >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="px-2 font-medium min-w-6 text-center">
-                            {item.quantity}
-                          </span>
-                          <button
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <div className="h-8 w-8 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
+                            <span className="text-center font-bold text-base-content text-sm">
+                              {item.quantity}
+                            </span>
+                          </div>
+                          <Button
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            className="p-1 hover:bg-base-200 rounded-r-lg transition-colors"
+                            variant="success"
+                            className="w-8 h-8 !p-0 rounded-lg shadow-sm min-h-0"
                           >
-                            <Plus className="w-4 h-4" />
-                          </button>
+                            <Plus className="w-3 h-3" />
+                          </Button>
                         </div>
 
                         <button

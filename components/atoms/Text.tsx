@@ -3,7 +3,18 @@ import type React from "react";
 interface TextProps {
   children: React.ReactNode;
   variant?: "body" | "small" | "large" | "caption" | "button";
-  color?: "default" | "muted" | "light" | "inherit";
+  color?:
+    | "default"
+    | "muted"
+    | "light"
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "info"
+    | "success"
+    | "warning"
+    | "error";
   className?: string;
   as?: "p" | "span" | "div";
 }
@@ -28,6 +39,13 @@ export default function Text({
     muted: "text-base-content/70",
     light: "text-base-content/50",
     inherit: "text-current",
+    primary: "text-primary",
+    secondary: "text-secondary",
+    accent: "text-accent",
+    info: "text-info",
+    success: "text-success",
+    warning: "text-warning",
+    error: "text-error",
   };
 
   return (

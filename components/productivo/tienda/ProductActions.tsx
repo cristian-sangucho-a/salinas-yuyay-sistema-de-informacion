@@ -36,22 +36,26 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   if (quantity > 0) {
     return (
-      <div className="flex items-center border border-primary/20 bg-base-100 h-10 md:h-12 w-full sm:w-auto min-w-[140px] md:min-w-40 animate-in fade-in zoom-in duration-200 transition-all">
-        <button
+      <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+        <Button
           onClick={() => handleUpdateQuantity(quantity - 1)}
-          className="h-full px-3 md:px-4 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
+          variant="error"
+          className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
         >
-          <Minus className="w-4 h-4 md:w-5 md:h-5" />
-        </button>
-        <span className="flex-1 text-center font-bold text-base md:text-lg">
-          {quantity}
-        </span>
-        <button
+          <Minus className="w-5 h-5" />
+        </Button>
+        <div className="h-12 flex items-center justify-center bg-base-100 rounded-lg border border-base-200 min-w-[3rem]">
+          <span className="text-center font-bold text-base-content text-lg">
+            {quantity}
+          </span>
+        </div>
+        <Button
           onClick={() => handleUpdateQuantity(quantity + 1)}
-          className="h-full px-3 md:px-4 hover:bg-primary/10 text-primary transition-colors flex items-center justify-center"
+          variant="success"
+          className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
         >
-          <Plus className="w-4 h-4 md:w-5 md:h-5" />
-        </button>
+          <Plus className="w-5 h-5" />
+        </Button>
       </div>
     );
   }
