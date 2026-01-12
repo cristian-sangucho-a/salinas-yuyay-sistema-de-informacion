@@ -1,6 +1,7 @@
 import SeccionTarjetas from "@components/turismo/SeccionTarjetas";
 import TicketCalculator from "@components/turismo/TicketCalculator";
 import EventsSection from "@components/turismo/EventsSection";
+import LocationNavigator from "@components/turismo/LocationNavigator";
 
 import { obtenerEventosServer } from "@/lib/data/turismo/eventos-server";
 import { obtenerSalasMuseoServer } from "@/lib/data/turismo/salas-museo-server";
@@ -32,6 +33,13 @@ export default async function VisitaPage() {
     eslogan: sala.eslogan,
     portada: generarUrlImagen(sala.collectionId, sala.id, sala.portada),
   }));
+  const ubicacionesSalas = salas
+    .filter((sala) => sala.portada !== undefined)
+    .map((sala) => ({
+      id: sala.id,
+      name: sala.titulo,
+      image: sala.portada as string,
+    }));
   const eventosParaComponente = (events ?? []).map((ev) => ({
     id: ev.id,
     title: ev.titulo,
@@ -42,7 +50,13 @@ export default async function VisitaPage() {
   return (
     <main className="flex-1">
       <EventsSection events={eventosParaComponente} />
-      <SeccionTarjetas salas={salas} />
+      <section className="max-w-4xl mx-auto px-6 py-12 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">RAÍCES</h2>
+        <p className="mt-3 text-lg md:text-xl text-foreground/80">
+          Conociendo el pasado para entender el presente.
+        </p>
+      </section>
+      <LocationNavigator locations={ubicacionesSalas} />
       <TicketCalculator />
     </main>
   );
