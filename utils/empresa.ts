@@ -214,6 +214,7 @@ export const SALINAS_YUYAY = {
       email: { title: "Correo Electrónico", address: "info@salinasyuyay.com" },
       phone: { title: "Teléfono / WhatsApp", number: "+593 99 123 4567" },
       mapButton: "Ver en Google Maps",
+      ubicacion: "https://maps.app.goo.gl/95Gb3stQJm2Mywox8",
     },
   },
 };

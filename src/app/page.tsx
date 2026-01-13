@@ -558,8 +558,16 @@ const FAQSection = () => {
 
 // 7. Sección de Contacto y Ubicación
 const ContactSection = () => {
-  const { title, subtitle, description, location, email, phone, mapButton } =
-    SALINAS_YUYAY.landing.contact;
+  const {
+    title,
+    subtitle,
+    description,
+    location,
+    email,
+    phone,
+    mapButton,
+    ubicacion,
+  } = SALINAS_YUYAY.landing.contact;
 
   return (
     <section id="contacto" className="py-24 relative z-10 bg-base-200">
@@ -610,15 +618,26 @@ const ContactSection = () => {
           </div>
         </div>
 
-        {/* Mapa Simulado / Imagen */}
+        {/* Mapa con Iframe */}
         <div className="h-[400px] bg-base-300 rounded-3xl overflow-hidden shadow-xl relative group">
-          {/* Aquí iría un Google Maps iframe o imagen estática */}
-          <div className="absolute inset-0 bg-[url('/images/map-placeholder.jpg')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
-          <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15957.973952327!2d-79.006933!3d-1.402432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d342f7c0a0b16f%3A0x5a37f62645856b3e!2sSalinas%20de%20Guaranda!5e0!3m2!1ses-419!2sec!4v1700000000000!5m2!1ses-419!2sec"
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: "grayscale(20%) contrast(1.1)" }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="group-hover:filter-none transition-all duration-500"
+          ></iframe>
+
+          {/* Overlay con Botón */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors pointer-events-none">
             <Button
               variant="primary"
               size="lg"
-              className="shadow-lg animate-bounce"
+              className="shadow-lg animate-bounce pointer-events-auto"
+              onClick={() => window.open(ubicacion, "_blank")}
             >
               <FaMapMarkedAlt className="mr-2" /> {mapButton}
             </Button>
