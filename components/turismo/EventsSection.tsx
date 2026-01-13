@@ -40,7 +40,7 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
   const featured = list && list.length > 0 ? list[selectedIndex] : undefined
   const router = useRouter()
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="relative h-[calc(100vh-80px)] bg-background text-foreground overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         {featured?.image ? (
@@ -52,17 +52,16 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
       </div>
 
-
-      {/* Main Content */}
-      <main className="relative z-10 flex flex-col justify-between min-h-[calc(100vh-80px)] px-6 pb-6">
+      {/* Content Container */}
+      <div className="relative z-10 h-full flex flex-col px-6">
         {/* Events Title */}
-        <div className="mt-auto mb-8">
+        <div className="pt-6 pb-4">
           <h1 className="text-7xl md:text-8xl font-bold text-white tracking-tight">Eventos</h1>
         </div>
 
         {/* Featured Event Card */}
         {featured && (
-          <div className="absolute md:right-6 right-0 left-0 md:left-auto top-1/2 -translate-y-1/2 md:w-auto w-full">
+          <div className="w-full md:absolute md:right-6 md:left-auto md:top-1/2 md:-translate-y-1/2 md:w-auto md:px-6">
             <div className="bg-white md:rounded-2xl px-6 py-4 flex items-center gap-6 shadow-2xl">
               <div className="flex items-center gap-3">
                 <span className="px-3 py-1 bg-neutral-800 text-white text-xs font-medium rounded-full">Proximamente</span>
@@ -87,10 +86,8 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
           </div>
         )}
 
-        {/* Bottom Section */}
-        <div className="flex items-end justify-between">
-          
-
+        {/* Bottom Section - Event Cards */}
+        <div className="mt-auto md:flex md:items-end md:justify-between flex flex-col justify-end">
           {/* Event Cards */}
           <div className="flex gap-4 overflow-x-auto md:overflow-x-visible pb-2 pt-2 -mx-6 px-6 md:mx-0 md:px-0">
             {list.map((event, idx) => (
@@ -121,9 +118,7 @@ export default function EventsSection({ events = defaultEvents }: { events?: Eve
             ))}
           </div>
         </div>
-
-       
-      </main>
+      </div>
     </div>
   )
 }

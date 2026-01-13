@@ -69,7 +69,7 @@ export default function LocationNavigator({ locations }: Props) {
   const activeImage = data.find((loc) => loc.id === activeLocation)?.image || data[0]?.image || ""
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto h-[640px] md:h-[720px] overflow-hidden">
+    <div className="relative w-full max-w-6xl mx-auto h-screen md:h-[720px] overflow-hidden">
       {/* Background image with fade */}
       <div
         key={activeImage}
@@ -82,11 +82,11 @@ export default function LocationNavigator({ locations }: Props) {
       <div className="absolute inset-0 bg-black/20" aria-hidden />
 
       {/* Navigation sections */}
-      <div className="relative z-10 flex h-full">
+      <div className="relative z-10 grid grid-cols-3 grid-rows-2 gap-0 h-full md:flex">
         {data.map((location, index) => (
           <div
             key={location.id}
-            className="relative flex-1 flex items-start justify-center cursor-pointer group"
+            className="relative w-full md:flex-1 flex items-start justify-center cursor-pointer group py-3"
             onMouseEnter={() => setActiveLocation(location.id)}
             onClick={() => {
               setActiveLocation(location.id)
@@ -110,19 +110,19 @@ export default function LocationNavigator({ locations }: Props) {
             }}
           >
             {/* Vertical separator line */}
-            {index > 0 && <div className="absolute left-0 top-0 bottom-0 w-px bg-white/40" aria-hidden />}
+            {index > 0 && <div className="absolute left-0 top-0 bottom-0 w-px bg-white/40 hidden md:block" aria-hidden />}
 
             {/* Yellow highlight background on hover */}
             <div
-              className={`absolute top-0 left-0 right-0 transition-all duration-300 ${
-                activeLocation === location.id ? "h-32 bg-amber-400" : "h-0 bg-transparent"
+              className={`absolute inset-x-0 top-0 w-full transition-all duration-300 ${
+                activeLocation === location.id ? "h-40 md:h-32 bg-amber-400" : "h-0 bg-transparent"
               }`}
               aria-hidden
             />
 
             {/* Text label */}
             <span
-              className={`relative z-10 px-4 py-6 text-center text-sm font-medium transition-colors duration-300 ${
+              className={`relative z-10 px-4 py-2 md:py-6 text-center text-sm font-medium transition-colors duration-300 ${
                 activeLocation === location.id ? "text-gray-900" : "text-white drop-shadow-lg"
               }`}
             >
@@ -136,7 +136,7 @@ export default function LocationNavigator({ locations }: Props) {
       {activeLocation && (
         <button
           onClick={() => router.push(`/turismo/museo/${activeLocation}`)}
-          className="md:hidden absolute bottom-6 left-6 z-20 bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 transition-all duration-200 hover:scale-105"
+          className="md:hidden absolute bottom-6 left-6 z-20 bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 rounded-lg shadow-lg flex items-center gap-0 transition-all duration-200 hover:scale-105"
           aria-label="Ver más detalles"
         >
           <span className="font-medium">Ver más</span>
