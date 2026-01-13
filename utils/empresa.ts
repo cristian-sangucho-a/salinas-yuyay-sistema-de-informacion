@@ -2,7 +2,7 @@ export const SALINAS_YUYAY = {
   nombre: "Salinas Yuyay",
 
   descripcion: `Un ecosistema integrado de desarrollo comunitario, cultura viva y turismo sostenible en el corazón de los Andes.`,
-  eslogan: "Preservando nuestra historia para el futuro.",
+  eslogan: "La memoria de un pueblo para su difusión",
   logo: "/logo.png",
   email: "",
   telefono: "",

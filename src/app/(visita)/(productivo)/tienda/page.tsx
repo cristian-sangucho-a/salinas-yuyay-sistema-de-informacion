@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SALINAS_YUYAY } from "@utils/empresa";
+import { SEO_CONFIG } from "@utils/seo";
 import { featureIconMap } from "@utils/maps/productivo";
 import {
   transformCategoria,
@@ -23,9 +24,10 @@ import {
 import type { Feature, Categoria, Product } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
-  title: "Tienda | Salinas Yuyay",
-  description:
-    "Descubre la calidad excepcional de nuestros productos artesanales de Salinas de Guaranda. Quesos, chocolates, embutidos y textiles hechos con tradición.",
+  title: SEO_CONFIG.tienda.title,
+  description: SEO_CONFIG.tienda.description,
+  keywords: SEO_CONFIG.tienda.keywords,
+  openGraph: SEO_CONFIG.tienda.openGraph,
 };
 
 // Revalidar cada hora (3600 segundos)

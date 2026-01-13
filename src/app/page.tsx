@@ -73,7 +73,6 @@ const Portal = ({
   title,
   subtitle,
   icon,
-  bgImage,
   colorClass,
   id,
   isActive,
@@ -592,8 +591,6 @@ const ContactSection = () => {
     location,
     email,
     phone,
-    mapButton,
-    ubicacion,
   } = SALINAS_YUYAY.landing.contact;
 
   return (
