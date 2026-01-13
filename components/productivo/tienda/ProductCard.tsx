@@ -139,11 +139,11 @@ export default function ProductCard({
                 <Button
                   onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
                   variant="error"
-                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
                 >
                   <Minus className="w-5 h-5" />
                 </Button>
-                <div className="h-12 min-w-[3rem] px-2 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
+                <div className="h-12 min-w-12 px-2 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
                   <span className="text-center font-bold text-base-content text-lg">
                     {quantity}
                   </span>
@@ -151,7 +151,7 @@ export default function ProductCard({
                 <Button
                   onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
                   variant="success"
-                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
                 >
                   <Plus className="w-5 h-5" />
                 </Button>
@@ -266,7 +266,7 @@ export default function ProductCard({
                 <Button
                   onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
                   variant="error"
-                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
                 >
                   <Minus className="w-5 h-5" />
                 </Button>
@@ -278,7 +278,7 @@ export default function ProductCard({
                 <Button
                   onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
                   variant="success"
-                  className="w-12 h-12 !p-0 rounded-lg shadow-md min-h-0"
+                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
                 >
                   <Plus className="w-5 h-5" />
                 </Button>
