@@ -332,26 +332,27 @@ const SectionTabs = ({
   return (
     <div className="flex justify-center mb-6 animate-fade-in-down w-full">
       <div className="overflow-x-auto max-w-full pb-2 no-scrollbar px-1">
-        <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max">
+        <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max gap-2">
           {portals.map((portal) => {
             const isActive = activeSection === portal.id;
+            const variant = portal.colorClass.replace("bg-", "") as
+              | "primary"
+              | "secondary"
+              | "neutral";
+
             return (
-              <button
+              <Button
                 key={portal.id}
                 onClick={() => onSectionChange(portal.id)}
-                className={`px-4 py-2 md:px-6 md:py-2.5 rounded-xl md:rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative overflow-hidden ${
+                variant={isActive ? variant : "ghost"}
+                className={`rounded-xl md:rounded-full transition-all duration-300 ${
                   isActive
-                    ? "text-white shadow-md scale-105"
-                    : "text-base-content/60 hover:text-base-content hover:bg-white/10"
-                }`}
+                    ? "scale-105 shadow-md text-white font-bold"
+                    : `text-${variant} hover:bg-white/10 opacity-80 hover:opacity-100 font-medium`
+                } uppercase tracking-wider`}
               >
-                {isActive && (
-                  <div
-                    className={`absolute inset-0 ${portal.colorClass} opacity-100 -z-10`}
-                  ></div>
-                )}
-                <span className="relative z-10">{portal.title}</span>
-              </button>
+                {portal.title}
+              </Button>
             );
           })}
         </div>
@@ -366,6 +367,12 @@ const DynamicContent = ({ section }: { section: string | null }) => {
 
   const content = SALINAS_YUYAY.landing.dynamicContent;
   const data = content[section as keyof typeof content];
+
+  const sectionImages: Record<string, string> = {
+    productivo: "/productivo/seccion-contenido-tienda.jpg",
+    cultural: "/cultural/seccion-contenido-archivo.jpg",
+    turismo: "/turistico/seccion-contenido-turismo.jpg",
+  };
 
   if (!data) return null;
 
@@ -426,21 +433,25 @@ const DynamicContent = ({ section }: { section: string | null }) => {
           </div>
         </div>
 
-        {/* Visual Preview (Placeholder) */}
+        {/* Visual Preview con Imagen Real */}
         <div
           className={`aspect-video rounded-3xl overflow-hidden shadow-2xl relative group ${data.bg}`}
         >
+          {/* Imagen de Fondo */}
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
+            style={{
+              backgroundImage: `url('${sectionImages[section] || ""}')`,
+            }}
+          ></div>
+
+          {/* Overlay Gradiente Sutil */}
           <div
             className={`absolute inset-0 bg-linear-to-br ${data.color.replace(
               "text-",
               "from-"
-            )} to-black/50 opacity-40`}
+            )} to-black/50 opacity-30 group-hover:opacity-10 transition-opacity duration-500`}
           ></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-9xl opacity-20 text-white mix-blend-overlay font-black">
-              {section.charAt(0).toUpperCase()}
-            </span>
-          </div>
         </div>
       </div>
     </div>
@@ -621,7 +632,7 @@ const ContactSection = () => {
 export default function Home() {
   const router = useRouter();
   const [activePortal, setActivePortal] = useState<string | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string>("productivo");
   const [headerThreshold, setHeaderThreshold] = useState(20);
 
   useEffect(() => {
@@ -695,21 +706,19 @@ export default function Home() {
           <StatsTicker />
         </section>
 
-        {/* SECCIÓN 2: CONTENIDO DINÁMICO (Reemplaza a las secciones estáticas) */}
-        {selectedSection && (
-          <section
-            id="dynamic-content"
-            className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
-          >
-            <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
-              <SectionTabs
-                activeSection={selectedSection}
-                onSectionChange={setSelectedSection}
-              />
-              <DynamicContent section={selectedSection} />
-            </div>
-          </section>
-        )}
+        {/* SECCIÓN 2: CONTENIDO DINÁMICO (Siempre visible) */}
+        <section
+          id="dynamic-content"
+          className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
+        >
+          <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+            <SectionTabs
+              activeSection={selectedSection}
+              onSectionChange={setSelectedSection}
+            />
+            <DynamicContent section={selectedSection} />
+          </div>
+        </section>
 
         {/* SECCIÓN 3: IMPACTO (Social Proof) */}
         <ImpactSection />
