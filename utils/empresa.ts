@@ -192,7 +192,7 @@ export const SALINAS_YUYAY = {
       },
     },
     impact: {
-      title: "Nuestro Impacto Comunitario",
+      title: "Nuestro impacto comunitario",
       stats: [
         { value: "50+", label: "Años de historia" },
         { value: "120+", label: "Familias productoras" },
