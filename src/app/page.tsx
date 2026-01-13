@@ -54,7 +54,6 @@ const iconMap: Record<string, React.ReactElement> = {
   FaPhone: <FaPhone />,
 };
 
-
 interface PortalProps {
   title: string;
   subtitle: string;
@@ -104,7 +103,9 @@ const Portal = ({
         {id === "productivo" && (
           <div
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              isActive
+                ? "opacity-100"
+                : "opacity-100 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <Image
@@ -122,7 +123,9 @@ const Portal = ({
         {id === "cultural" && (
           <div
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              isActive
+                ? "opacity-100"
+                : "opacity-100 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <Image
@@ -140,7 +143,9 @@ const Portal = ({
         {id === "turismo" && (
           <div
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              isActive
+                ? "opacity-100"
+                : "opacity-100 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <Image
@@ -164,13 +169,7 @@ const Portal = ({
 
       {/* Contenedor Flex para Contenido (Evita traslape) */}
       <div
-        className={`absolute inset-0 z-20 flex flex-col md:justify-end md:pt-0 transition-all duration-500
-          ${
-            isProductivo && !isActive
-              ? "justify-start pt-36"
-              : "justify-end pt-16"
-          }
-        `}
+        className={`absolute inset-0 z-20 flex flex-col justify-center md:justify-end md:pt-0 transition-all duration-500`}
       >
         {/* Parte Superior: Paneles Interactivos (Subsecciones) - Oculto en móvil */}
         <div
@@ -584,14 +583,8 @@ const FAQSection = () => {
 
 // 7. Sección de Contacto y Ubicación
 const ContactSection = () => {
-  const {
-    title,
-    subtitle,
-    description,
-    location,
-    email,
-    phone,
-  } = SALINAS_YUYAY.landing.contact;
+  const { title, subtitle, description, location, email, phone } =
+    SALINAS_YUYAY.landing.contact;
 
   return (
     <section id="contacto" className="py-24 relative z-10 bg-base-200">
@@ -654,7 +647,6 @@ const ContactSection = () => {
             referrerPolicy="no-referrer-when-downgrade"
             className="group-hover:filter-none transition-all duration-500"
           ></iframe>
-
         </div>
       </div>
     </section>
