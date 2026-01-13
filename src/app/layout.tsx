@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     description: SALINAS_YUYAY.descripcion,
   },
   icons: {
-    icon: SALINAS_YUYAY.logo,
-    shortcut: SALINAS_YUYAY.logo,
-    apple: SALINAS_YUYAY.logo,
+    icon: SALINAS_YUYAY.favicon,
+    shortcut: SALINAS_YUYAY.favicon,
+    apple: SALINAS_YUYAY.favicon,
   },
   robots: SEO_CONFIG.root.robots as Metadata["robots"],
 };
