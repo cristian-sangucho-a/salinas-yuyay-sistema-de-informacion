@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import { SALINAS_YUYAY } from "../../utils/empresa";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -7,8 +8,8 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "SAISAL - Salinas Yuyay",
-  description: "Sistema de Archivo e Información de Salinas",
+  title: " Salinas Yuyay",
+  description: SALINAS_YUYAY.descripcion,
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",

@@ -26,12 +26,12 @@ export async function generateMetadata({
 
   if (!producto) {
     return {
-      title: "Producto no encontrado | SAISAL",
+      title: "Producto no encontrado | Salinas Yuyay",
     };
   }
 
   return {
-    title: `${producto.nombre} | SAISAL`,
+    title: `${producto.nombre} | Salinas Yuyay`,
     description:
       producto.descripcion || `Producto artesanal: ${producto.nombre}`,
   };

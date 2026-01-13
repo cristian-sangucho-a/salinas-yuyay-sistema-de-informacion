@@ -10,7 +10,7 @@ import {
 import type { Categoria } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
-  title: "Categorías de Productos",
+  title: "Categorías de Productos | Salinas Yuyay",
   description:
     "Explora todas nuestras categorías de productos artesanales de Salinas de Guaranda.",
 };

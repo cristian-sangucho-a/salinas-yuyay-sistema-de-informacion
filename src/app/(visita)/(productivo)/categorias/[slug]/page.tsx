@@ -37,7 +37,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${categoria.nombre} - Productos Artesanales | SAISAL`,
+    title: `${categoria.nombre} | Salinas Yuyay`,
     description:
       categoria.descripcion_categoria ||
       `Explora nuestros productos de ${categoria.nombre}`,

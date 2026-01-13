@@ -3,7 +3,7 @@ import CheckoutStepper from "@components/productivo/tienda/checkout/CheckoutStep
 import { PageHeader } from "@components/productivo/tienda";
 
 export const metadata: Metadata = {
-  title: "Finalizar Compra | SAISAL",
+  title: "Finalizar Compra | Salinas Yuyay",
   description: "Completa tu pedido de productos artesanales.",
 };
 

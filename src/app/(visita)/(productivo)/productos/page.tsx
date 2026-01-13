@@ -7,7 +7,7 @@ import { getCachedCategoriasConSubcategorias } from "@/lib/cache/categorias";
 import type { Product } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
-  title: "Todos los productos | SAISAL",
+  title: "Todos los productos | Salinas Yuyay",
   description:
     "Descubre todos nuestros productos artesanales de Salinas de Guaranda.",
 };
