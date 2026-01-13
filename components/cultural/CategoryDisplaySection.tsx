@@ -112,16 +112,16 @@ export default function CategoryDisplaySection({
             <div className="btn-group">
               <Button
                 onClick={() => setViewMode('grid')}
-                variant="outline"
-                className={`border-base-300 transition-all ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+                variant={viewMode === 'grid' ? 'primary' : 'outline'}
+                className={`${viewMode === 'grid' ? 'border-none' : 'border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED]'} transition-all`}
                 aria-label="Vista de cuadrícula"
               >
                 <FaThLarge className={`transition-transform ${viewMode === 'grid' ? 'scale-110' : ''}`} />
               </Button>
               <Button
                 onClick={() => setViewMode('list')}
-                variant="outline"
-                className={`border-base-300 transition-all ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+                variant={viewMode === 'list' ? 'primary' : 'outline'}
+                className={`${viewMode === 'list' ? 'border-none' : 'border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED]'} transition-all`}
                 aria-label="Vista de lista"
               >
                 <FaList className={`transition-transform ${viewMode === 'list' ? 'scale-110' : ''}`} />

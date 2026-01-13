@@ -50,18 +50,18 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
         priority
         placeholder="empty"
         onLoad={() => setImageLoaded(true)}
-        className="absolute inset-0 w-full h-full object-cover brightness-50"
+        className="absolute inset-0 w-full h-full object-cover brightness-40"
         sizes="100vw"
       />
 
       {/* Contenido */}
       {imageLoaded && (
         <div className="relative z-20 max-w-4xl mx-auto px-4 md:px-8 text-center -translate-y-6 md:-translate-y-10 animate-in fade-in duration-700">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-white">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-white text-shadow-lg">
             Descubre el patrimonio cultural digital de Salinas
           </h1>
           
-          <p className="text-lg md:text-xl text-gray-100 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-100 mb-12 max-w-2xl mx-auto text-shadow-md">
             Busca y comparte arte, documentos, fotografías y más de la valiosa memoria histórica y cultural de Salinas de Guaranda, Ecuador.
           </p>
 
@@ -74,7 +74,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 value={searchTerm}
                 onChange={handleChange}
                 onKeyPress={handleKeyPress}
-                placeholder="Buscar categorías..."
+                placeholder="Buscar en la colección..."
                 className="input input-bordered w-full pl-12 pr-12 border-gray-300 bg-white focus:border-primary focus:outline-none text-[#4A3B31] h-16 text-base rounded-lg shadow-lg"
               />
               {searchTerm && (
