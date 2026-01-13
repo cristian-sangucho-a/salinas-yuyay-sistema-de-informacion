@@ -21,40 +21,30 @@ export default function FeaturesBar({
   // Variante default con carrusel
   if (variant === "default" && autoRotate) {
     return (
-      <section className="bg-primary py-8 overflow-hidden">
-        <div className="relative">
-          <div
-            className={styles.scrollContainer}
-            style={
-              { "--rotation-speed": `${rotationSpeed}s` } as React.CSSProperties
-            }
-          >
-            {/* Contenido original */}
-            <div className="flex gap-8 lg:gap-12 px-6 md:px-12 lg:px-16 shrink-0">
-              {features.map((feature, index) => (
-                <div key={`original-${index}`} className="w-64 shrink-0">
-                  <FeatureItem
-                    icon={feature.icon}
-                    title={feature.title}
-                    description={feature.description}
-                    variant={feature.variant}
-                  />
+      <section className="bg-primary py-3 overflow-hidden border-t border-white/10 relative z-20">
+        <div className="relative w-full overflow-hidden">
+          <div className="flex animate-marquee items-center gap-12 lg:gap-24">
+            {/* Contenido triplicado para efecto infinito suave */}
+            {[...features, ...features, ...features].map((feature, index) => (
+              <div
+                key={`feature-${index}`}
+                className="shrink-0 flex items-center"
+              >
+                <div className="flex items-center gap-3 group opacity-80 hover:opacity-100 transition-opacity">
+                  <div className="text-primary-content text-xl">
+                    {feature.icon}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-primary-content text-sm whitespace-nowrap">
+                      {feature.title}
+                    </span>
+                    <span className="text-primary-content/70 text-xs whitespace-nowrap hidden sm:block">
+                      {feature.description}
+                    </span>
+                  </div>
                 </div>
-              ))}
-            </div>
-            {/* Contenido duplicado para loop infinito */}
-            <div className="flex gap-8 lg:gap-12 px-6 md:px-12 lg:px-16 shrink-0">
-              {features.map((feature, index) => (
-                <div key={`duplicate-${index}`} className="w-64 shrink-0">
-                  <FeatureItem
-                    icon={feature.icon}
-                    title={feature.title}
-                    description={feature.description}
-                    variant={feature.variant}
-                  />
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

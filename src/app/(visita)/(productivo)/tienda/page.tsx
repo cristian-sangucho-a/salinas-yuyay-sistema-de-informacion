@@ -56,15 +56,27 @@ export default async function TiendaPage() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
-      <TiendaHero
-        title={tienda.textos.hero.titulo}
-        titleHighlight={tienda.textos.hero.tituloDestacado}
-        description={tienda.textos.hero.descripcion}
-      />
+      {/* Hero Section & Features Bar Wrapper (Root Logic) */}
+      <section className="relative w-full h-[calc(100vh-80px)] flex flex-col">
+        {/* Hero Content - Occupies remaining space */}
+        <div className="flex-1 w-full relative min-h-0">
+          <TiendaHero
+            title={tienda.textos.hero.titulo}
+            titleHighlight={tienda.textos.hero.tituloDestacado}
+            description={tienda.textos.hero.descripcion}
+          />
+        </div>
 
-      {/* Features Bar */}
-      <FeaturesBar features={features} autoRotate={true} rotationSpeed={40} />
+        {/* Features Bar - Fixed height at bottom */}
+        <div className="shrink-0 w-full relative z-20">
+          <FeaturesBar
+            features={features}
+            variant="default"
+            autoRotate={true}
+            rotationSpeed={40}
+          />
+        </div>
+      </section>
 
       {/* Categorías de Productos Andinos */}
       <CategoriasGrid
