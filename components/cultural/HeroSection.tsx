@@ -41,7 +41,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative flex items-center justify-center min-h-screen bg-base-100 bg-cover bg-center bg-no-repeat overflow-hidden">
+    <section className="relative flex items-center justify-center min-h-screen bg-[#F8F3ED] bg-cover bg-center bg-no-repeat overflow-hidden">
       <Image
         src="/salinas-background.webp"
         alt="Paisaje de Salinas"
