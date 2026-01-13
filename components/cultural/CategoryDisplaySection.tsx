@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { FaThLarge, FaList, FaChevronDown } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 import CategoryCard from './CategoryCard';
 import CategoryListItem from './CategoryListItem';
 import type { Categoria } from '@/lib/types';
@@ -72,17 +73,18 @@ export default function CategoryDisplaySection({
               </div>
               <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52 mt-1 max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
                 <li>
-                  <button
+                  <Button
                     onClick={() => {
                       setSelectedCategoryId('Todas');
                       if (document.activeElement instanceof HTMLElement) {
                         document.activeElement.blur();
                       }
                     }}
-                    className={`text-left w-full transition-colors ${selectedCategoryId === 'Todas' ? 'bg-base-300 font-semibold' : ''}`}
+                    variant="ghost"
+                    className={`text-left w-full justify-start transition-colors ${selectedCategoryId === 'Todas' ? 'bg-base-300 font-semibold' : ''}`}
                   >
                     Todas
-                  </button>
+                  </Button>
                 </li>
                 {categorias.map((categoria, index) => (
                   <li 
@@ -90,37 +92,40 @@ export default function CategoryDisplaySection({
                     className="animate-in fade-in slide-in-from-top-1 duration-200"
                     style={{ animationDelay: `${index * 30}ms` }}
                   >
-                    <button
+                    <Button
                       onClick={() => {
                         setSelectedCategoryId(categoria.id);
                         if (document.activeElement instanceof HTMLElement) {
                           document.activeElement.blur();
                         }
                       }}
-                      className={`text-left w-full transition-colors ${selectedCategoryId === categoria.id ? 'bg-base-300 font-semibold' : ''}`}
+                      variant="ghost"
+                      className={`text-left w-full justify-start transition-colors ${selectedCategoryId === categoria.id ? 'bg-base-300 font-semibold' : ''}`}
                     >
                       {categoria.nombre}
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="btn-group">
-              <button
+              <Button
                 onClick={() => setViewMode('grid')}
-                className={`btn btn-outline border-base-300 transition-all ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+                variant="outline"
+                className={`border-base-300 transition-all ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
                 aria-label="Vista de cuadrícula"
               >
                 <FaThLarge className={`transition-transform ${viewMode === 'grid' ? 'scale-110' : ''}`} />
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setViewMode('list')}
-                className={`btn btn-outline border-base-300 transition-all ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+                variant="outline"
+                className={`border-base-300 transition-all ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
                 aria-label="Vista de lista"
               >
                 <FaList className={`transition-transform ${viewMode === 'list' ? 'scale-110' : ''}`} />
-              </button>
+              </Button>
             </div>
           </div>
         </div>

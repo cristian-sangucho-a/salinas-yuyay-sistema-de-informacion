@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaFile } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 import SolicitudModal from './SolicitudModal';
 
 interface AssetFileItemProps {
@@ -48,12 +49,13 @@ export default function AssetFileItem({
           </div>
 
           <div className="shrink-0">
-            <button
+            <Button
               onClick={() => setIsModalOpen(true)}
-              className="btn btn-sm bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
+              size="sm"
+              className="bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2"
             >
               Solicitar
-            </button>
+            </Button>
           </div>
         </div>
       </div>

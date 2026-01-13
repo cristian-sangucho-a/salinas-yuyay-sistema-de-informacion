@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Button } from "@components/atoms";
 import {
   FaCalendar,
   FaUser,
@@ -72,12 +73,13 @@ export default function AssetCard({ asset }: AssetCardProps) {
 
         {fileCount > 0 && (
           <div className="border-t border-[#D9C3A3] pt-4 mt-4">
-            <button
+            <Button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setIsExpanded(!isExpanded);
               }}
+              variant="ghost"
               className="flex items-center justify-between w-full text-sm font-semibold text-[#5A1E02] hover:text-[#8B3C10] transition-colors mb-2"
             >
               <span>Archivos disponibles ({fileCount})</span>
@@ -86,7 +88,7 @@ export default function AssetCard({ asset }: AssetCardProps) {
                   isExpanded ? "rotate-180" : ""
                 }`}
               />
-            </button>
+            </Button>
 
             <div
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -124,17 +126,19 @@ export default function AssetCard({ asset }: AssetCardProps) {
         )}
 
         <div className="flex justify-end mt-4">
-          <button
+          <Button
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setIsModalOpen(true);
             }}
-            className="btn btn-sm bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2 transition-all"
+            variant="primary"
+            size="sm"
+            className="bg-[#5A1E02] hover:bg-[#8B3C10] text-white border-none gap-2 transition-all"
           >
             <FaPaperPlane className="w-3 h-3" />
             Solicitar activo
-          </button>
+          </Button>
         </div>
       </div>
 

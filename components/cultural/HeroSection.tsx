@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaSearch, FaTimes } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 
 interface HeroSectionProps {
   onSearch?: (searchTerm: string) => void;
@@ -75,14 +76,15 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
               className="input input-bordered w-full pl-12 pr-12 border-gray-300 bg-white focus:border-primary focus:outline-none text-[#4A3B31] h-16 text-base rounded-lg shadow-lg"
             />
             {searchTerm && (
-              <button
+              <Button
                 type="button"
                 onClick={handleClear}
+                variant="ghost"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors z-10 p-2"
                 aria-label="Limpiar búsqueda"
               >
                 <FaTimes className="w-4 h-4" />
-              </button>
+              </Button>
             )}
           </div>
         </div>

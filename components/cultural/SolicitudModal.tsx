@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { FaTimes, FaCheckCircle, FaFileAlt } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 import { createSolicitud } from '@/lib/data';
 
 interface SolicitudModalProps {
@@ -113,13 +114,14 @@ export default function SolicitudModal({
       >
         <div className="bg-white text-[#5A1E02] px-6 py-4 rounded-t-xl flex items-center justify-between border-b border-[#D9C3A3]">
           <h2 className="text-xl font-bold">Solicitar archivos</h2>
-          <button
+          <Button
             onClick={onClose}
+            variant="ghost"
             className="text-[#B63A1B] hover:bg-[#B63A1B]/10 rounded-full p-1 transition-all duration-200 hover:rotate-90"
             aria-label="Cerrar"
           >
             <FaTimes className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {submitSuccess ? (
@@ -234,17 +236,18 @@ export default function SolicitudModal({
             )}
 
             <div className="flex gap-3 pt-2">
-              <button
+              <Button
                 type="button"
                 onClick={onClose}
-                className="btn flex-1 bg-white border-2 border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED] hover:border-[#7C8B56] transition-all"
+                variant="outline"
+                className="flex-1 bg-white border-2 border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED] hover:border-[#7C8B56] transition-all"
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
                 disabled={isSubmitting || !isFormValid}
-                className="btn flex-1 bg-[#7C8B56] hover:bg-[#7C8B56]/90 text-white border-none disabled:bg-[#7C8B56]/30 disabled:cursor-not-allowed transition-all"
+                className="flex-1 bg-[#7C8B56] hover:bg-[#7C8B56]/90 text-white border-none disabled:bg-[#7C8B56]/30 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
@@ -254,7 +257,7 @@ export default function SolicitudModal({
                 ) : (
                   'Enviar solicitud'
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         )}
