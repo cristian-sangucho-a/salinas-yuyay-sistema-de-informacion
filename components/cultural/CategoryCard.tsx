@@ -18,9 +18,9 @@ export default function CategoryCard({ categoria, assetCount }: CategoryCardProp
   return (
     <Link 
       href={`/cultural/categoria/${categoria.id}`} 
-      className="card bg-base-100 border-2 border-[#D9C3A3] shadow-md hover:shadow-xl hover:border-secondary transition-all hover:-translate-y-1 overflow-hidden"
+      className="card bg-base-100 border-2 border-[#D9C3A3] shadow-md hover:shadow-xl hover:border-secondary transition-all hover:-translate-y-1 overflow-hidden h-full flex flex-col"
     >
-      <figure className="relative h-56 bg-base-300">
+      <figure className="relative h-48 w-full bg-base-300 flex-shrink-0">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -34,14 +34,14 @@ export default function CategoryCard({ categoria, assetCount }: CategoryCardProp
           </div>
         )}
       </figure>
-      <div className="card-body p-5">
-        <h3 className="card-title text-xl text-primary font-bold">
+      <div className="card-body p-5 flex-1 flex flex-col">
+        <h3 className="card-title text-lg text-primary font-bold line-clamp-2">
           {categoria.nombre}
         </h3>
-        <p className="text-base-content/70 line-clamp-3 text-sm">
+        <p className="text-base-content/70 line-clamp-2 text-sm flex-1">
           {categoria.descripcion}
         </p>
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#D9C3A3]">
+        <div className="flex items-center gap-2 mt-auto pt-3 border-t border-[#D9C3A3]">
           <FaFolder className="text-secondary w-4 h-4" />
           <span className="text-sm font-medium text-base-content/80">
             {assetCount} {assetCount === 1 ? 'activo' : 'activos'}
