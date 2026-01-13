@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaShoppingBag,
   FaLandmark,
@@ -69,6 +70,7 @@ interface PortalProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onClick: () => void;
+  onExpand: () => void;
 }
 
 const Portal = ({
@@ -82,6 +84,7 @@ const Portal = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  onExpand,
 }: PortalProps) => {
   const isProductivo = id === "productivo";
   const isCultural = id === "cultural";
@@ -138,7 +141,15 @@ const Portal = ({
       ></div>
 
       {/* Contenedor Flex para Contenido (Evita traslape) */}
-      <div className="absolute inset-0 z-20 flex flex-col pt-16 md:pt-0 justify-end">
+      <div
+        className={`absolute inset-0 z-20 flex flex-col md:justify-end md:pt-0 transition-all duration-500
+          ${
+            isProductivo && !isActive
+              ? "justify-start pt-36"
+              : "justify-end pt-16"
+          }
+        `}
+      >
         {/* Parte Superior: Paneles Interactivos (Subsecciones) - Oculto en móvil */}
         <div
           className={`relative w-full transition-all duration-700 ease-in-out hidden md:block ${
@@ -288,7 +299,11 @@ const Portal = ({
               </p>
 
               <div
-                className={`flex items-center text-accent font-bold uppercase tracking-widest text-sm md:text-xl whitespace-nowrap transition-all ${
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onExpand();
+                }}
+                className={`flex items-center text-accent font-bold uppercase tracking-widest text-sm md:text-xl whitespace-nowrap transition-all cursor-pointer hover:text-white ${
                   isActive
                     ? "duration-500 delay-200 opacity-100 translate-x-0"
                     : "duration-200 delay-0 opacity-0 -translate-x-4"
@@ -317,26 +332,27 @@ const SectionTabs = ({
   return (
     <div className="flex justify-center mb-6 animate-fade-in-down w-full">
       <div className="overflow-x-auto max-w-full pb-2 no-scrollbar px-1">
-        <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max">
+        <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max gap-2">
           {portals.map((portal) => {
             const isActive = activeSection === portal.id;
+            const variant = portal.colorClass.replace("bg-", "") as
+              | "primary"
+              | "secondary"
+              | "neutral";
+
             return (
-              <button
+              <Button
                 key={portal.id}
                 onClick={() => onSectionChange(portal.id)}
-                className={`px-4 py-2 md:px-6 md:py-2.5 rounded-xl md:rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative overflow-hidden ${
+                variant={isActive ? variant : "ghost"}
+                className={`rounded-xl md:rounded-full transition-all duration-300 ${
                   isActive
-                    ? "text-white shadow-md scale-105"
-                    : "text-base-content/60 hover:text-base-content hover:bg-white/10"
-                }`}
+                    ? "scale-105 shadow-md text-white font-bold"
+                    : `text-${variant} hover:bg-white/10 opacity-80 hover:opacity-100 font-medium`
+                } uppercase tracking-wider`}
               >
-                {isActive && (
-                  <div
-                    className={`absolute inset-0 ${portal.colorClass} opacity-100 -z-10`}
-                  ></div>
-                )}
-                <span className="relative z-10">{portal.title}</span>
-              </button>
+                {portal.title}
+              </Button>
             );
           })}
         </div>
@@ -351,6 +367,12 @@ const DynamicContent = ({ section }: { section: string | null }) => {
 
   const content = SALINAS_YUYAY.landing.dynamicContent;
   const data = content[section as keyof typeof content];
+
+  const sectionImages: Record<string, string> = {
+    productivo: "/productivo/seccion-contenido-tienda.jpg",
+    cultural: "/cultural/seccion-contenido-archivo.jpg",
+    turismo: "/turistico/seccion-contenido-turismo.jpg",
+  };
 
   if (!data) return null;
 
@@ -411,21 +433,25 @@ const DynamicContent = ({ section }: { section: string | null }) => {
           </div>
         </div>
 
-        {/* Visual Preview (Placeholder) */}
+        {/* Visual Preview con Imagen Real */}
         <div
           className={`aspect-video rounded-3xl overflow-hidden shadow-2xl relative group ${data.bg}`}
         >
+          {/* Imagen de Fondo */}
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
+            style={{
+              backgroundImage: `url('${sectionImages[section] || ""}')`,
+            }}
+          ></div>
+
+          {/* Overlay Gradiente Sutil */}
           <div
             className={`absolute inset-0 bg-linear-to-br ${data.color.replace(
               "text-",
               "from-"
-            )} to-black/50 opacity-40`}
+            )} to-black/50 opacity-30 group-hover:opacity-10 transition-opacity duration-500`}
           ></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-9xl opacity-20 text-white mix-blend-overlay font-black">
-              {section.charAt(0).toUpperCase()}
-            </span>
-          </div>
         </div>
       </div>
     </div>
@@ -532,8 +558,16 @@ const FAQSection = () => {
 
 // 7. Sección de Contacto y Ubicación
 const ContactSection = () => {
-  const { title, subtitle, description, location, email, phone, mapButton } =
-    SALINAS_YUYAY.landing.contact;
+  const {
+    title,
+    subtitle,
+    description,
+    location,
+    email,
+    phone,
+    mapButton,
+    ubicacion,
+  } = SALINAS_YUYAY.landing.contact;
 
   return (
     <section id="contacto" className="py-24 relative z-10 bg-base-200">
@@ -584,15 +618,26 @@ const ContactSection = () => {
           </div>
         </div>
 
-        {/* Mapa Simulado / Imagen */}
+        {/* Mapa con Iframe */}
         <div className="h-[400px] bg-base-300 rounded-3xl overflow-hidden shadow-xl relative group">
-          {/* Aquí iría un Google Maps iframe o imagen estática */}
-          <div className="absolute inset-0 bg-[url('/images/map-placeholder.jpg')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
-          <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15957.973952327!2d-79.006933!3d-1.402432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d342f7c0a0b16f%3A0x5a37f62645856b3e!2sSalinas%20de%20Guaranda!5e0!3m2!1ses-419!2sec!4v1700000000000!5m2!1ses-419!2sec"
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: "grayscale(20%) contrast(1.1)" }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="group-hover:filter-none transition-all duration-500"
+          ></iframe>
+
+          {/* Overlay con Botón */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors pointer-events-none">
             <Button
               variant="primary"
               size="lg"
-              className="shadow-lg animate-bounce"
+              className="shadow-lg animate-bounce pointer-events-auto"
+              onClick={() => window.open(ubicacion, "_blank")}
             >
               <FaMapMarkedAlt className="mr-2" /> {mapButton}
             </Button>
@@ -604,8 +649,9 @@ const ContactSection = () => {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [activePortal, setActivePortal] = useState<string | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string>("productivo");
   const [headerThreshold, setHeaderThreshold] = useState(20);
 
   useEffect(() => {
@@ -621,12 +667,24 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handlePortalClick = (section: string) => {
+  const handleExpandClick = (section: string) => {
     setSelectedSection(section);
     // Scroll suave hacia la sección de contenido
     const contentElement = document.getElementById("dynamic-content");
     if (contentElement) {
-      contentElement.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        contentElement.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  };
+
+  const handlePortalClick = (section: string) => {
+    if (section === "productivo") {
+      router.push("/tienda");
+    } else if (section === "cultural") {
+      router.push("/cultural");
+    } else if (section === "turismo") {
+      router.push("/turismo");
     }
   };
 
@@ -658,6 +716,7 @@ export default function Home() {
                 onMouseEnter={() => setActivePortal(portal.id)}
                 onMouseLeave={() => setActivePortal(null)}
                 onClick={() => handlePortalClick(portal.id)}
+                onExpand={() => handleExpandClick(portal.id)}
               />
             ))}
           </div>
@@ -666,21 +725,19 @@ export default function Home() {
           <StatsTicker />
         </section>
 
-        {/* SECCIÓN 2: CONTENIDO DINÁMICO (Reemplaza a las secciones estáticas) */}
-        {selectedSection && (
-          <section
-            id="dynamic-content"
-            className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
-          >
-            <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
-              <SectionTabs
-                activeSection={selectedSection}
-                onSectionChange={setSelectedSection}
-              />
-              <DynamicContent section={selectedSection} />
-            </div>
-          </section>
-        )}
+        {/* SECCIÓN 2: CONTENIDO DINÁMICO (Siempre visible) */}
+        <section
+          id="dynamic-content"
+          className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
+        >
+          <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+            <SectionTabs
+              activeSection={selectedSection}
+              onSectionChange={setSelectedSection}
+            />
+            <DynamicContent section={selectedSection} />
+          </div>
+        </section>
 
         {/* SECCIÓN 3: IMPACTO (Social Proof) */}
         <ImpactSection />
