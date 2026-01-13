@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   FaShoppingBag,
@@ -100,7 +101,7 @@ const Portal = ({
       onMouseLeave={onMouseLeave}
     >
       {/* Fondo Imagen - Modificado para ser transparente y mostrar el fondo principal */}
-      <div className="absolute inset-0 transition-transform duration-1000 ease-out group-hover:scale-110">
+      <div className="absolute inset-0 transition-transform duration-1000 ease-out">
         <div
           className={`absolute inset-0 ${colorClass} opacity-10 group-hover:opacity-30 transition-opacity duration-500`}
         ></div>
@@ -108,35 +109,62 @@ const Portal = ({
         {/* Imagen de fondo específica para Tienda (Productivo) */}
         {id === "productivo" && (
           <div
-            className={`absolute inset-0 bg-[url('/productivo/subseccion-tienda.jpeg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
             }`}
-          ></div>
+          >
+            <Image
+              src="/productivo/subseccion-tienda.jpeg"
+              alt="Sección Productiva"
+              fill
+              priority
+              quality={90}
+              className="object-cover object-center"
+            />
+          </div>
         )}
 
         {/* Imagen de fondo específica para Archivo (Cultural) */}
         {id === "cultural" && (
           <div
-            className={`absolute inset-0 bg-[url('/cultural/subseccion-archivo.jpeg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
             }`}
-          ></div>
+          >
+            <Image
+              src="/cultural/subseccion-archivo.jpeg"
+              alt="Sección Cultural"
+              fill
+              priority
+              quality={90}
+              className="object-cover object-center"
+            />
+          </div>
         )}
 
         {/* Imagen de fondo específica para Turismo */}
         {id === "turismo" && (
           <div
-            className={`absolute inset-0 bg-[url('/turistico/subsecccion-turismo.jpg')] bg-cover bg-center transition-opacity duration-700 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
             }`}
-          ></div>
+          >
+            <Image
+              src="/turistico/subsecccion-turismo.jpg"
+              alt="Sección Turística"
+              fill
+              priority
+              quality={90}
+              className="object-cover object-center"
+            />
+          </div>
         )}
       </div>
 
       {/* Overlay Gradiente */}
       <div
-        className={`absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent transition-opacity duration-500 ${
-          isActive ? "opacity-80" : "opacity-60 group-hover:opacity-70"
+        className={`absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 ${
+          isActive ? "opacity-70" : "opacity-30 group-hover:opacity-50"
         }`}
       ></div>
 
@@ -438,12 +466,16 @@ const DynamicContent = ({ section }: { section: string | null }) => {
           className={`aspect-video rounded-3xl overflow-hidden shadow-2xl relative group ${data.bg}`}
         >
           {/* Imagen de Fondo */}
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
-            style={{
-              backgroundImage: `url('${sectionImages[section] || ""}')`,
-            }}
-          ></div>
+          {sectionImages[section] && (
+            <Image
+              src={sectionImages[section]}
+              alt={data.title}
+              fill
+              quality={90}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-center transition-transform duration-1000 group-hover:scale-110"
+            />
+          )}
 
           {/* Overlay Gradiente Sutil */}
           <div
@@ -699,7 +731,14 @@ export default function Home() {
           <div className="flex-1 flex flex-col md:flex-row relative">
             {/* Fondo Global con Partículas (Visible en las uniones y fondo) */}
             <div className="absolute inset-0 z-0">
-              <div className="absolute inset-0 bg-[url('/vista-superior-salinas.png')] bg-cover bg-center opacity-100"></div>
+              <Image
+                src="/vista-superior-salinas.png"
+                alt="Vista Superior Salinas"
+                fill
+                priority
+                quality={90}
+                className="object-cover object-center opacity-100"
+              />
               <div className="absolute inset-0 bg-black/20"></div>
             </div>
 
