@@ -54,12 +54,7 @@ const iconMap: Record<string, React.ReactElement> = {
   FaPhone: <FaPhone />,
 };
 
-// --- Componentes Internos para esta Página ---
 
-// 1. Componente de Partículas (Fondo Atmosférico Global) - ELIMINADO
-// const ParticleBackground = () => { ... }
-
-// 2. Componente de Portal Interactivo
 interface PortalProps {
   title: string;
   subtitle: string;
@@ -663,17 +658,6 @@ const ContactSection = () => {
             className="group-hover:filter-none transition-all duration-500"
           ></iframe>
 
-          {/* Overlay con Botón */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors pointer-events-none">
-            <Button
-              variant="primary"
-              size="lg"
-              className="shadow-lg animate-bounce pointer-events-auto"
-              onClick={() => window.open(ubicacion, "_blank")}
-            >
-              <FaMapMarkedAlt className="mr-2" /> {mapButton}
-            </Button>
-          </div>
         </div>
       </div>
     </section>

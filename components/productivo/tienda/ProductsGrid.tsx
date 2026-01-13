@@ -20,7 +20,7 @@ export default function ProductsGrid({
   subtitle,
   products,
   showViewAllButton = false,
-  viewAllHref = "/tienda/productos",
+  viewAllHref = "/productos",
   viewAllText = "VER TODOS LOS PRODUCTOS",
 }: ProductsGridProps) {
   return (
