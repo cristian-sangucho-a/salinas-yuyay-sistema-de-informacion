@@ -23,9 +23,29 @@ export const SALINAS_YUYAY = {
       },
       categorias: {
         titulo: "Categorías de productos andinos",
+        descripcion:
+          "Explora nuestra variedad de productos auténticos, elaborados con pasión y tradición en el corazón de los Andes. Desde deliciosos quesos y chocolates finos hasta textiles únicos y embutidos artesanales.",
       },
       productosDestacados: {
-        titulo: "Productos destacados",
+        titulo: "Otros productos destacados",
+        descripcion:
+          "Explora nuestra selección más popular. Desde quesos maduros hasta chocolates finos, cada producto representa lo mejor de nuestra tradición artesanal.",
+      },
+      featuredProduct: {
+        titulo: "Producto destacado",
+        nombre: "Queso Maduro Premium",
+        descripcion:
+          "Nuestro queso más emblemático, elaborado siguiendo recetas ancestrales transmitidas de generación en generación. Cada pieza es cuidadosamente seleccionada y madurada en condiciones óptimas para lograr su sabor único e inconfundible.",
+        features: [
+          "Elaborado con leche fresca de la región",
+          "Proceso de maduración controlado de 6 meses",
+          "Sin conservantes ni aditivos artificiales",
+          "Reconocido internacionalmente por su calidad",
+        ],
+        buttonText: "Explorar Más",
+        buttonHref: "/productos",
+        imageIcon: "🧀",
+        image: "/productivo/producto-destacado.jpg",
       },
     },
     features: [

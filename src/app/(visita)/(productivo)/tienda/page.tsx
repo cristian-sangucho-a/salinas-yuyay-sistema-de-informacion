@@ -23,7 +23,7 @@ import {
 import type { Feature, Categoria, Product } from "@/lib/types/productivo";
 
 export const metadata: Metadata = {
-  title: "Tienda - Productos Artesanales | SAISAL",
+  title: "Tienda | Salinas Yuyay",
   description:
     "Descubre la calidad excepcional de nuestros productos artesanales de Salinas de Guaranda. Quesos, chocolates, embutidos y textiles hechos con tradición.",
 };
@@ -42,7 +42,7 @@ export default async function TiendaPage() {
   const categoriasTransformadas: Categoria[] =
     categorias.map(transformCategoria);
   const favoriteProducts: Product[] = productosDestacados
-    .slice(0, 8) // Limitar a 8 productos destacados
+    .slice(0, 12) // Limitar a 12 productos destacados
     .map(transformProducto);
 
   // Configuración de features (estático desde empresa.ts)
@@ -82,28 +82,28 @@ export default async function TiendaPage() {
       <CategoriasGrid
         categorias={categoriasTransformadas}
         title={tienda.textos.categorias.titulo}
+        subtitle={tienda.textos.categorias.descripcion}
       />
 
       {/* Featured Product */}
       <FeaturedProduct
-        title="Queso Maduro Premium"
-        description="Nuestro queso más emblemático, elaborado siguiendo recetas ancestrales transmitidas de generación en generación. Cada pieza es cuidadosamente seleccionada y madurada en condiciones óptimas para lograr su sabor único e inconfundible."
-        features={[
-          "Elaborado con leche fresca de la región",
-          "Proceso de maduración controlado de 6 meses",
-          "Sin conservantes ni aditivos artificiales",
-          "Reconocido internacionalmente por su calidad",
-        ]}
-        buttonText="Explorar Más"
-        buttonHref="/productos"
-        imageIcon="🧀"
+        title={tienda.textos.featuredProduct.titulo}
+        subtitle={tienda.textos.featuredProduct.nombre}
+        description={tienda.textos.featuredProduct.descripcion}
+        features={tienda.textos.featuredProduct.features}
+        buttonText={tienda.textos.featuredProduct.buttonText}
+        buttonHref={tienda.textos.featuredProduct.buttonHref}
+        imageIcon={tienda.textos.featuredProduct.imageIcon}
+        image={tienda.textos.featuredProduct.image}
       />
 
       {/* Productos Destacados */}
       {favoriteProducts.length > 0 && (
         <ProductsGrid
           title={tienda.textos.productosDestacados.titulo}
+          subtitle={tienda.textos.productosDestacados.descripcion}
           products={favoriteProducts}
+          showViewAllButton={true}
         />
       )}
     </main>
