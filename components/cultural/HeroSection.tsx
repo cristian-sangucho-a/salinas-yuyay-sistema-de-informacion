@@ -47,11 +47,10 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
         alt="Paisaje de Salinas"
         fill
         priority
-        className="absolute inset-0 w-full h-full object-cover"
+        placeholder="empty"
+        className="absolute inset-0 w-full h-full object-cover brightness-50"
         sizes="100vw"
       />
-      {/* Overlay oscuro */}
-      <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/50 to-black/60 z-10"></div>
 
       {/* Contenido */}
       <div className="relative z-20 max-w-4xl mx-auto px-4 md:px-8 text-center -translate-y-6 md:-translate-y-10">
