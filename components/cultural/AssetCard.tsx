@@ -45,7 +45,7 @@ export default function AssetCard({ asset }: AssetCardProps) {
             {asset.titulo}
           </h3>
 
-        <p className="text-sm text-[#4A3B31]/70 mb-4 line-clamp-2">
+        <p className="text-sm text-[#4A3B31]/70 mb-4">
           {asset.descripcion}
         </p>
 
