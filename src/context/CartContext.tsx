@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import Alert from "@molecules/Alert";
 
 export interface CartItem {
   id: string;
@@ -9,18 +10,20 @@ export interface CartItem {
   image?: string;
   quantity: number;
   category?: string;
+  contificoId?: string;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (item: Omit<CartItem, "quantity">) => void;
+  addToCart: (item: Omit<CartItem, "quantity">) => Promise<boolean>;
   removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  updateQuantity: (id: string, quantity: number) => Promise<void>;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
   isCartOpen: boolean;
   toggleCart: () => void;
+  isLoading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -29,6 +32,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [stockError, setStockError] = useState<string | null>(null);
+
+  // Clear error after 3 seconds
+  useEffect(() => {
+    if (stockError) {
+      const timer = setTimeout(() => {
+        setStockError(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [stockError]);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -50,30 +65,92 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, isLoaded]);
 
-  const addToCart = (newItem: Omit<CartItem, "quantity">) => {
-    setItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === newItem.id);
-      if (existingItem) {
-        return prevItems.map((item) =>
-          item.id === newItem.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+  const checkStock = async (
+    contificoId: string,
+    requestedQuantity: number
+  ): Promise<boolean> => {
+    try {
+      const res = await fetch(`/api/contifico/productos/${contificoId}`);
+      if (!res.ok) return true; // Si falla la API, permitimos (fallback) o bloqueamos? Asumiremos fallback por ahora o logueamos.
+      // Si queremos ser estrictos: return false;
+
+      const data = await res.json();
+      const stock = parseFloat(data.cantidad_stock || "0");
+
+      // Permitir si hay stock suficiente
+      // Nota: La API devuelve string "cantidad_stock": "-5.0" en el ejemplo del usuario.
+      // Si el stock es negativo, ¿qué significa?
+      // Asumiremos que debe ser mayor o igual a la cantidad solicitada.
+      // Si el sistema maneja negativos como "sin stock", entonces stock < requestedQuantity bloqueará.
+      return stock >= requestedQuantity;
+    } catch (error) {
+      console.error("Error verificando stock:", error);
+      return true; // Fallback ante error de conexión
+    }
+  };
+
+  const addToCart = async (
+    newItem: Omit<CartItem, "quantity">
+  ): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      const existingItem = items.find((item) => item.id === newItem.id);
+      const newQuantity = existingItem ? existingItem.quantity + 1 : 1;
+      const contificoId = newItem.contificoId || existingItem?.contificoId;
+
+      if (contificoId) {
+        const hasStock = await checkStock(contificoId, newQuantity);
+        if (!hasStock) {
+          setStockError(
+            "Lo sentimos, no disponemos de suficiente stock para agregar este producto. Estamos trabajando para reponer nuestro inventario."
+          );
+          return false;
+        }
       }
-      return [...prevItems, { ...newItem, quantity: 1 }];
-    });
-    // setIsCartOpen(true); // Removed auto-open behavior
+
+      setItems((prevItems) => {
+        if (existingItem) {
+          return prevItems.map((item) =>
+            item.id === newItem.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return [...prevItems, { ...newItem, quantity: 1 }];
+      });
+      return true;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const removeFromCart = (id: string) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = async (id: string, quantity: number) => {
     if (quantity < 1) {
       removeFromCart(id);
       return;
     }
+
+    const item = items.find((i) => i.id === id);
+    if (item && item.contificoId && quantity > item.quantity) {
+      // Solo verificamos si estamos AUMENTANDO la cantidad
+      setIsLoading(true);
+      try {
+        const hasStock = await checkStock(item.contificoId, quantity);
+        if (!hasStock) {
+          setStockError(
+            "Lo sentimos, has alcanzado el límite de existencias disponibles. Estamos trabajando para reponer nuestro inventario."
+          );
+          return;
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
@@ -105,8 +182,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalPrice,
         isCartOpen,
         toggleCart,
+        isLoading,
       }}
     >
+      {stockError && (
+        <div className="fixed top-24 left-1/2 z-100 w-full max-w-md px-4 animate-fade-in-down">
+          <Alert
+            type="error"
+            title="Stock Insuficiente"
+            showIcon={true}
+            className="shadow-2xl"
+          >
+            {stockError}
+          </Alert>
+        </div>
+      )}
       {children}
     </CartContext.Provider>
   );

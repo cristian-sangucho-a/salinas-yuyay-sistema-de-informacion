@@ -41,6 +41,7 @@ export function transformProducto(producto: Producto): Product {
     name: producto.nombre || "Producto sin nombre",
     description: producto.descripcion || "",
     price: precio,
+    contificoId: producto.contifico_id,
     image: imagen || undefined,
     slug: producto.slug,
     badge: producto.destacado ? "Destacado" : undefined,

@@ -22,6 +22,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  contificoId?: string;
   image?: string;
   slug?: string;
   rating?: number;

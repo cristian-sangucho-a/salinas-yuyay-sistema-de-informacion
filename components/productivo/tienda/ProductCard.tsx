@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Eye, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Eye, Plus, Minus, Loader2, XCircle } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Button from "@atoms/Button";
 import Text from "@atoms/Text";
@@ -18,6 +18,7 @@ interface ProductCardProps {
   category?: string | { name: string };
   slug?: string;
   variant?: "grid" | "list";
+  contificoId?: string;
 }
 
 export default function ProductCard({
@@ -29,23 +30,36 @@ export default function ProductCard({
   category,
   slug = "#",
   variant = "grid",
+  contificoId,
 }: ProductCardProps) {
   const { addToCart, items, updateQuantity } = useCart();
+  const [isChecking, setIsChecking] = useState(false);
+  const [isOutOfStock, setIsOutOfStock] = useState(false);
 
   const categoryName = typeof category === "object" ? category?.name : category;
   const cartItem = items.find((item) => item.id === id);
   const quantity = cartItem?.quantity || 0;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart({
+
+    if (isOutOfStock || isChecking) return;
+
+    setIsChecking(true);
+    const success = await addToCart({
       id,
       name,
       price,
       image,
       category: categoryName,
+      contificoId,
     });
+
+    setIsChecking(false);
+    if (!success) {
+      setIsOutOfStock(true);
+    }
   };
 
   const handleUpdateQuantity = (e: React.MouseEvent, newQuantity: number) => {
@@ -121,10 +135,25 @@ export default function ProductCard({
               <Button
                 onClick={handleAddToCart}
                 variant="outline"
-                className="h-12 w-full"
+                className="h-12 w-full disabled:opacity-70 disabled:cursor-not-allowed transition-all"
+                disabled={isChecking || isOutOfStock}
               >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Agregar al Carrito
+                {isOutOfStock ? (
+                  <>
+                    <XCircle className="w-5 h-5 mr-2 text-error" />
+                    <span className="text-error font-medium">Agotado</span>
+                  </>
+                ) : isChecking ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Validando...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Agregar al Carrito
+                  </>
+                )}
               </Button>
             </div>
 
@@ -246,12 +275,31 @@ export default function ProductCard({
               <Button
                 onClick={handleAddToCart}
                 variant="primary"
-                className="h-12 w-full"
+                className="h-12 w-full disabled:bg-base-300 disabled:text-base-content/50 disabled:border-base-300 transition-all"
+                disabled={isChecking || isOutOfStock}
               >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                <Text variant="button" color="inherit" as="span">
-                  Agregar
-                </Text>
+                {isOutOfStock ? (
+                  <>
+                    <XCircle className="w-5 h-5 mr-2" />
+                    <Text variant="button" color="inherit" as="span">
+                      Agotado
+                    </Text>
+                  </>
+                ) : isChecking ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Text variant="button" color="inherit" as="span">
+                      Validando...
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    <Text variant="button" color="inherit" as="span">
+                      Agregar
+                    </Text>
+                  </>
+                )}
               </Button>
             </div>
 
