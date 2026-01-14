@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaTimes, FaCheckCircle, FaImage, FaUpload } from "react-icons/fa";
+import { Button } from "@components/atoms";
 import type { Categoria } from "@/lib/types";
 import { createCategoria, updateCategoria } from "@/lib/admin-data";
 import { getFileUrl } from "@/lib/data";
@@ -147,14 +148,15 @@ export default function CategoriaModal({
           <h2 className="text-xl font-bold">
             {categoria ? "Editar Categoría" : "Nueva Categoría"}
           </h2>
-          <button
+          <Button
             onClick={() => onClose(false)}
             disabled={isSubmitting}
+            variant="ghost"
             className="text-[#B63A1B] hover:bg-[#B63A1B]/10 rounded-full p-1 transition-all duration-200 hover:rotate-90 disabled:opacity-50"
             aria-label="Cerrar"
           >
             <FaTimes className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {submitSuccess ? (
@@ -247,15 +249,16 @@ export default function CategoriaModal({
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <button
+                      <Button
                         type="button"
                         onClick={handleRemoveImage}
                         disabled={isSubmitting}
-                        className="btn btn-sm bg-[#B63A1B] hover:bg-[#B63A1B]/80 text-white border-none disabled:opacity-50"
+                        size="sm"
+                        className="bg-[#B63A1B] hover:bg-[#B63A1B]/80 text-white border-none disabled:opacity-50 gap-1"
                       >
-                        <FaTimes className="w-3 h-3 mr-1" />
+                        <FaTimes className="w-3 h-3" />
                         Quitar imagen
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -279,17 +282,18 @@ export default function CategoriaModal({
                     disabled={isSubmitting}
                     className="hidden"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isSubmitting}
-                    className="btn btn-outline border-[#D9C3A3] text-[#5A1E02] hover:bg-[#7C8B56]/10 hover:border-[#7C8B56] w-full disabled:opacity-50"
+                    variant="outline"
+                    className="border-[#D9C3A3] text-[#5A1E02] hover:bg-[#7C8B56]/10 hover:border-[#7C8B56] w-full disabled:opacity-50 gap-2"
                   >
-                    <FaUpload className="w-4 h-4 mr-2" />
+                    <FaUpload className="w-4 h-4" />
                     {imagenPreview && !removeImage
                       ? "Cambiar imagen"
                       : "Seleccionar imagen"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -301,18 +305,19 @@ export default function CategoriaModal({
             )}
 
             <div className="flex gap-3 pt-2">
-              <button
+              <Button
                 type="button"
                 onClick={() => onClose(false)}
                 disabled={isSubmitting}
-                className="btn flex-1 bg-white border-2 border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED] hover:border-[#7C8B56] transition-all disabled:opacity-50"
+                variant="outline"
+                className="flex-1 bg-white border-2 border-[#D9C3A3] text-[#4A3B31] hover:bg-[#F8F3ED] hover:border-[#7C8B56] transition-all disabled:opacity-50"
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn flex-1 bg-[#7C8B56] hover:bg-[#7C8B56]/90 text-white border-none disabled:bg-[#7C8B56]/30 disabled:cursor-not-allowed transition-all"
+                className="flex-1 bg-[#7C8B56] hover:bg-[#7C8B56]/90 text-white border-none disabled:bg-[#7C8B56]/30 disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
@@ -324,7 +329,7 @@ export default function CategoriaModal({
                 ) : (
                   "Crear categoría"
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         )}

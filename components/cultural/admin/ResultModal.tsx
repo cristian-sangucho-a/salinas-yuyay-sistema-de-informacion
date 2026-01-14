@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 
 interface ResultModalProps {
   isOpen: boolean;
@@ -50,7 +51,7 @@ export default function ResultModal({
 
         {/* Botón */}
         <div className="p-6 bg-[#F8F3ED] rounded-b-xl">
-          <button
+          <Button
             onClick={onClose}
             className={`w-full px-4 py-3 rounded-lg font-medium text-white ${
               type === 'success'
@@ -59,7 +60,7 @@ export default function ResultModal({
             } transition-all`}
           >
             Aceptar
-          </button>
+          </Button>
         </div>
       </div>
     </div>

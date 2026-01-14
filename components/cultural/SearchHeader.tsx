@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 
 interface SearchHeaderProps {
   onSearch: (searchTerm: string) => void;
@@ -35,14 +36,15 @@ export default function SearchHeader({ onSearch }: SearchHeaderProps) {
               className="input input-bordered w-full pl-12 pr-12 border-[#D9C3A3] bg-white focus:border-[#7C8B56] focus:outline-none text-[#4A3B31] h-14 text-base"
             />
             {searchTerm && (
-              <button
+              <Button
                 type="button"
                 onClick={handleClear}
+                variant="ghost"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B63A1B] hover:text-[#B63A1B]/80 transition-colors z-10 p-2"
                 aria-label="Limpiar búsqueda"
               >
                 <FaTimes className="w-4 h-4" />
-              </button>
+              </Button>
             )}
           </div>
         </div>

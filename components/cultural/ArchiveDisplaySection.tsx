@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaThLarge, FaList } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 import AssetCard from './AssetCard';
 import AssetListItem from './AssetListItem';
 import type { Categoria, Activo } from '@/lib/types';
@@ -31,20 +32,22 @@ export default function ArchiveDisplaySection({
           </div>
 
           <div className="btn-group">
-            <button
+            <Button
               onClick={() => setViewMode('grid')}
-              className={`btn btn-outline border-base-300 ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+              variant="outline"
+              className={`border-base-300 ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
               aria-label="Vista de cuadrícula"
             >
               <FaThLarge />
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setViewMode('list')}
-              className={`btn btn-outline border-base-300 ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+              variant="outline"
+              className={`border-base-300 ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
               aria-label="Vista de lista"
             >
               <FaList />
-            </button>
+            </Button>
           </div>
         </div>
 

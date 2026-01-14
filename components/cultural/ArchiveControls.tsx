@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { FaThLarge, FaList, FaChevronDown } from 'react-icons/fa';
+import { Button } from '@components/atoms';
 import type { Categoria } from '@/lib/types';
 
 interface ArchiveControlsProps {
@@ -42,51 +43,55 @@ export default function ArchiveControls({
           </div>
           <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52 mt-1 max-h-60 overflow-y-auto">
              <li>
-               <button
+               <Button
                  onClick={() => {
                    onCategoryChange('Todas');
                    if (document.activeElement instanceof HTMLElement) {
                      document.activeElement.blur();
                    }
                  }}
-                 className={`text-left w-full ${selectedCategoryId === 'Todas' ? 'bg-base-300 font-semibold' : ''}`}
+                 variant="ghost"
+                 className={`text-left w-full justify-start ${selectedCategoryId === 'Todas' ? 'bg-base-300 font-semibold' : ''}`}
                >
                  Todas
-               </button>
+               </Button>
              </li>
             {categorias.map((category) => (
               <li key={category.id}>
-                <button
+                <Button
                     onClick={() => {
                         onCategoryChange(category.id);
                         if (document.activeElement instanceof HTMLElement) {
                             document.activeElement.blur();
                         }
                     }}
-                    className={`text-left w-full ${selectedCategoryId === category.id ? 'bg-base-300 font-semibold' : ''}`}
+                    variant="ghost"
+                    className={`text-left w-full justify-start ${selectedCategoryId === category.id ? 'bg-base-300 font-semibold' : ''}`}
                 >
                     {category.nombre}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="btn-group">
-          <button
+          <Button
             onClick={() => onViewChange('grid')}
-            className={`btn btn-outline border-base-300 ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+            variant="outline"
+            className={`border-base-300 ${viewMode === 'grid' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
             aria-label="Vista de cuadrícula"
           >
             <FaThLarge />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onViewChange('list')}
-            className={`btn btn-outline border-base-300 ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
+            variant="outline"
+            className={`border-base-300 ${viewMode === 'list' ? 'btn-active bg-primary text-primary-content border-primary' : 'bg-base-100 text-base-content hover:bg-base-200'}`}
             aria-label="Vista de lista"
           >
             <FaList />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
