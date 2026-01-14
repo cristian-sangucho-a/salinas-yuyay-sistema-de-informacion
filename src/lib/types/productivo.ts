@@ -101,3 +101,33 @@ export interface Producto {
     subcategoria?: SubcategoriaProducto;
   };
 }
+
+export interface ClientData {
+  id?: string;
+  cedula: string;
+  razon_social: string;
+  email: string;
+  telefonos: string;
+  tipo: "N" | "J";
+  es_cliente: boolean;
+  es_proveedor: boolean;
+}
+
+export interface AddressData {
+  provincia: string;
+  ciudad: string;
+  callePrincipal: string;
+  calleSecundaria: string;
+  referencia: string;
+  codigoPostal?: string;
+}
+
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  image?: string;
+  quantity: number;
+  category?: string;
+  contificoId?: string;
+}

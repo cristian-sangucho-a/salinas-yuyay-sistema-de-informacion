@@ -2,16 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Alert from "@molecules/Alert";
-
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image?: string;
-  quantity: number;
-  category?: string;
-  contificoId?: string;
-}
+import { CartItem } from "@/lib/types/productivo";
 
 interface CartContextType {
   items: CartItem[];
@@ -75,21 +66,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   ): Promise<boolean> => {
     try {
       const res = await fetch(`/api/contifico/productos/${contificoId}`);
-      if (!res.ok) return true; // Si falla la API, permitimos (fallback) o bloqueamos? Asumiremos fallback por ahora o logueamos.
-      // Si queremos ser estrictos: return false;
+      if (!res.ok) return true;
 
       const data = await res.json();
       const stock = parseFloat(data.cantidad_stock || "0");
 
-      // Permitir si hay stock suficiente
-      // Nota: La API devuelve string "cantidad_stock": "-5.0" en el ejemplo del usuario.
-      // Si el stock es negativo, ¿qué significa?
-      // Asumiremos que debe ser mayor o igual a la cantidad solicitada.
-      // Si el sistema maneja negativos como "sin stock", entonces stock < requestedQuantity bloqueará.
       return stock >= requestedQuantity;
     } catch (error) {
       console.error("Error verificando stock:", error);
-      return true; // Fallback ante error de conexión
+      return true;
     }
   };
 

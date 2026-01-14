@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/context/CartContext";
-import { CartItem } from "@/context/CartContext";
+import { CartItem } from "@/lib/types/productivo";
 
 interface UseAddToCartProps {
   product: Omit<CartItem, "quantity">;
