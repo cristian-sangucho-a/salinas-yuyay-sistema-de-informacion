@@ -74,7 +74,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return stock >= requestedQuantity;
     } catch (error) {
       console.error("Error verificando stock:", error);
-      return true;
+      return true; 
     }
   };
 

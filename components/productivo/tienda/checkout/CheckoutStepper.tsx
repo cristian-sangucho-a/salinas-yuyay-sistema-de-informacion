@@ -11,26 +11,8 @@ import Button from "@atoms/Button";
 import Title from "@atoms/Title";
 import Text from "@atoms/Text";
 import { useCart } from "@/context/CartContext";
-
-interface ClientData {
-  id?: string;
-  cedula: string;
-  razon_social: string;
-  email: string;
-  telefonos: string;
-  tipo: "N" | "J";
-  es_cliente: boolean;
-  es_proveedor: boolean;
-}
-
-interface AddressData {
-  provincia: string;
-  ciudad: string;
-  callePrincipal: string;
-  calleSecundaria: string;
-  referencia: string;
-  codigoPostal?: string;
-}
+import { ClientData, AddressData } from "@/lib/types/productivo";
+import { sendOrderConfirmationEmail } from "@/lib/email-service";
 
 const steps = [
   { id: 0, label: "Carrito", icon: ShoppingCart },
@@ -43,8 +25,9 @@ export default function CheckoutStepper() {
   const [currentStep, setCurrentStep] = useState(0);
   const [clientData, setClientData] = useState<ClientData | null>(null);
   const [addressData, setAddressData] = useState<AddressData | null>(null);
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,10 +60,30 @@ export default function CheckoutStepper() {
     handleNextStep();
   };
 
-  const handleFinalize = () => {
-    // Aquí iría la lógica para enviar el pedido al backend
-    console.log("Finalizing order...", { clientData, addressData, items });
-    setIsSuccess(true);
+  const handleFinalize = async () => {
+    if (!clientData || !addressData) return;
+    setIsProcessing(true);
+
+    try {
+      const total = items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      // Enviar correo de confirmación
+      await sendOrderConfirmationEmail(clientData, addressData, items, total);
+
+      // Aquí iría la lógica para enviar el pedido al backend (DB)
+      console.log("Finalizing order...", { clientData, addressData, items });
+
+      clearCart();
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Error finalizing order:", error);
+      // Aquí podrías mostrar un mensaje de error al usuario
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (isSuccess) {
@@ -306,7 +309,7 @@ export default function CheckoutStepper() {
               {/* Payment Method Placeholder */}
               <div className="card bg-base-100 shadow-sm border border-base-200">
                 <div className="card-body p-6">
-                  <h3 className="card-title text-lg flex items-center gap-2 mb-4 border-b border-base-200 pb-3">
+                  <h3 className="card-title text-lg flex items-center gap-2 mb-4">
                     <CreditCard className="w-5 h-5 text-primary" />
                     Método de pago
                   </h3>
