@@ -123,7 +123,7 @@ export default function CartDrawer() {
                               updateQuantity(item.id, item.quantity - 1)
                             }
                             variant="error"
-                            className="w-8 h-8 !p-0 rounded-lg shadow-sm min-h-0"
+                            className="w-8 h-8 p-0! rounded-lg shadow-sm min-h-0"
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="w-3 h-3" />
@@ -138,7 +138,7 @@ export default function CartDrawer() {
                               updateQuantity(item.id, item.quantity + 1)
                             }
                             variant="success"
-                            className="w-8 h-8 !p-0 rounded-lg shadow-sm min-h-0"
+                            className="w-8 h-8 p-0! rounded-lg shadow-sm min-h-0"
                           >
                             <Plus className="w-3 h-3" />
                           </Button>

@@ -10,6 +10,7 @@ import CheckoutSummary from "./CheckoutSummary";
 import Button from "@atoms/Button";
 import Title from "@atoms/Title";
 import Text from "@atoms/Text";
+import Alert from "@molecules/Alert";
 import { useCart } from "@/context/CartContext";
 import { ClientData, AddressData } from "@/lib/types/productivo";
 import { sendOrderConfirmationEmail } from "@/lib/email-service";
@@ -25,9 +26,11 @@ export default function CheckoutStepper() {
   const [currentStep, setCurrentStep] = useState(0);
   const [clientData, setClientData] = useState<ClientData | null>(null);
   const [addressData, setAddressData] = useState<AddressData | null>(null);
-  const { items, clearCart } = useCart();
+  const { items, clearCart, checkStock } = useCart();
   const [isSuccess, setIsSuccess] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,7 +45,41 @@ export default function CheckoutStepper() {
     }
   }, [currentStep]);
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
+    // Validar Stock en el paso 0
+    if (currentStep === 0) {
+      setIsValidating(true);
+      setValidationError(null);
+
+      try {
+        const validations = await Promise.all(
+          items.map(async (item) => {
+            if (!item.contificoId) return { item, valid: true };
+            const valid = await checkStock(item.contificoId, item.quantity);
+            return { item, valid };
+          })
+        );
+
+        const invalidItem = validations.find((v) => !v.valid);
+
+        if (invalidItem) {
+          setValidationError(
+            `Lo sentimos, el producto "${invalidItem.item.name}" no tiene suficiente stock disponible para la cantidad solicitada.`
+          );
+          setIsValidating(false);
+          return;
+        }
+      } catch (error) {
+        console.error("Error validating stock:", error);
+        setValidationError(
+          "Ocurrió un error verificando el stock. Por favor intente nuevamente."
+        );
+        setIsValidating(false);
+        return;
+      }
+      setIsValidating(false);
+    }
+
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -138,8 +175,12 @@ export default function CheckoutStepper() {
         {/* Botón Continuar en Header (Solo visible en paso 0 si hay items) */}
         {currentStep === 0 && items.length > 0 && (
           <div className="hidden md:block">
-            <Button onClick={handleNextStep} variant="primary">
-              Continuar
+            <Button
+              onClick={handleNextStep}
+              variant="primary"
+              disabled={isValidating}
+            >
+              {isValidating ? "Verificando..." : "Continuar"}
             </Button>
           </div>
         )}
@@ -149,6 +190,11 @@ export default function CheckoutStepper() {
       <div className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
         {currentStep === 0 && (
           <div className="space-y-6">
+            {validationError && (
+              <Alert type="error" title="Stock Insuficiente" showIcon={true}>
+                {validationError}
+              </Alert>
+            )}
             <CheckoutCart />
             {items.length > 0 && (
               <div className="flex justify-end md:hidden">
@@ -157,8 +203,9 @@ export default function CheckoutStepper() {
                   variant="primary"
                   size="lg"
                   className="w-full"
+                  disabled={isValidating}
                 >
-                  Continuar a Datos
+                  {isValidating ? "Verificando..." : "Continuar a Datos"}
                 </Button>
               </div>
             )}
