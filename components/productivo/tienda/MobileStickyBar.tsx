@@ -11,6 +11,7 @@ interface MobileStickyBarProps {
     price: number;
     image?: string;
     category?: string;
+    contificoId?: string;
   };
 }
 

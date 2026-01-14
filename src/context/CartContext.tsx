@@ -17,13 +17,17 @@ interface CartContextType {
   items: CartItem[];
   addToCart: (item: Omit<CartItem, "quantity">) => Promise<boolean>;
   removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => Promise<void>;
+  updateQuantity: (id: string, quantity: number) => Promise<boolean>;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
   isCartOpen: boolean;
   toggleCart: () => void;
   isLoading: boolean;
+  checkStock: (
+    contificoId: string,
+    requestedQuantity: number
+  ) => Promise<boolean>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -128,10 +132,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const updateQuantity = async (id: string, quantity: number) => {
+  const updateQuantity = async (
+    id: string,
+    quantity: number
+  ): Promise<boolean> => {
     if (quantity < 1) {
       removeFromCart(id);
-      return;
+      return true;
     }
 
     const item = items.find((i) => i.id === id);
@@ -144,7 +151,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           setStockError(
             "Lo sentimos, has alcanzado el límite de existencias disponibles. Estamos trabajando para reponer nuestro inventario."
           );
-          return;
+          return false;
         }
       } finally {
         setIsLoading(false);
@@ -154,6 +161,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
+    return true;
   };
 
   const clearCart = () => {
@@ -183,6 +191,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         isCartOpen,
         toggleCart,
         isLoading,
+        checkStock,
       }}
     >
       {stockError && (

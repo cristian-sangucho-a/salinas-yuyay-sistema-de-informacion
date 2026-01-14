@@ -11,6 +11,7 @@ interface StickyProductSummaryProps {
     price: number;
     image?: string;
     category?: string;
+    contificoId?: string;
   };
 }
 

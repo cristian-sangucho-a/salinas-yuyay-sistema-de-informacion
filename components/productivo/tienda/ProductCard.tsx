@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Eye, Plus, Minus, Loader2, XCircle } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Button from "@atoms/Button";
 import Text from "@atoms/Text";
 import Title from "@atoms/Title";
+import ProductActions from "./ProductActions";
 
 interface ProductCardProps {
   id: string;
@@ -32,41 +33,7 @@ export default function ProductCard({
   variant = "grid",
   contificoId,
 }: ProductCardProps) {
-  const { addToCart, items, updateQuantity } = useCart();
-  const [isChecking, setIsChecking] = useState(false);
-  const [isOutOfStock, setIsOutOfStock] = useState(false);
-
   const categoryName = typeof category === "object" ? category?.name : category;
-  const cartItem = items.find((item) => item.id === id);
-  const quantity = cartItem?.quantity || 0;
-
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isOutOfStock || isChecking) return;
-
-    setIsChecking(true);
-    const success = await addToCart({
-      id,
-      name,
-      price,
-      image,
-      category: categoryName,
-      contificoId,
-    });
-
-    setIsChecking(false);
-    if (!success) {
-      setIsOutOfStock(true);
-    }
-  };
-
-  const handleUpdateQuantity = (e: React.MouseEvent, newQuantity: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    updateQuantity(id, newQuantity);
-  };
 
   if (variant === "list") {
     return (
@@ -124,68 +91,18 @@ export default function ProductCard({
             </Text>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 grid-rows-1 w-full sm:w-auto overflow-hidden">
-            <div
-              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
-                quantity > 0
-                  ? "-translate-y-full opacity-0 invisible"
-                  : "translate-y-0 opacity-100 visible"
-              }`}
-            >
-              <Button
-                onClick={handleAddToCart}
-                variant="outline"
-                className="h-12 w-full disabled:opacity-70 disabled:cursor-not-allowed transition-all"
-                disabled={isChecking || isOutOfStock}
-              >
-                {isOutOfStock ? (
-                  <>
-                    <XCircle className="w-5 h-5 mr-2 text-error" />
-                    <span className="text-error font-medium">Agotado</span>
-                  </>
-                ) : isChecking ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Validando...
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    Agregar al Carrito
-                  </>
-                )}
-              </Button>
-            </div>
-
-            <div
-              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
-                quantity > 0
-                  ? "translate-y-0 opacity-100 visible"
-                  : "translate-y-full opacity-0 invisible"
-              }`}
-            >
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <Button
-                  onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-                  variant="error"
-                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
-                >
-                  <Minus className="w-5 h-5" />
-                </Button>
-                <div className="h-12 min-w-12 px-2 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
-                  <span className="text-center font-bold text-base-content text-lg">
-                    {quantity}
-                  </span>
-                </div>
-                <Button
-                  onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
-                  variant="success"
-                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
-                >
-                  <Plus className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
+          <div className="mt-4 grid grid-cols-1 grid-rows-1 w-full sm:w-auto overflow-hidden relative z-10">
+            <ProductActions
+              product={{
+                id,
+                name,
+                price,
+                image,
+                category: categoryName,
+                contificoId,
+              }}
+              variant="card"
+            />
           </div>
           <div className="mt-2">
             <Link
@@ -264,74 +181,18 @@ export default function ProductCard({
             ${price.toFixed(2)}
           </Title>
 
-          <div className="grid grid-cols-1 grid-rows-1 w-auto overflow-hidden relative z-20">
-            <div
-              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
-                quantity > 0
-                  ? "-translate-y-full opacity-0 invisible"
-                  : "translate-y-0 opacity-100 visible"
-              }`}
-            >
-              <Button
-                onClick={handleAddToCart}
-                variant="primary"
-                className="h-12 w-full disabled:bg-base-300 disabled:text-base-content/50 disabled:border-base-300 transition-all"
-                disabled={isChecking || isOutOfStock}
-              >
-                {isOutOfStock ? (
-                  <>
-                    <XCircle className="w-5 h-5 mr-2" />
-                    <Text variant="button" color="inherit" as="span">
-                      Agotado
-                    </Text>
-                  </>
-                ) : isChecking ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    <Text variant="button" color="inherit" as="span">
-                      Validando...
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    <Text variant="button" color="inherit" as="span">
-                      Agregar
-                    </Text>
-                  </>
-                )}
-              </Button>
-            </div>
-
-            <div
-              className={`col-start-1 row-start-1 transition-all duration-300 ease-in-out transform ${
-                quantity > 0
-                  ? "translate-y-0 opacity-100 visible"
-                  : "translate-y-full opacity-0 invisible"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-                  variant="error"
-                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
-                >
-                  <Minus className="w-5 h-5" />
-                </Button>
-                <div className="h-12 w-12 flex items-center justify-center bg-base-100 rounded-lg border border-base-200">
-                  <span className="text-center font-bold text-base-content text-lg">
-                    {quantity}
-                  </span>
-                </div>
-                <Button
-                  onClick={(e) => handleUpdateQuantity(e, quantity + 1)}
-                  variant="success"
-                  className="w-12 h-12 p-0! rounded-lg shadow-md min-h-0"
-                >
-                  <Plus className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
+          <div className="w-32 sm:w-36 overflow-hidden relative z-20">
+            <ProductActions
+              product={{
+                id,
+                name,
+                price,
+                image,
+                category: categoryName,
+                contificoId,
+              }}
+              variant="card"
+            />
           </div>
         </div>
       </div>

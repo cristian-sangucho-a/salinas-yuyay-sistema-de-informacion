@@ -109,6 +109,7 @@ export default async function ProductoPage({ params }: ProductoPageProps) {
                   price: precio,
                   image: imagenPrincipal || undefined,
                   category: categoriaNombre,
+                  contificoId: producto.contifico_id,
                 }}
               />
 
@@ -132,6 +133,7 @@ export default async function ProductoPage({ params }: ProductoPageProps) {
           price: precio,
           image: imagenPrincipal || undefined,
           category: categoriaNombre,
+          contificoId: producto.contifico_id,
         }}
       />
     </main>
