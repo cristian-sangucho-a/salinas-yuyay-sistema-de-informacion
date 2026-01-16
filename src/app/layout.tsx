@@ -10,7 +10,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SEO_CONFIG.root.metadataBase),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://salinas-yuyay-si.vercel.app"
+  ),
   title: SEO_CONFIG.root.title,
   description: SALINAS_YUYAY.descripcion,
   keywords: SEO_CONFIG.root.keywords,

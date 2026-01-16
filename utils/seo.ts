@@ -1,7 +1,8 @@
 import { SALINAS_YUYAY } from "./empresa";
 export const SEO_CONFIG = {
   root: {
-    metadataBase: "https://salinasyuyay.com",
+    metadataBase:
+      process.env.NEXT_PUBLIC_SITE_URL || "https://salinas-yuyay-si.vercel.app",
     title: {
       default: `${SALINAS_YUYAY.nombre} | ${SALINAS_YUYAY.eslogan}`,
       template: `%s | ${SALINAS_YUYAY.nombre} `,
@@ -20,7 +21,9 @@ export const SEO_CONFIG = {
     openGraph: {
       type: "website",
       locale: "es_EC",
-      url: "https://salinasyuyay.com",
+      url:
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        "https://salinas-yuyay-si.vercel.app",
       siteName: "Salinas Yuyay",
       images: [
         {
