@@ -14,6 +14,7 @@ import Alert from "@molecules/Alert";
 import { useCart } from "@/context/CartContext";
 import { ClientData, AddressData } from "@/lib/types/productivo";
 import { sendOrderConfirmationEmail } from "@/lib/email-service";
+import { createContificoPrefactura } from "@/lib/contifico";
 
 const steps = [
   { id: 0, label: "Carrito", icon: ShoppingCart },
@@ -107,11 +108,28 @@ export default function CheckoutStepper() {
         0
       );
 
-      // Enviar correo de confirmación
-      await sendOrderConfirmationEmail(clientData, addressData, items, total);
+      // Enviar correo de confirmación y crear prefactura en paralelo
+      const [emailResult, prefacturaResult] = await Promise.all([
+        sendOrderConfirmationEmail(clientData, addressData, items, total),
+        createContificoPrefactura(clientData, addressData, items),
+      ]);
+
+      if (!prefacturaResult.success) {
+        console.warn(
+          "Advertencia: No se pudo crear la prefactura en Contífico",
+          prefacturaResult.error
+        );
+        // No bloqueamos el flujo de éxito para el usuario, pero lo registramos
+      }
 
       // Aquí iría la lógica para enviar el pedido al backend (DB)
-      console.log("Finalizing order...", { clientData, addressData, items });
+      console.log("Finalizing order...", {
+        clientData,
+        addressData,
+        items,
+        emailResult,
+        prefacturaResult,
+      });
 
       clearCart();
       setIsSuccess(true);

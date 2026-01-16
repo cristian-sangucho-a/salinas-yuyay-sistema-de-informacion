@@ -8,7 +8,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { ContificoProducto } from "@/lib/contifico";
-import { updateProducto, createProducto } from "@/lib/admin-data-productivo";
+import { updateProducto } from "@/lib/admin-data-productivo";
 import { Producto, CategoriaProducto } from "@/lib/types/productivo";
 import { getCategoriasProductos } from "@/lib/data/tienda/categorias";
 import ConfirmationModal from "@components/molecules/ConfirmationModal";
