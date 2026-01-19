@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 const pocketbase_url = process.env.NEXT_CONFIG_IMAGE_URL || 'localhost';
 const nextConfig: NextConfig = {
   images: {
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: 'http',
