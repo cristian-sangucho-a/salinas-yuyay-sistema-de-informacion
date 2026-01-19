@@ -351,8 +351,8 @@ const SectionTabs = ({
   const portals = SALINAS_YUYAY.landing.hero.portals;
 
   return (
-    <div className="flex justify-center mb-6 animate-fade-in-down w-full">
-      <div className="overflow-x-auto max-w-full pb-2 no-scrollbar px-1">
+    <div className="flex justify-center w-full mb-6 animate-fade-in-down-static">
+      <div className="overflow-x-auto w-fit max-w-full pb-2 no-scrollbar px-1 mx-auto">
         <div className="bg-base-200/50 backdrop-blur-sm p-1 rounded-2xl md:rounded-full inline-flex shadow-lg border border-white/10 min-w-max gap-2">
           {portals.map((portal) => {
             const isActive = activeSection === portal.id;
@@ -474,7 +474,7 @@ const DynamicContent = ({ section }: { section: string | null }) => {
           <div
             className={`absolute inset-0 bg-linear-to-br ${data.color.replace(
               "text-",
-              "from-"
+              "from-",
             )} to-black/50 opacity-30 group-hover:opacity-10 transition-opacity duration-500`}
           ></div>
         </div>
@@ -740,7 +740,7 @@ export default function Home() {
         {/* SECCIÓN 2: CONTENIDO DINÁMICO (Siempre visible) */}
         <section
           id="dynamic-content"
-          className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10"
+          className="min-h-[80vh] flex flex-col items-center justify-start bg-base-100/80 backdrop-blur-md relative z-10 transition-colors duration-500 pt-16 pb-10 scroll-mt-12"
         >
           <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
             <SectionTabs

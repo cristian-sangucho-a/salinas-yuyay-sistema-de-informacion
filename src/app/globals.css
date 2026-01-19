@@ -225,3 +225,18 @@ body {
 .animate-fade-in-down {
   animation: fadeInSlideDown 0.8s ease-out forwards;
 }
+
+@keyframes fadeInSlideDownStatic {
+  0% {
+    opacity: 0;
+    transform: translate(0, -20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.animate-fade-in-down-static {
+  animation: fadeInSlideDownStatic 0.8s ease-out forwards;
+}
