@@ -35,6 +35,11 @@ export default async function EventPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold mb-6">
             {evento.titulo}
           </h1>
+          {evento.eslogan && (
+            <p className="text-xl text-base-content/80 italic mb-6">
+              {evento.eslogan}
+            </p>
+          )}
 
           <div className="text-sm text-base-content/70 flex flex-wrap gap-x-6 gap-y-2 mb-4">
             {evento.fecha_de_inicio && (
