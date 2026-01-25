@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const apiKey = process.env.CONTIFICO_API_KEY;
   const token = process.env.CONTIFICO_API_TOKEN;
@@ -11,14 +11,14 @@ export async function GET(
   if (!apiKey) {
     return NextResponse.json(
       { error: "Server configuration error: Missing CONTIFICO_API_KEY" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   if (!id) {
     return NextResponse.json(
       { error: "Product ID is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -56,7 +56,7 @@ export async function GET(
             "Error fetching product from Contifico",
           details: errorData,
         },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -72,7 +72,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const apiKey = process.env.CONTIFICO_API_KEY;
   const token = process.env.CONTIFICO_API_TOKEN;
@@ -81,14 +81,14 @@ export async function PATCH(
   if (!apiKey) {
     return NextResponse.json(
       { error: "Server configuration error: Missing CONTIFICO_API_KEY" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   if (!id) {
     return NextResponse.json(
       { error: "Product ID is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -129,7 +129,7 @@ export async function PATCH(
             "Error updating product in Contifico",
           details: errorData,
         },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -154,7 +154,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const apiKey = process.env.CONTIFICO_API_KEY;
   const token = process.env.CONTIFICO_API_TOKEN;
@@ -163,14 +163,14 @@ export async function DELETE(
   if (!apiKey) {
     return NextResponse.json(
       { error: "Server configuration error: Missing CONTIFICO_API_KEY" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   if (!id) {
     return NextResponse.json(
       { error: "Product ID is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -213,7 +213,7 @@ export async function DELETE(
             "Error deactivating product in Contifico",
           details: errorData,
         },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
