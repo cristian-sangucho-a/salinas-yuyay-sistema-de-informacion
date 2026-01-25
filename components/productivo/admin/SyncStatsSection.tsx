@@ -24,7 +24,7 @@ export default function SyncStatsSection({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <StatCard
-        title="Por Vincular"
+        title="Por vincular"
         count={unlinkedCount}
         icon={<FaLink className="w-6 h-6" />}
         color="warning"
@@ -33,7 +33,7 @@ export default function SyncStatsSection({
       />
 
       <StatCard
-        title="Con Diferencias"
+        title="Con diferencias"
         count={diffCount}
         icon={<FaExclamationTriangle className="w-6 h-6" />}
         color="error"

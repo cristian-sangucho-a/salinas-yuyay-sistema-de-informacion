@@ -183,14 +183,19 @@ export async function DELETE(
       url.searchParams.append("pos", token);
     }
 
+    // Contifico API often returns 405 Method Not Allowed for DELETE.
+    // Instead, we perform a "soft delete" by updating the status to "I" (Inactive).
     const response = await fetch(url.toString(), {
-      method: "DELETE",
+      method: "PATCH",
       headers: {
         Authorization: apiKey,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({ estado: "I" }),
     });
 
     if (!response.ok) {
+      // If PUT fails, we try to parse the error
       const errorText = await response.text();
       let errorData;
       try {
@@ -199,12 +204,13 @@ export async function DELETE(
         errorData = { message: errorText };
       }
 
+      // If the error is 405 on PUT as well, we are stuck, but unlikely for an update.
       return NextResponse.json(
         {
           error:
             errorData.mensaje ||
             errorData.error ||
-            "Error deleting product in Contifico",
+            "Error deactivating product in Contifico",
           details: errorData,
         },
         { status: response.status }

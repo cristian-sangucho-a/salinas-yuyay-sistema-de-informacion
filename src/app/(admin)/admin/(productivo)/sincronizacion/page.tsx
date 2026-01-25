@@ -271,7 +271,7 @@ export default function SincronizacionPage() {
                                     }
                                     disabled={isSyncing}
                                   >
-                                    Vincular a Este
+                                    Vincular a este producto
                                   </button>
                                 </div>
                                 <div className="divider my-2 text-xs text-base-content/40">
@@ -282,7 +282,7 @@ export default function SincronizacionPage() {
                                   onClick={() => handleImport(item.contifico)}
                                   disabled={isSyncing}
                                 >
-                                  Importar como Nuevo
+                                  Importar como nuevo
                                 </button>
                               </div>
                             ) : (
@@ -295,7 +295,7 @@ export default function SincronizacionPage() {
                                   onClick={() => handleImport(item.contifico)}
                                   disabled={isSyncing}
                                 >
-                                  Importar como Nuevo
+                                  Importar como nuevo
                                 </button>
                               </div>
                             )}
