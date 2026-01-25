@@ -37,7 +37,7 @@ export function useAddToCart({
             current.quantity > 0 ? current.quantity + 1 : 1;
           const hasStock = await current.checkStock(
             product.contificoId,
-            quantityToCheck
+            quantityToCheck,
           );
           if (!hasStock) {
             setIsOutOfStock(true);
@@ -96,6 +96,7 @@ export function useAddToCart({
       e.stopPropagation();
     }
     updateQuantity(product.id, quantity - 1);
+    setIsOutOfStock(false);
   };
 
   return {

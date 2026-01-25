@@ -44,7 +44,7 @@ export async function generateMetadata({
   };
 }
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export default async function CategoriaPage({
   params,
@@ -78,7 +78,7 @@ export default async function CategoriaPage({
       ? subcategoriaSlug
       : [subcategoriaSlug];
     products = products.filter(
-      (p) => p.subcategory?.slug && slugs.includes(p.subcategory.slug)
+      (p) => p.subcategory?.slug && slugs.includes(p.subcategory.slug),
     );
   }
 
@@ -88,13 +88,13 @@ export default async function CategoriaPage({
     products = products.filter(
       (p) =>
         p.name.toLowerCase().includes(searchLower) ||
-        p.description.toLowerCase().includes(searchLower)
+        p.description.toLowerCase().includes(searchLower),
     );
   }
 
   // Transformar subcategorías para FeaturesBar
   const subcategoriasFeatures: Feature[] = subcategoriasData.map(
-    transformSubcategoriaToFeature
+    transformSubcategoriaToFeature,
   );
 
   return (

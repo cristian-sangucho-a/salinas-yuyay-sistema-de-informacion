@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Explora todas nuestras categorías de productos artesanales de Salinas de Guaranda.",
 };
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export default async function CategoriasPage() {
   const categorias = await getCategoriasProductos().catch(() => []);

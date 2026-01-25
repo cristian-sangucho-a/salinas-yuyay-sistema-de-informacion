@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   openGraph: SEO_CONFIG.tienda.openGraph,
 };
 
-// Revalidar cada hora (3600 segundos)
-export const revalidate = 3600;
+// Revalidar inmediatamente (0)
+export const revalidate = 0;
 
 export default async function TiendaPage() {
   // Obtener datos desde PocketBase
