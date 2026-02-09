@@ -10,60 +10,17 @@ export interface LocationItem {
   image: string;
 }
 
-const defaultLocations: LocationItem[] = [
-  {
-    id: "monumento",
-    name: "Monumento",
-    image: "/historic-monument-ecuador.jpg",
-  },
-  {
-    id: "museo-cerveza",
-    name: "Museo de la Cerveza",
-    image: "/beer-museum-ecuador.jpg",
-  },
-  {
-    id: "planetario",
-    name: "Planetario",
-    image: "/planetarium-building-ecuador.jpg",
-  },
-  {
-    id: "museo-guayasamin",
-    name: "Museo Guayasamín",
-    image: "/guayasamin-museum-ecuador-art.jpg",
-  },
-  {
-    id: "museo-tren",
-    name: "Museo del Tren",
-    image: "/train-museum-ecuador-railway.jpg",
-  },
-  {
-    id: "plaza-cultural",
-    name: "Plaza Cultural",
-    image: "/cultural-plaza-ecuador-square.jpg",
-  },
-  {
-    id: "plaza-central",
-    name: "Plaza Central",
-    image: "/central-plaza-ecuador-colonial.jpg",
-  },
-  {
-    id: "legado-virtual",
-    name: "Legado Virtual EC",
-    image: "/virtual-legacy-museum-ecuador.jpg",
-  },
-];
-
 type Props = {
   locations?: LocationItem[];
 };
 
 export default function LocationNavigator({ locations }: Props) {
   const data = useMemo(
-    () => (locations && locations.length > 0 ? locations : defaultLocations),
+    () => (locations && locations.length > 0 ? locations : []),
     [locations],
   );
   const [activeLocation, setActiveLocation] = useState<string | null>(
-    data?.[0]?.id ?? null,
+    data[0]?.id ?? null,
   );
   const router = useRouter();
 
