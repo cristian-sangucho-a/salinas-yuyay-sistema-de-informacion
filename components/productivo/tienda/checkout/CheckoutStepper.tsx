@@ -16,6 +16,12 @@ import { ClientData, AddressData } from "@/lib/types/productivo";
 import { sendOrderConfirmationEmail } from "@/lib/email-service";
 import { createContificoPrefactura } from "@/lib/contifico";
 
+interface PrefacturaData {
+  id?: string;
+  documento?: string;
+  mensaje?: string;
+}
+
 const steps = [
   { id: 0, label: "Carrito", icon: ShoppingCart },
   { id: 1, label: "Datos", icon: User },
@@ -27,6 +33,8 @@ export default function CheckoutStepper() {
   const [currentStep, setCurrentStep] = useState(0);
   const [clientData, setClientData] = useState<ClientData | null>(null);
   const [addressData, setAddressData] = useState<AddressData | null>(null);
+  const [prefacturaExitosa, setPrefacturaExitosa] =
+    useState<PrefacturaData | null>(null);
   const { items, clearCart, checkStock } = useCart();
   const [isSuccess, setIsSuccess] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -58,14 +66,14 @@ export default function CheckoutStepper() {
             if (!item.contificoId) return { item, valid: true };
             const valid = await checkStock(item.contificoId, item.quantity);
             return { item, valid };
-          })
+          }),
         );
 
         const invalidItem = validations.find((v) => !v.valid);
 
         if (invalidItem) {
           setValidationError(
-            `Lo sentimos, el producto "${invalidItem.item.name}" no tiene suficiente stock disponible para la cantidad solicitada.`
+            `Lo sentimos, el producto "${invalidItem.item.name}" no tiene suficiente stock disponible para la cantidad solicitada.`,
           );
           setIsValidating(false);
           return;
@@ -73,7 +81,7 @@ export default function CheckoutStepper() {
       } catch (error) {
         console.error("Error validating stock:", error);
         setValidationError(
-          "Ocurrió un error verificando el stock. Por favor intente nuevamente."
+          "Ocurrió un error verificando el stock. Por favor intente nuevamente.",
         );
         setIsValidating(false);
         return;
@@ -105,7 +113,7 @@ export default function CheckoutStepper() {
     try {
       const total = items.reduce(
         (sum, item) => sum + item.price * item.quantity,
-        0
+        0,
       );
 
       // Enviar correo de confirmación y crear prefactura en paralelo
@@ -117,9 +125,11 @@ export default function CheckoutStepper() {
       if (!prefacturaResult.success) {
         console.warn(
           "Advertencia: No se pudo crear la prefactura en Contífico",
-          prefacturaResult.error
+          prefacturaResult.error,
         );
-        // No bloqueamos el flujo de éxito para el usuario, pero lo registramos
+      } else if (prefacturaResult.data) {
+        // Guardamos el resultado exitoso para mostrarlo
+        setPrefacturaExitosa(prefacturaResult.data as PrefacturaData);
       }
 
       // Aquí iría la lógica para enviar el pedido al backend (DB)
@@ -150,11 +160,28 @@ export default function CheckoutStepper() {
         <Title variant="h2" className="text-primary mb-4 font-bold">
           ¡Pedido Realizado con Éxito!
         </Title>
-        <Text className="max-w-md mx-auto mb-8 text-lg">
+        <Text className="max-w-md mx-auto mb-4 text-lg">
           Gracias por tu compra, <strong>{clientData?.razon_social}</strong>.
           Hemos enviado un correo de confirmación a{" "}
           <strong>{clientData?.email}</strong>.
         </Text>
+
+        {prefacturaExitosa && (
+          <div className="alert alert-success shadow-sm max-w-md mx-auto mb-8 bg-success/10 border-success/20 text-success-content">
+            <div className="flex flex-col items-center text-sm w-full">
+              <span className="font-semibold flex items-center gap-2">
+                Documento generado (Contífico)
+              </span>
+              <div className="mt-1 font-mono bg-white/50 px-2 py-1 rounded">
+                Ref:{" "}
+                {prefacturaExitosa.documento ||
+                  prefacturaExitosa.id ||
+                  "ID desconocido"}
+              </div>
+            </div>
+          </div>
+        )}
+
         <Link href="/tienda">
           <Button variant="primary" size="lg">
             Volver a la Tienda
