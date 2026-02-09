@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Plus } from "lucide-react"
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
 
 export interface LocationItem {
-  id: string
-  name: string
-  image: string
+  id: string;
+  name: string;
+  image: string;
 }
 
 const defaultLocations: LocationItem[] = [
@@ -51,22 +51,30 @@ const defaultLocations: LocationItem[] = [
     name: "Legado Virtual EC",
     image: "/virtual-legacy-museum-ecuador.jpg",
   },
-]
+];
 
 type Props = {
-  locations?: LocationItem[]
-}
+  locations?: LocationItem[];
+};
 
 export default function LocationNavigator({ locations }: Props) {
-  const data = useMemo(() => (locations && locations.length > 0 ? locations : defaultLocations), [locations])
-  const [activeLocation, setActiveLocation] = useState<string | null>(data[0]?.id ?? null)
-  const router = useRouter()
+  const data = useMemo(
+    () => (locations && locations.length > 0 ? locations : defaultLocations),
+    [locations],
+  );
+  const [activeLocation, setActiveLocation] = useState<string | null>(
+    data?.[0]?.id ?? null,
+  );
+  const router = useRouter();
 
   useEffect(() => {
-    setActiveLocation(data[0]?.id ?? null)
-  }, [data])
+    setActiveLocation(data?.[0]?.id ?? null);
+  }, [data]);
 
-  const activeImage = data.find((loc) => loc.id === activeLocation)?.image || data[0]?.image || ""
+  const activeImage =
+    data?.find((loc) => loc.id === activeLocation)?.image ||
+    data?.[0]?.image ||
+    "";
 
   return (
     <div className="relative w-full max-w-6xl mx-auto h-screen md:h-[720px] overflow-hidden">
@@ -74,7 +82,10 @@ export default function LocationNavigator({ locations }: Props) {
       <div
         key={activeImage}
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${activeImage})`, animation: "fadeImage 0.7s ease-in-out" }}
+        style={{
+          backgroundImage: `url(${activeImage})`,
+          animation: "fadeImage 0.7s ease-in-out",
+        }}
         aria-hidden
       />
 
@@ -89,10 +100,10 @@ export default function LocationNavigator({ locations }: Props) {
             className="relative w-full md:flex-1 flex items-start justify-center cursor-pointer group py-3"
             onMouseEnter={() => setActiveLocation(location.id)}
             onClick={() => {
-              setActiveLocation(location.id)
+              setActiveLocation(location.id);
               // Only navigate on desktop (md breakpoint = 768px)
               if (window.innerWidth >= 768) {
-                router.push(`/turismo/museo/${location.id}`)
+                router.push(`/turismo/museo/${location.id}`);
               }
             }}
             role="button"
@@ -100,22 +111,29 @@ export default function LocationNavigator({ locations }: Props) {
             onFocus={() => setActiveLocation(location.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault()
-                setActiveLocation(location.id)
+                e.preventDefault();
+                setActiveLocation(location.id);
                 // Only navigate on desktop
                 if (window.innerWidth >= 768) {
-                  router.push(`/turismo/museo/${location.id}`)
+                  router.push(`/turismo/museo/${location.id}`);
                 }
               }
             }}
           >
             {/* Vertical separator line */}
-            {index > 0 && <div className="absolute left-0 top-0 bottom-0 w-px bg-white/40 hidden md:block" aria-hidden />}
+            {index > 0 && (
+              <div
+                className="absolute left-0 top-0 bottom-0 w-px bg-white/40 hidden md:block"
+                aria-hidden
+              />
+            )}
 
             {/* Yellow highlight background on hover */}
             <div
               className={`absolute inset-x-0 top-0 w-full transition-all duration-300 ${
-                activeLocation === location.id ? "h-40 md:h-32 bg-amber-400" : "h-0 bg-transparent"
+                activeLocation === location.id
+                  ? "h-40 md:h-32 bg-amber-400"
+                  : "h-0 bg-transparent"
               }`}
               aria-hidden
             />
@@ -123,7 +141,9 @@ export default function LocationNavigator({ locations }: Props) {
             {/* Text label */}
             <span
               className={`relative z-10 px-4 py-2 md:py-6 text-center text-sm font-medium transition-colors duration-300 ${
-                activeLocation === location.id ? "text-gray-900" : "text-white drop-shadow-lg"
+                activeLocation === location.id
+                  ? "text-gray-900"
+                  : "text-white drop-shadow-lg"
               }`}
             >
               {location.name}
@@ -157,5 +177,5 @@ export default function LocationNavigator({ locations }: Props) {
         }
       `}</style>
     </div>
-  )
+  );
 }
